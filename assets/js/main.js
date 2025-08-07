@@ -8,10 +8,20 @@
   // Initialize
   function init() {
     setupClock();
+    setupStatusClock();
     setupMenus();
     setupDesktopIcons();
     setupWindows();
+    detectMobileAndToggleMode();
     setupGlobalHandlers();
+    // Open About by default; if on mobile, zoom it for full-screen feel
+    setTimeout(() => {
+      openWindow('win-about');
+      if (document.body.classList.contains('ios-mode')) {
+        // Ensure about window is maximized
+        try { toggleZoom('win-about'); } catch (_) {}
+      }
+    }, 0);
   }
 
   // Clock
@@ -26,6 +36,21 @@
     function tick() {
       clock.textContent = format(new Date());
     }
+    tick();
+    setInterval(tick, 30_000);
+  }
+
+  // Status bar clock (mobile)
+  function setupStatusClock() {
+    const statusClock = document.getElementById('status-clock');
+    if (!statusClock) return;
+    function fmt(dt) {
+      const hh = dt.getHours();
+      const mm = dt.getMinutes().toString().padStart(2, '0');
+      const h12 = ((hh + 11) % 12 + 1);
+      return `${h12}:${mm}`;
+    }
+    const tick = () => { statusClock.textContent = fmt(new Date()); };
     tick();
     setInterval(tick, 30_000);
   }
@@ -325,6 +350,23 @@
         const active = document.querySelector('.mac-window.active:not([hidden])');
         if (active) active.setAttribute('hidden', '');
       }
+    });
+  }
+
+  // Toggle iOS-like mode on small screens or mobile user agents
+  function detectMobileAndToggleMode() {
+    const isSmall = window.matchMedia('(max-width: 640px)').matches;
+    const ua = navigator.userAgent || '';
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    if (isSmall || isMobileUA) {
+      document.body.classList.add('ios-mode');
+    } else {
+      document.body.classList.remove('ios-mode');
+    }
+    window.addEventListener('resize', () => {
+      const small = window.matchMedia('(max-width: 640px)').matches;
+      if (small) document.body.classList.add('ios-mode');
+      else document.body.classList.remove('ios-mode');
     });
   }
 
