@@ -4,14 +4,11 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Charcoal, Chicago, Geneva, Tahoma, Arial, sans-serif; color: #000; background: #c7c7c7; }
 body.ios-mode { background: #cfd6df; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
-/* Desktop Background: subtle grid reminiscent of classic patterns */
+/* Desktop Background: Mac OS 9 Platinum pinstripes */
 #desktop {
   position: relative;
   height: calc(100vh - 22px);
-  background:
-    linear-gradient(#cfcfcf, #cfcfcf) 0 0/100% 100% no-repeat,
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 8px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 8px);
+  background: repeating-linear-gradient(0deg, #d9d9d9 0px, #d9d9d9 2px, #cfcfcf 2px, #cfcfcf 4px);
   padding: 12px;
   overflow: hidden;
 }
@@ -24,13 +21,15 @@ body.ios-mode #desktop { background: linear-gradient(#cfd6df, #cfd6df); height: 
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
-  background: linear-gradient(#dfdfdf, #c9c9c9);
+  background: linear-gradient(#efefef, #cfcfcf);
   border-bottom: 1px solid #000;
   position: sticky;
   top: 0;
   z-index: 1000;
   user-select: none;
 }
+.app-name { font-size: 12px; margin: 0 6px 0 4px; padding: 0 6px; border: 1px solid transparent; }
+.menu-left { display: flex; align-items: center; gap: 6px; }
 body.ios-mode .menu-bar { display: none; }
 
 /* iOS-like Status Bar */
@@ -59,7 +58,7 @@ body.ios-mode .status-bar { display: flex; }
   cursor: default;
 }
 .menu-trigger:focus { outline: 1px dotted #000; }
-.menu.open .menu-trigger { border-color: #000; background: #bfbfbf; }
+.menu.open .menu-trigger { border-color: #000; background: #bfbfbf; box-shadow: inset 1px 1px 0 #fff; }
 .menu-dropdown {
   position: absolute;
   top: 20px;
@@ -102,10 +101,12 @@ body.ios-mode .desktop-icon .icon-label { background: rgba(255,255,255,0.8); bor
   width: 520px; height: 360px;
   background: #fff;
   border: 1px solid #000;
-  box-shadow: 2px 2px 0 #000;
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000;
   display: grid;
   grid-template-rows: 22px 1fr;
 }
+.mac-window.platinum .title-bar { background: linear-gradient(#e7e7e7, #cfcfcf); }
+.mac-window.active.platinum .title-bar { background: linear-gradient(#0041ff, #0030cc); color: #fff; }
 body.ios-mode .mac-window { border-radius: 10px; border: 1px solid rgba(0,0,0,0.6); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
 .mac-window[hidden] { display: none !important; }
 .mac-window.active .title-bar { background: linear-gradient(#2d63f0, #1745d8); color: #fff; }
@@ -120,6 +121,7 @@ body.ios-mode .mac-window { border-radius: 10px; border: 1px solid rgba(0,0,0,0.
   user-select: none;
   cursor: move;
 }
+.title-bar .title { text-shadow: 1px 1px 0 rgba(0,0,0,0.2); }
 body.ios-mode .title-bar { border-bottom-color: rgba(0,0,0,0.2); border-top-left-radius: 10px; border-top-right-radius: 10px; }
 .mac-window.active.ios-header .title-bar { background: linear-gradient(#5c8bff, #3f6af1); }
 .title-bar .title { font-size: 12px; font-weight: 600; margin: 0; }

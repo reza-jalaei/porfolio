@@ -144,6 +144,23 @@
 
       // Resizing
       enableResize(win);
+
+      // Windowshade behavior: double-click on title bar collapses content
+      let isShaded = false;
+      titleBar?.addEventListener('dblclick', () => {
+        const content = win.querySelector('.window-content');
+        if (!content) return;
+        isShaded = !isShaded;
+        if (isShaded) {
+          win.dataset.prevHeight = String(win.offsetHeight);
+          content.style.display = 'none';
+          win.style.height = '22px';
+        } else {
+          const prevH = parseInt(win.dataset.prevHeight || '360', 10);
+          content.style.display = '';
+          win.style.height = `${prevH}px`;
+        }
+      });
     });
   }
 
