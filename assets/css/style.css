@@ -12,7 +12,7 @@ body.ios-mode { background: #cfd6df; font-family: "Helvetica Neue", Helvetica, A
   padding: 12px;
   overflow: hidden;
 }
-body.ios-mode #desktop { background: linear-gradient(#cfd6df, #cfd6df); height: 100vh; padding-top: 28px; }
+body.ios-mode #desktop { background: #dbe2ea; height: 100vh; padding-top: 28px; }
 
 /* Menu Bar */
 .menu-bar {
@@ -29,13 +29,24 @@ body.ios-mode #desktop { background: linear-gradient(#cfd6df, #cfd6df); height: 
   user-select: none;
 }
 .app-name { font-size: 12px; margin: 0 6px 0 4px; padding: 0 6px; border: 1px solid transparent; }
-.menu-left { display: flex; align-items: center; gap: 6px; }
+.menu-left { display: flex; align-items: center; gap: 6px; position: relative; }
+/* Apple dropdown */
+.apple-dropdown { display: none; position: absolute; top: 20px; left: 0; background: #efefef; border: 1px solid #000; box-shadow: 2px 2px 0 #000; list-style: none; margin: 0; padding: 4px 0; z-index: 1002; }
+.apple-dropdown li { font-size: 12px; padding: 3px 12px; white-space: nowrap; }
+.apple-dropdown .separator { height: 1px; margin: 4px 0; background: #9a9a9a; padding: 0; }
 body.ios-mode .menu-bar { display: none; }
 
 /* iOS-like Status Bar */
 .status-bar { display: none; height: 20px; padding: 2px 8px; font-size: 12px; background: #000; color: #fff; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
 body.ios-mode .status-bar { display: flex; }
+.status-left { display: flex; align-items: center; gap: 6px; }
 .status-carrier { font-weight: 600; }
+.status-signal { display: inline-flex; gap: 2px; }
+.sig-bar { width: 3px; height: 6px; background: #fff; opacity: 0.4; display: inline-block; }
+.sig-bar:nth-child(2) { height: 8px; opacity: 0.55; }
+.sig-bar:nth-child(3) { height: 10px; opacity: 0.7; }
+.sig-bar:nth-child(4) { height: 12px; opacity: 0.85; }
+.sig-bar:nth-child(5) { height: 14px; opacity: 1; }
 .status-battery { font-variant-numeric: tabular-nums; }
 .menu-left { display: flex; align-items: center; gap: 8px; }
 .menu-right { font-size: 12px; }
@@ -96,8 +107,8 @@ body.ios-mode .desktop-icon .icon-label { background: rgba(255,255,255,0.8); bor
 /* Mac Window */
 .mac-window {
   position: absolute;
-  top: 80px; left: 80px;
-  width: 520px; height: 360px;
+  top: 96px; left: 96px;
+  width: 640px; height: 420px;
   background: #fff;
   border: 1px solid #000;
   box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000;
@@ -157,6 +168,19 @@ body.ios-mode .resize-handle { display: none; }
 .video-item { margin-bottom: 12px; }
 .podcast-embed { margin-top: 8px; }
 .podcast-embed .podcast-link { margin: 6px 0 0; font-size: 12px; }
+
+/* About This Mac */
+.about-mac { display: flex; align-items: center; gap: 12px; }
+.about-mac .os-name { font-weight: 700; }
+.about-mac .os-version { font-size: 12px; color: #333; }
+.about-mac .machine { font-size: 12px; }
+
+/* Boot overlay */
+#boot-overlay { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 2000; }
+#boot-overlay.active { display: flex; }
+.boot-inner { display: flex; flex-direction: column; align-items: center; gap: 14px; color: #fff; }
+.boot-spinner { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* Minimized windows dock (simple) */
 .dock {

@@ -10,18 +10,38 @@
 <body>
   <!-- iOS-style Status Bar (shown on mobile only) -->
   <div class="status-bar" aria-hidden="true">
-    <span class="status-carrier">Jalaei</span>
+    <div class="status-left">
+      <span class="status-carrier">Reza</span>
+      <span class="status-signal" aria-hidden="true">
+        <span class="sig-bar"></span><span class="sig-bar"></span><span class="sig-bar"></span><span class="sig-bar"></span><span class="sig-bar"></span>
+      </span>
+    </div>
     <span id="status-clock">--:--</span>
     <span class="status-battery">100%</span>
+  </div>
+
+  <!-- Boot overlay -->
+  <div id="boot-overlay" aria-hidden="true">
+    <div class="boot-inner">
+      <div class="boot-apple" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="40" height="40"><path d="M16.365 12.72c.012 1.96 1.72 2.613 1.733 2.62-.014.045-.27.92-.888 1.82-.534.78-1.09 1.56-1.965 1.58-.858.016-1.135-.51-2.12-.51-.984 0-1.29.495-2.106.525-.85.03-1.497-.84-2.035-1.62-1.108-1.61-1.95-4.545-1.353-6.535.936-3.03 3.642-3.28 3.964-3.28.85-.08 1.66.57 2.12.57.45 0 1.39-.7 2.34-.6.4.017 1.525.16 2.25 1.19-.06.037-1.342.78-1.34 2.34m-1.57-6.81c.41-.5.69-1.2.62-1.91-.6.025-1.33.4-1.77.9-.392.45-.72 1.17-.63 1.86.67.05 1.36-.35 1.78-.85" fill="#fff"/></svg>
+      </div>
+      <div class="boot-spinner" aria-hidden="true"></div>
+    </div>
   </div>
   <!-- Menu Bar -->
   <header class="menu-bar" role="navigation" aria-label="Menu bar">
     <div class="menu-left">
       <button class="apple-menu" aria-haspopup="true" aria-expanded="false" title="Apple Menu" aria-label="Apple Menu">
-        <svg class="apple-logo" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+        <svg class="apple-logo" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path d="M16.365 12.72c.012 1.96 1.72 2.613 1.733 2.62-.014.045-.27.92-.888 1.82-.534.78-1.09 1.56-1.965 1.58-.858.016-1.135-.51-2.12-.51-.984 0-1.29.495-2.106.525-.85.03-1.497-.84-2.035-1.62-1.108-1.61-1.95-4.545-1.353-6.535.936-3.03 3.642-3.28 3.964-3.28.85-.08 1.66.57 2.12.57.45 0 1.39-.7 2.34-.6.4.017 1.525.16 2.25 1.19-.06.037-1.342.78-1.34 2.34m-1.57-6.81c.41-.5.69-1.2.62-1.91-.6.025-1.33.4-1.77.9-.392.45-.72 1.17-.63 1.86.67.05 1.36-.35 1.78-.85" fill="currentColor"/>
         </svg>
       </button>
+      <ul id="apple-dropdown" class="apple-dropdown" role="menu" aria-label="Apple">
+        <li role="menuitem" data-action="about-this-mac">About This Mac</li>
+        <li class="separator" role="separator"></li>
+        <li role="menuitem" data-action="about-this-site">About This Site</li>
+      </ul>
       <div class="app-name" aria-hidden="true">Finder</div>
       <nav class="menus">
         <div class="menu" data-menu="file">
@@ -125,7 +145,7 @@
         <span class="icon-label">Contact</span>
       </li>
       <li class="desktop-icon" tabindex="0">
-        <a class="icon-link" href="#" target="_blank" rel="noopener">
+        <a class="icon-link" href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener">
           <div class="icon-svg" aria-hidden="true">
             <!-- Document icon -->
             <svg viewBox="0 0 24 24" width="48" height="48" fill="#000">
@@ -133,7 +153,7 @@
               <path d="M14 2v6h6" fill="none" stroke="#000" stroke-width="2"/>
             </svg>
           </div>
-          <span class="icon-label">Resume</span>
+          <span class="icon-label">Resume (LinkedIn)</span>
         </a>
       </li>
     </ul>
@@ -157,7 +177,7 @@
           <p>Senior CRO Consultant and Product Owner at <a href="https://figpii.com" target="_blank" rel="noopener">FigPii</a>.</p>
           <p>Specialties: UX Focused Design, JavaScript, Node.js, Shopify, A/B Testing, Analytics.</p>
           <div class="podcast-embed" aria-label="30 Minutes of Marketing Podcast">
-            <iframe allow="autoplay *; encrypted-media *; clipboard-write" frameborder="0" height="175" style="width:100%;max-width:700px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation" src="https://embed.podcasts.apple.com/us/podcast/30-minutes-of-marketing/id1587332914"></iframe>
+            <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="175" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.podcasts.apple.com/us/podcast/episode-5-interviewing-reza-special-guest-episode/id1587332914?i=1000539771591"></iframe>
             <p class="podcast-link"><a href="https://podcasts.apple.com/us/podcast/30-minutes-of-marketing/id1587332914" target="_blank" rel="noopener">Listen on Apple Podcasts</a></p>
           </div>
         </div>
@@ -176,14 +196,7 @@
       <h2 id="title-projects" class="title">Projects</h2>
     </div>
     <div class="window-content">
-      <ul class="list">
-        <li>
-          <strong>Linkedin</strong>
-          <div><a href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener">https://www.linkedin.com/in/reza-jalaei/</a></div>
-        </li>
-      </ul>
       <div class="media">
-        <h3>Videos</h3>
         <div class="video-item">
           <strong>Who is Reza?</strong>
           <video controls preload="metadata" width="100%">
@@ -192,6 +205,12 @@
           </video>
         </div>
       </div>
+      <ul class="list">
+        <li>
+          <strong>Linkedin</strong>
+          <div><a href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener">https://www.linkedin.com/in/reza-jalaei/</a></div>
+        </li>
+      </ul>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
   </section>
@@ -236,6 +255,30 @@
         <li><a href="https://www.linkedin.com/in/reza-j/" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://github.com/reza-jalaei" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
+    </div>
+    <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+
+  <section id="win-about-mac" class="mac-window platinum" role="dialog" aria-labelledby="title-about-mac" aria-modal="false" hidden>
+    <div class="title-bar" data-window-drag-handle>
+      <div class="controls">
+        <button class="control close" aria-label="Close window" data-action="close"></button>
+        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
+        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
+      </div>
+      <h2 id="title-about-mac" class="title">About This Mac</h2>
+    </div>
+    <div class="window-content">
+      <div class="about-mac">
+        <div class="about-mac-logo">
+          <svg viewBox="0 0 24 24" width="48" height="48"><path d="M16.365 12.72c.012 1.96 1.72 2.613 1.733 2.62-.014.045-.27.92-.888 1.82-.534.78-1.09 1.56-1.965 1.58-.858.016-1.135-.51-2.12-.51-.984 0-1.29.495-2.106.525-.85.03-1.497-.84-2.035-1.62-1.108-1.61-1.95-4.545-1.353-6.535.936-3.03 3.642-3.28 3.964-3.28.85-.08 1.66.57 2.12.57.45 0 1.39-.7 2.34-.6.4.017 1.525.16 2.25 1.19-.06.037-1.342.78-1.34 2.34m-1.57-6.81c.41-.5.69-1.2.62-1.91-.6.025-1.33.4-1.77.9-.392.45-.72 1.17-.63 1.86.67.05 1.36-.35 1.78-.85" fill="#000"/></svg>
+        </div>
+        <div class="about-mac-text">
+          <div class="os-name">Mac OS X</div>
+          <div class="os-version">Version 10.0 (Aqua)</div>
+          <div class="machine">Reza’s Mac</div>
+        </div>
+      </div>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
   </section>

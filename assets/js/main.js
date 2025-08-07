@@ -21,6 +21,7 @@
         // Ensure about window is maximized
         try { toggleZoom('win-about'); } catch (_) {}
       }
+      showBootOverlay();
     }, 0);
   }
 
@@ -66,6 +67,19 @@
       menu.querySelectorAll('.menu-dropdown [data-action]')
         .forEach(item => item.addEventListener('click', (e) => handleMenuAction(e, item)));
     });
+    // Apple menu dropdown
+    const appleBtn = document.querySelector('.apple-menu');
+    const appleDrop = document.getElementById('apple-dropdown');
+    if (appleBtn && appleDrop) {
+      appleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = appleDrop.style.display === 'block';
+        appleDrop.style.display = open ? 'none' : 'block';
+      });
+      document.addEventListener('click', () => { appleDrop.style.display = 'none'; });
+      appleDrop.querySelectorAll('[data-action]')
+        .forEach(item => item.addEventListener('click', (e) => handleMenuAction(e, item)));
+    }
   }
   function toggleMenu(menu) {
     const isOpen = menu.classList.contains('open');
@@ -91,14 +105,15 @@
       case 'open-blog': openWindow('win-blog'); break;
       case 'open-projects': openWindow('win-projects'); break;
       case 'open-contact': openWindow('win-contact'); break;
+      case 'about-this-mac': openWindow('win-about-mac'); break;
       case 'minimize-all': minimizeAll(); break;
       case 'arrange-windows': tileWindows(); break;
       case 'tidy-icons': tidyIcons(); break;
-      case 'show-grid': alert('Grid toggled (demo)'); break;
-      case 'about-this-site': alert('Built with vanilla HTML/CSS/JS, styled after Mac OS 9.'); break;
-      case 'sleep': alert('Zzz… (demo)'); break;
-      case 'restart': alert('Restarting… (demo)'); break;
-      case 'shutdown': alert('Shutting down… (demo)'); break;
+      case 'show-grid': alert('Grid toggled'); break;
+      case 'about-this-site': alert('Built with vanilla HTML/CSS/JS'); break;
+      case 'sleep': alert('Zzz…'); break;
+      case 'restart': alert('Restarting…'); break;
+      case 'shutdown': alert('Shutting down…'); break;
     }
     closeAllMenus();
   }
@@ -369,6 +384,14 @@
         if (active) active.setAttribute('hidden', '');
       }
     });
+  }
+
+  // Boot overlay logic
+  function showBootOverlay() {
+    const overlay = document.getElementById('boot-overlay');
+    if (!overlay) return;
+    overlay.classList.add('active');
+    setTimeout(() => overlay.classList.remove('active'), 1400);
   }
 
   // Toggle iOS-like mode on small screens or mobile user agents
