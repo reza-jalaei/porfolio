@@ -491,6 +491,9 @@
     if (!app) return;
     hideSpringboard();
     app.removeAttribute('hidden');
+    app.classList.remove('opening');
+    void app.offsetWidth;
+    app.classList.add('opening');
     document.getElementById('home-button')?.removeAttribute('hidden');
   }
   function showSpringboard() {
