@@ -5,24 +5,31 @@
   const windows = Array.from(document.querySelectorAll('.mac-window'));
   let zIndexCounter = 10;
 
-  // Initialize
   function init() {
     setupClock();
     setupStatusClock();
     setupMenus();
     setupDesktopIcons();
     setupWindows();
+    setupDock();
+    setupIOS();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
-    // Open About by default; if on mobile, zoom it for full-screen feel
     setTimeout(() => {
       openWindow('win-about');
       if (document.body.classList.contains('ios-mode')) {
-        // Ensure about window is maximized
-        try { toggleZoom('win-about'); } catch (_) {}
+        showLockScreen();
       }
       showBootOverlay();
     }, 0);
+  }
+
+  function updateAppName(activeTitle) {
+    const label = document.querySelector('.app-name');
+    if (!label) return;
+    label.textContent = activeTitle || 'Finder';
+    label.classList.add('active');
+    setTimeout(() => label.classList.remove('active'), 180);
   }
 
   // Clock
@@ -114,6 +121,7 @@
       case 'sleep': alert('Zzz…'); break;
       case 'restart': alert('Restarting…'); break;
       case 'shutdown': alert('Shutting down…'); break;
+      case 'switch-to-iphone': enableIOSMode(); break;
     }
     closeAllMenus();
   }
@@ -184,6 +192,9 @@
     windows.forEach(w => w.classList.remove('active'));
     win.classList.add('active');
     win.style.zIndex = String(++zIndexCounter);
+    setDockIndicator(win.id, true);
+    const title = win.querySelector('.title')?.textContent || '';
+    updateAppName(title);
   }
 
   function openWindow(id) {
@@ -200,19 +211,34 @@
       win.dataset.initialized = 'true';
     }
     focusWindow(win);
+    bounceDockIcon(id);
   }
 
   function closeWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
     win.setAttribute('hidden', '');
+    setDockIndicator(id, false);
   }
 
   function minimizeWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
-    win.setAttribute('hidden', '');
-    addToDock(id, win.querySelector('.title')?.textContent || id);
+    animateGenieToDock(win, () => {
+      win.setAttribute('hidden', '');
+      setDockIndicator(id, false);
+    });
+  }
+
+  function restoreWindowFromDock(id) {
+    const win = document.getElementById(id);
+    if (!win) return openWindow(id);
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return openWindow(id);
+    // prepare
+    win.removeAttribute('hidden');
+    focusWindow(win);
+    animateFromIconToWindow(icon, win);
   }
 
   function minimizeAll() {
@@ -318,8 +344,14 @@
     });
   }
 
-  // Simple dock for minimized windows
+  // macOS-style Dock
   const dockId = 'dock';
+  const dockApps = [
+    { id: 'win-about', label: 'About', svg: `<svg viewBox="0 0 24 24" width="48" height="48" fill="#000"><circle cx="12" cy="8" r="4"/><rect x="4" y="14" width="16" height="7" rx="3"/></svg>` },
+    { id: 'win-projects', label: 'Projects', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><path d=\"M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>` },
+    { id: 'win-blog', label: 'Blog', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M8 7h8M8 11h8M8 15h6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` },
+    { id: 'win-contact', label: 'Contact', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M3 7l9 6 9-6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` }
+  ];
   function ensureDock() {
     let dock = document.getElementById(dockId);
     if (!dock) {
@@ -331,19 +363,55 @@
     }
     return dock;
   }
-  function addToDock(id, label) {
+  function setupDock() {
     const dock = ensureDock();
-    let btn = dock.querySelector(`[data-win="${id}"]`);
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.textContent = label;
-      btn.setAttribute('data-win', id);
+    dock.innerHTML = '';
+    for (const app of dockApps) {
+      const btn = document.createElement('button');
+      btn.className = 'dock-icon';
+      btn.setAttribute('data-win', app.id);
+      btn.setAttribute('aria-label', app.label);
+      btn.innerHTML = `${app.svg}<span class="indicator"></span><span class="label">${app.label}</span>`;
       btn.addEventListener('click', () => {
-        openWindow(id);
-        btn.remove();
+        const win = document.getElementById(app.id);
+        if (win && !win.hasAttribute('hidden')) {
+          minimizeWindow(app.id);
+        } else {
+          restoreWindowFromDock(app.id);
+        }
       });
       dock.appendChild(btn);
     }
+    // magnification
+    dock.addEventListener('mousemove', (e) => {
+      const icons = Array.from(dock.querySelectorAll('.dock-icon'));
+      icons.forEach(icon => {
+        const rect = icon.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height; // bottom center as origin
+        const dx = Math.abs(e.clientX - cx);
+        const dist = Math.min(160, dx);
+        const mag = 1 + (1 - dist/160) * 1.2; // up to 2.2x
+        icon.style.setProperty('--mag', mag.toFixed(3));
+        icon.style.transform = `scale(${mag.toFixed(3)})`;
+      });
+    });
+    dock.addEventListener('mouseleave', () => {
+      dock.querySelectorAll('.dock-icon').forEach(i => { i.style.transform = 'scale(1)'; i.style.removeProperty('--mag'); });
+    });
+  }
+  function bounceDockIcon(id) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return;
+    icon.classList.remove('bounce');
+    void icon.offsetWidth; // restart animation
+    icon.classList.add('bounce');
+    setDockIndicator(id, true);
+  }
+  function setDockIndicator(id, on) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return;
+    icon.classList.toggle('active', !!on);
   }
 
   // Window management helpers
@@ -391,7 +459,145 @@
     const overlay = document.getElementById('boot-overlay');
     if (!overlay) return;
     overlay.classList.add('active');
-    setTimeout(() => overlay.classList.remove('active'), 1400);
+    const bar = document.getElementById('boot-bar');
+    let progress = 0;
+    const step = () => {
+      progress += Math.random() * 18 + 6; // 6-24% steps
+      progress = Math.min(100, progress);
+      if (bar) {
+        bar.style.width = progress + '%';
+        bar.parentElement?.setAttribute('aria-valuenow', String(Math.floor(progress)));
+      }
+      if (progress < 100) {
+        setTimeout(step, 160);
+      } else {
+        setTimeout(() => overlay.classList.remove('active'), 260);
+      }
+    };
+    setTimeout(step, 180);
+  }
+
+  // iOS Mode
+  function setupIOS() {
+    cloneContentToIOS();
+    setupSpringboard();
+    setupLockScreen();
+  }
+  function enableIOSMode() {
+    document.body.classList.add('ios-mode');
+    updateModeVisibility();
+    showLockScreen();
+    window.scrollTo(0,0);
+  }
+  function disableIOSMode() {
+    document.body.classList.remove('ios-mode');
+    updateModeVisibility();
+  }
+  function cloneContentToIOS() {
+    const mapping = [
+      ['win-about', 'ios-about'],
+      ['win-projects', 'ios-projects'],
+      ['win-blog', 'ios-blog'],
+      ['win-contact', 'ios-contact']
+    ];
+    for (const [winId, iosId] of mapping) {
+      const src = document.querySelector(`#${winId} .window-content`);
+      const dest = document.querySelector(`#${iosId} .app-body`);
+      if (src && dest && dest.childElementCount === 0) {
+        dest.appendChild(src.cloneNode(true));
+      }
+    }
+  }
+  function setupSpringboard() {
+    const springboard = document.getElementById('springboard');
+    const homeButton = document.getElementById('home-button');
+    if (!springboard || !homeButton) return;
+
+    // paging
+    const pages = Array.from(document.querySelectorAll('.sb-page'));
+    const dots = document.getElementById('page-dots');
+    let current = 0; let downX = 0; let isDown = false;
+    positionPages();
+    function positionPages() {
+      pages.forEach((p, i) => {
+        p.style.transform = `translateX(${(i-current)*100}%)`;
+        p.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1)';
+      });
+      Array.from(dots.children).forEach((d,i)=> d.classList.toggle('active', i===current));
+    }
+    function goTo(i) { current = Math.max(0, Math.min(i, pages.length-1)); positionPages(); }
+
+    function onDown(x){ isDown=true; downX=x; pages.forEach(p=>p.style.transition='none'); }
+    function onMove(x){ if(!isDown) return; const dx=(x-downX)/springboard.clientWidth*100; pages.forEach((p,i)=>{p.style.transform=`translateX(${(i-current)*100+dx}%)`;}); }
+    function onUp(x){ if(!isDown) return; isDown=false; const dx=(x-downX)/springboard.clientWidth; if (dx>0.15) goTo(current-1); else if(dx<-0.15) goTo(current+1); else positionPages(); }
+
+    springboard.addEventListener('mousedown', e=>onDown(e.clientX));
+    springboard.addEventListener('mousemove', e=>onMove(e.clientX));
+    window.addEventListener('mouseup', e=>onUp(e.clientX));
+    springboard.addEventListener('touchstart', e=>onDown(e.touches[0].clientX), { passive: true });
+    springboard.addEventListener('touchmove', e=>onMove(e.touches[0].clientX), { passive: true });
+    springboard.addEventListener('touchend', e=>onUp(e.changedTouches[0].clientX), { passive: true });
+    dots.querySelectorAll('span').forEach(s=> s.addEventListener('click', ()=> goTo(parseInt(s.dataset.page,10))));
+
+    springboard.querySelectorAll('[data-app]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const targetId = btn.getAttribute('data-app');
+        const app = document.getElementById(targetId);
+        if (!app) return;
+        const icRect = btn.getBoundingClientRect();
+        app.style.opacity = '0';
+        app.style.transform = `translate(${icRect.left + icRect.width/2}px, ${icRect.top + icRect.height/2}px) scale(0.05)`;
+        hideSpringboard();
+        app.removeAttribute('hidden');
+        requestAnimationFrame(() => {
+          app.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 180ms ease-out';
+          app.style.transform = 'translate(0,0) scale(1)';
+          app.style.opacity = '1';
+          setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
+        });
+        document.getElementById('home-button')?.removeAttribute('hidden');
+      });
+    });
+    homeButton.addEventListener('click', () => showSpringboard());
+
+    // Jiggle on long press
+    let pressTimer = null;
+    springboard.addEventListener('touchstart', () => { pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600); }, { passive: true });
+    springboard.addEventListener('touchend', () => { clearTimeout(pressTimer); pressTimer = null; });
+
+    // Back buttons in apps
+    document.querySelectorAll('.ios-app .ios-back').forEach(btn => {
+      btn.addEventListener('click', () => showSpringboard());
+    });
+  }
+  function openIOSApp(id) {
+    const app = document.getElementById(id);
+    if (!app) return;
+    hideSpringboard();
+    app.removeAttribute('hidden');
+    app.classList.remove('opening');
+    void app.offsetWidth;
+    app.classList.add('opening');
+    document.getElementById('home-button')?.removeAttribute('hidden');
+  }
+  function showSpringboard() {
+    document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
+    document.getElementById('springboard')?.removeAttribute('hidden');
+    document.getElementById('home-button')?.setAttribute('hidden', '');
+  }
+  function hideSpringboard() {
+    document.getElementById('springboard')?.setAttribute('hidden', '');
+  }
+  function updateModeVisibility() {
+    const isIOS = document.body.classList.contains('ios-mode');
+    const sb = document.getElementById('springboard');
+    if (isIOS) {
+      windows.forEach(w => w.setAttribute('hidden', ''));
+      sb?.removeAttribute('hidden');
+    } else {
+      sb?.setAttribute('hidden', '');
+      document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
+    }
   }
 
   // Toggle iOS-like mode on small screens or mobile user agents
@@ -404,12 +610,107 @@
     } else {
       document.body.classList.remove('ios-mode');
     }
+    updateModeVisibility();
     window.addEventListener('resize', () => {
       const small = window.matchMedia('(max-width: 640px)').matches;
       if (small) document.body.classList.add('ios-mode');
       else document.body.classList.remove('ios-mode');
+      updateModeVisibility();
     });
   }
+
+  // Genie animation (approximate)
+  function animateGenieToDock(win, onDone) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${win.id}"]`);
+    if (!icon) { onDone?.(); return; }
+    const winRect = win.getBoundingClientRect();
+    const icRect = icon.getBoundingClientRect();
+    const ghost = win.cloneNode(true);
+    ghost.style.pointerEvents = 'none';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${winRect.left}px`;
+    ghost.style.top = `${winRect.top}px`;
+    ghost.style.width = `${winRect.width}px`;
+    ghost.style.height = `${winRect.height}px`;
+    ghost.style.opacity = '0.98';
+    document.body.appendChild(ghost);
+    // compute transform
+    const dx = (icRect.left + icRect.width/2) - (winRect.left + winRect.width/2);
+    const dy = (icRect.top) - (winRect.top + winRect.height);
+    const scaleX = Math.max(0.05, icRect.width / winRect.width);
+    const scaleY = Math.max(0.05, icRect.height / winRect.height);
+    ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1, borderRadius: getComputedStyle(win).borderRadius },
+      { offset: 0.6, transform: `translate(${dx*0.9}px, ${dy*0.6}px) scale(${Math.max(scaleX,0.2)}, ${Math.max(scaleY,0.2)})`, opacity: 0.7, filter: 'blur(0.5px)' },
+      { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 0.0, filter: 'blur(1px)' }
+    ], { duration: 380, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)' }).onfinish = () => {
+      ghost.remove();
+      onDone?.();
+    };
+  }
+
+  function animateFromIconToWindow(icon, win) {
+    const icRect = icon.getBoundingClientRect();
+    const winRect = win.getBoundingClientRect();
+    const ghost = win.cloneNode(true);
+    ghost.style.pointerEvents = 'none';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${icRect.left}px`;
+    ghost.style.top = `${icRect.top}px`;
+    ghost.style.width = `${icRect.width}px`;
+    ghost.style.height = `${icRect.height}px`;
+    ghost.style.opacity = '0.0';
+    document.body.appendChild(ghost);
+    const dx = (winRect.left + winRect.width/2) - (icRect.left + icRect.width/2);
+    const dy = (winRect.top + 22) - (icRect.top + icRect.height/2);
+    const scaleX = Math.max(0.05, icRect.width / Math.max(1, winRect.width));
+    const scaleY = Math.max(0.05, icRect.height / Math.max(1, winRect.height));
+    ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 0.0 },
+      { offset: 0.2, opacity: 0.6 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${1/scaleX}, ${1/scaleY})`, opacity: 1 }
+    ], { duration: 360, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)' }).onfinish = () => {
+      ghost.remove();
+      focusWindow(win);
+    };
+  }
+
+  // iOS: Lock Screen, SpringBoard paging, and animations
+  function setupLockScreen() {
+    const lock = document.getElementById('lock-screen');
+    const thumb = document.querySelector('#lock-slider .slider-thumb');
+    const time = document.getElementById('lock-time');
+    if (!lock || !thumb || !time) return;
+    const tick = () => {
+      const d = new Date();
+      const hh = ((d.getHours()+11)%12)+1;
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      time.textContent = `${hh}:${mm}`;
+    };
+    tick(); setInterval(tick, 60_000);
+
+    let dragging = false, startX = 0;
+    thumb.addEventListener('mousedown', (e) => { dragging = true; startX = e.clientX; });
+    window.addEventListener('mouseup', () => { if (!dragging) return; dragging = false; resetThumb(); });
+    window.addEventListener('mousemove', (e) => { if (!dragging) return; dragTo(e.clientX); });
+    thumb.addEventListener('touchstart', (e) => { dragging = true; startX = e.touches[0].clientX; }, { passive: true });
+    window.addEventListener('touchend', () => { if (!dragging) return; dragging = false; resetThumb(); }, { passive: true });
+    window.addEventListener('touchmove', (e) => { if (!dragging) return; dragTo(e.touches[0].clientX); }, { passive: true });
+
+    function dragTo(x) {
+      const track = document.querySelector('#lock-slider');
+      const min = 4, max = track.clientWidth - thumb.clientWidth - 4;
+      let dx = Math.max(min, Math.min(x - startX + 4, max));
+      thumb.style.left = dx + 'px';
+      if (dx >= max) {
+        hideLockScreen();
+        showSpringboard();
+      }
+    }
+    function resetThumb() { thumb.style.left = '4px'; }
+  }
+  function showLockScreen() { document.getElementById('lock-screen')?.removeAttribute('hidden'); document.getElementById('lock-screen').style.display = 'flex'; }
+  function hideLockScreen() { const el = document.getElementById('lock-screen'); if (el) { el.setAttribute('hidden',''); el.style.display='none'; } }
 
   // Start
   init();
