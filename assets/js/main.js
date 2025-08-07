@@ -217,8 +217,21 @@
   function minimizeWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
-    win.setAttribute('hidden', '');
-    setDockIndicator(id, false);
+    animateGenieToDock(win, () => {
+      win.setAttribute('hidden', '');
+      setDockIndicator(id, false);
+    });
+  }
+
+  function restoreWindowFromDock(id) {
+    const win = document.getElementById(id);
+    if (!win) return openWindow(id);
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return openWindow(id);
+    // prepare
+    win.removeAttribute('hidden');
+    focusWindow(win);
+    animateFromIconToWindow(icon, win);
   }
 
   function minimizeAll() {
@@ -352,7 +365,14 @@
       btn.setAttribute('data-win', app.id);
       btn.setAttribute('aria-label', app.label);
       btn.innerHTML = `${app.svg}<span class="indicator"></span><span class="label">${app.label}</span>`;
-      btn.addEventListener('click', () => openWindow(app.id));
+      btn.addEventListener('click', () => {
+        const win = document.getElementById(app.id);
+        if (win && !win.hasAttribute('hidden')) {
+          minimizeWindow(app.id);
+        } else {
+          restoreWindowFromDock(app.id);
+        }
+      });
       dock.appendChild(btn);
     }
     // magnification
@@ -470,7 +490,24 @@
     const homeButton = document.getElementById('home-button');
     if (!springboard || !homeButton) return;
     springboard.querySelectorAll('[data-app]').forEach(btn => {
-      btn.addEventListener('click', () => openIOSApp(btn.getAttribute('data-app')));
+      btn.addEventListener('click', (e) => {
+        const targetId = btn.getAttribute('data-app');
+        const app = document.getElementById(targetId);
+        if (!app) return;
+        const icRect = btn.getBoundingClientRect();
+        // initial scale at icon position
+        app.style.opacity = '0';
+        app.style.transform = `translate(${icRect.left + icRect.width/2}px, ${icRect.top + icRect.height/2}px) scale(0.05)`;
+        hideSpringboard();
+        app.removeAttribute('hidden');
+        requestAnimationFrame(() => {
+          app.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 180ms ease-out';
+          app.style.transform = 'translate(0,0) scale(1)';
+          app.style.opacity = '1';
+          setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
+        });
+        document.getElementById('home-button')?.removeAttribute('hidden');
+      });
     });
     homeButton.addEventListener('click', () => showSpringboard());
     // Jiggle on long press
@@ -532,6 +569,102 @@
       if (small) document.body.classList.add('ios-mode');
       else document.body.classList.remove('ios-mode');
       updateModeVisibility();
+    });
+  }
+
+  // Genie animation (approximate)
+  function animateGenieToDock(win, onDone) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${win.id}"]`);
+    if (!icon) { onDone?.(); return; }
+    const winRect = win.getBoundingClientRect();
+    const icRect = icon.getBoundingClientRect();
+    const ghost = win.cloneNode(true);
+    ghost.style.pointerEvents = 'none';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${winRect.left}px`;
+    ghost.style.top = `${winRect.top}px`;
+    ghost.style.width = `${winRect.width}px`;
+    ghost.style.height = `${winRect.height}px`;
+    ghost.style.opacity = '0.98';
+    document.body.appendChild(ghost);
+    // compute transform
+    const dx = (icRect.left + icRect.width/2) - (winRect.left + winRect.width/2);
+    const dy = (icRect.top) - (winRect.top + winRect.height);
+    const scaleX = Math.max(0.05, icRect.width / winRect.width);
+    const scaleY = Math.max(0.05, icRect.height / winRect.height);
+    ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1, borderRadius: getComputedStyle(win).borderRadius },
+      { offset: 0.6, transform: `translate(${dx*0.9}px, ${dy*0.6}px) scale(${Math.max(scaleX,0.2)}, ${Math.max(scaleY,0.2)})`, opacity: 0.7, filter: 'blur(0.5px)' },
+      { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 0.0, filter: 'blur(1px)' }
+    ], { duration: 380, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)' }).onfinish = () => {
+      ghost.remove();
+      onDone?.();
+    };
+  }
+
+  function animateFromIconToWindow(icon, win) {
+    const icRect = icon.getBoundingClientRect();
+    const winRect = win.getBoundingClientRect();
+    const ghost = win.cloneNode(true);
+    ghost.style.pointerEvents = 'none';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${icRect.left}px`;
+    ghost.style.top = `${icRect.top}px`;
+    ghost.style.width = `${icRect.width}px`;
+    ghost.style.height = `${icRect.height}px`;
+    ghost.style.opacity = '0.0';
+    document.body.appendChild(ghost);
+    const dx = (winRect.left + winRect.width/2) - (icRect.left + icRect.width/2);
+    const dy = (winRect.top + 22) - (icRect.top + icRect.height/2);
+    const scaleX = Math.max(0.05, icRect.width / Math.max(1, winRect.width));
+    const scaleY = Math.max(0.05, icRect.height / Math.max(1, winRect.height));
+    ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 0.0 },
+      { offset: 0.2, opacity: 0.6 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${1/scaleX}, ${1/scaleY})`, opacity: 1 }
+    ], { duration: 360, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)' }).onfinish = () => {
+      ghost.remove();
+      focusWindow(win);
+    };
+  }
+
+  // iOS: zoom from icon to app
+  function setupSpringboard() {
+    const springboard = document.getElementById('springboard');
+    const homeButton = document.getElementById('home-button');
+    if (!springboard || !homeButton) return;
+    springboard.querySelectorAll('[data-app]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const targetId = btn.getAttribute('data-app');
+        const app = document.getElementById(targetId);
+        if (!app) return;
+        const icRect = btn.getBoundingClientRect();
+        // initial scale at icon position
+        app.style.opacity = '0';
+        app.style.transform = `translate(${icRect.left + icRect.width/2}px, ${icRect.top + icRect.height/2}px) scale(0.05)`;
+        hideSpringboard();
+        app.removeAttribute('hidden');
+        requestAnimationFrame(() => {
+          app.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 180ms ease-out';
+          app.style.transform = 'translate(0,0) scale(1)';
+          app.style.opacity = '1';
+          setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
+        });
+        document.getElementById('home-button')?.removeAttribute('hidden');
+      });
+    });
+    homeButton.addEventListener('click', () => showSpringboard());
+    // Jiggle on long press
+    let pressTimer = null;
+    springboard.addEventListener('touchstart', () => {
+      pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600);
+    }, { passive: true });
+    springboard.addEventListener('touchend', () => {
+      clearTimeout(pressTimer); pressTimer = null;
+    });
+    // Back buttons in apps
+    document.querySelectorAll('.ios-app .ios-back').forEach(btn => {
+      btn.addEventListener('click', () => showSpringboard());
     });
   }
 
