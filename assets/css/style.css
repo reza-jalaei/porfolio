@@ -238,3 +238,36 @@ body.ios-mode .dock { background: rgba(255,255,255,0.9); border-color: rgba(0,0,
 .about .avatar { border: 1px solid #000; box-shadow: 2px 2px 0 #000; background: #fff; }
 body.ios-mode .about .avatar { border-radius: 12px; border-color: rgba(0,0,0,0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 @media (max-width: 520px) { .about { grid-template-columns: 64px 1fr; } .about .avatar { width: 64px; height: 64px; } }
+
+/* iOS 4 Lock Screen */
+#lock-screen { position: fixed; inset: 0; display: none; align-items: flex-end; justify-content: center; background: #000; z-index: 2000; }
+#lock-screen .lock-bg { position: absolute; inset: 0; background:
+  radial-gradient(1200px 700px at 30% -10%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%),
+  radial-gradient(1000px 700px at 70% 120%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%),
+  linear-gradient(180deg, #3d74d8, #14305e 70%);
+  opacity: 0.7; filter: blur(1px);
+}
+#lock-screen .lock-time { position: absolute; top: 20%; color: #fff; font-weight: 400; font-size: 64px; letter-spacing: -1px; text-shadow: 0 2px 6px rgba(0,0,0,0.7); }
+#lock-screen .lock-slider { position: relative; width: 86%; max-width: 520px; margin: 0 0 48px; height: 46px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.4); background: rgba(0,0,0,0.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 3px 10px rgba(0,0,0,0.5); display: grid; align-items: center; }
+#lock-screen .slider-track { color: rgba(255,255,255,0.85); text-transform: lowercase; font-size: 16px; text-align: center; overflow: hidden; position: relative; }
+#lock-screen .slider-track span { position: relative; }
+#lock-screen .slider-track::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%); animation: shimmer 1.6s linear infinite; }
+#lock-screen .slider-thumb { position: absolute; left: 4px; top: 4px; width: 38px; height: 38px; border-radius: 19px; background: linear-gradient(#cfd7e6, #8a9bb6); border: 1px solid rgba(0,0,0,0.4); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.4); }
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* SpringBoard paging */
+.sb-pages { height: calc(100% - 90px); overflow: hidden; position: relative; }
+.sb-pages .sb-page { position: absolute; inset: 0; }
+.page-dots { position: absolute; bottom: 84px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.page-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.55); box-shadow: 0 1px 0 rgba(0,0,0,0.6); }
+.page-dots span.active { background: #fff; }
+
+/* Aqua scrollbars approximation */
+* { scrollbar-width: thin; scrollbar-color: #9fb7ff #e6ecff; }
+*::-webkit-scrollbar { width: 12px; height: 12px; }
+*::-webkit-scrollbar-track { background: linear-gradient(#f3f6ff, #dde7ff); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15); }
+*::-webkit-scrollbar-thumb { background: linear-gradient(#b7c8ff, #8aa6ff); border: 1px solid rgba(0,0,0,0.25); border-radius: 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7); }
+
+/* App name highlight when active window changes */
+.app-name { transition: background-color 120ms ease, color 120ms ease; }
+.app-name.active { background: #3466ff; color: #fff; border-color: #123aa8; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.7); }

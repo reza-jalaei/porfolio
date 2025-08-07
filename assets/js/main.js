@@ -5,7 +5,6 @@
   const windows = Array.from(document.querySelectorAll('.mac-window'));
   let zIndexCounter = 10;
 
-  // Initialize
   function init() {
     setupClock();
     setupStatusClock();
@@ -16,15 +15,21 @@
     setupIOS();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
-    // Open About by default; if on mobile, zoom it for full-screen feel
     setTimeout(() => {
       openWindow('win-about');
       if (document.body.classList.contains('ios-mode')) {
-        // Show iOS SpringBoard by default
-        showSpringboard();
+        showLockScreen();
       }
       showBootOverlay();
     }, 0);
+  }
+
+  function updateAppName(activeTitle) {
+    const label = document.querySelector('.app-name');
+    if (!label) return;
+    label.textContent = activeTitle || 'Finder';
+    label.classList.add('active');
+    setTimeout(() => label.classList.remove('active'), 180);
   }
 
   // Clock
@@ -188,6 +193,8 @@
     win.classList.add('active');
     win.style.zIndex = String(++zIndexCounter);
     setDockIndicator(win.id, true);
+    const title = win.querySelector('.title')?.textContent || '';
+    updateAppName(title);
   }
 
   function openWindow(id) {
@@ -459,11 +466,12 @@
   function setupIOS() {
     cloneContentToIOS();
     setupSpringboard();
+    setupLockScreen();
   }
   function enableIOSMode() {
     document.body.classList.add('ios-mode');
     updateModeVisibility();
-    showSpringboard();
+    showLockScreen();
     window.scrollTo(0,0);
   }
   function disableIOSMode() {
@@ -489,13 +497,39 @@
     const springboard = document.getElementById('springboard');
     const homeButton = document.getElementById('home-button');
     if (!springboard || !homeButton) return;
+
+    // paging
+    const pages = Array.from(document.querySelectorAll('.sb-page'));
+    const dots = document.getElementById('page-dots');
+    let current = 0; let downX = 0; let isDown = false;
+    positionPages();
+    function positionPages() {
+      pages.forEach((p, i) => {
+        p.style.transform = `translateX(${(i-current)*100}%)`;
+        p.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1)';
+      });
+      Array.from(dots.children).forEach((d,i)=> d.classList.toggle('active', i===current));
+    }
+    function goTo(i) { current = Math.max(0, Math.min(i, pages.length-1)); positionPages(); }
+
+    function onDown(x){ isDown=true; downX=x; pages.forEach(p=>p.style.transition='none'); }
+    function onMove(x){ if(!isDown) return; const dx=(x-downX)/springboard.clientWidth*100; pages.forEach((p,i)=>{p.style.transform=`translateX(${(i-current)*100+dx}%)`;}); }
+    function onUp(x){ if(!isDown) return; isDown=false; const dx=(x-downX)/springboard.clientWidth; if (dx>0.15) goTo(current-1); else if(dx<-0.15) goTo(current+1); else positionPages(); }
+
+    springboard.addEventListener('mousedown', e=>onDown(e.clientX));
+    springboard.addEventListener('mousemove', e=>onMove(e.clientX));
+    window.addEventListener('mouseup', e=>onUp(e.clientX));
+    springboard.addEventListener('touchstart', e=>onDown(e.touches[0].clientX), { passive: true });
+    springboard.addEventListener('touchmove', e=>onMove(e.touches[0].clientX), { passive: true });
+    springboard.addEventListener('touchend', e=>onUp(e.changedTouches[0].clientX), { passive: true });
+    dots.querySelectorAll('span').forEach(s=> s.addEventListener('click', ()=> goTo(parseInt(s.dataset.page,10))));
+
     springboard.querySelectorAll('[data-app]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const targetId = btn.getAttribute('data-app');
         const app = document.getElementById(targetId);
         if (!app) return;
         const icRect = btn.getBoundingClientRect();
-        // initial scale at icon position
         app.style.opacity = '0';
         app.style.transform = `translate(${icRect.left + icRect.width/2}px, ${icRect.top + icRect.height/2}px) scale(0.05)`;
         hideSpringboard();
@@ -510,14 +544,12 @@
       });
     });
     homeButton.addEventListener('click', () => showSpringboard());
+
     // Jiggle on long press
     let pressTimer = null;
-    springboard.addEventListener('touchstart', () => {
-      pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600);
-    }, { passive: true });
-    springboard.addEventListener('touchend', () => {
-      clearTimeout(pressTimer); pressTimer = null;
-    });
+    springboard.addEventListener('touchstart', () => { pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600); }, { passive: true });
+    springboard.addEventListener('touchend', () => { clearTimeout(pressTimer); pressTimer = null; });
+
     // Back buttons in apps
     document.querySelectorAll('.ios-app .ios-back').forEach(btn => {
       btn.addEventListener('click', () => showSpringboard());
@@ -628,45 +660,42 @@
     };
   }
 
-  // iOS: zoom from icon to app
-  function setupSpringboard() {
-    const springboard = document.getElementById('springboard');
-    const homeButton = document.getElementById('home-button');
-    if (!springboard || !homeButton) return;
-    springboard.querySelectorAll('[data-app]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const targetId = btn.getAttribute('data-app');
-        const app = document.getElementById(targetId);
-        if (!app) return;
-        const icRect = btn.getBoundingClientRect();
-        // initial scale at icon position
-        app.style.opacity = '0';
-        app.style.transform = `translate(${icRect.left + icRect.width/2}px, ${icRect.top + icRect.height/2}px) scale(0.05)`;
-        hideSpringboard();
-        app.removeAttribute('hidden');
-        requestAnimationFrame(() => {
-          app.style.transition = 'transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 180ms ease-out';
-          app.style.transform = 'translate(0,0) scale(1)';
-          app.style.opacity = '1';
-          setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
-        });
-        document.getElementById('home-button')?.removeAttribute('hidden');
-      });
-    });
-    homeButton.addEventListener('click', () => showSpringboard());
-    // Jiggle on long press
-    let pressTimer = null;
-    springboard.addEventListener('touchstart', () => {
-      pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600);
-    }, { passive: true });
-    springboard.addEventListener('touchend', () => {
-      clearTimeout(pressTimer); pressTimer = null;
-    });
-    // Back buttons in apps
-    document.querySelectorAll('.ios-app .ios-back').forEach(btn => {
-      btn.addEventListener('click', () => showSpringboard());
-    });
+  // iOS: Lock Screen, SpringBoard paging, and animations
+  function setupLockScreen() {
+    const lock = document.getElementById('lock-screen');
+    const thumb = document.querySelector('#lock-slider .slider-thumb');
+    const time = document.getElementById('lock-time');
+    if (!lock || !thumb || !time) return;
+    const tick = () => {
+      const d = new Date();
+      const hh = ((d.getHours()+11)%12)+1;
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      time.textContent = `${hh}:${mm}`;
+    };
+    tick(); setInterval(tick, 60_000);
+
+    let dragging = false, startX = 0;
+    thumb.addEventListener('mousedown', (e) => { dragging = true; startX = e.clientX; });
+    window.addEventListener('mouseup', () => { if (!dragging) return; dragging = false; resetThumb(); });
+    window.addEventListener('mousemove', (e) => { if (!dragging) return; dragTo(e.clientX); });
+    thumb.addEventListener('touchstart', (e) => { dragging = true; startX = e.touches[0].clientX; }, { passive: true });
+    window.addEventListener('touchend', () => { if (!dragging) return; dragging = false; resetThumb(); }, { passive: true });
+    window.addEventListener('touchmove', (e) => { if (!dragging) return; dragTo(e.touches[0].clientX); }, { passive: true });
+
+    function dragTo(x) {
+      const track = document.querySelector('#lock-slider');
+      const min = 4, max = track.clientWidth - thumb.clientWidth - 4;
+      let dx = Math.max(min, Math.min(x - startX + 4, max));
+      thumb.style.left = dx + 'px';
+      if (dx >= max) {
+        hideLockScreen();
+        showSpringboard();
+      }
+    }
+    function resetThumb() { thumb.style.left = '4px'; }
   }
+  function showLockScreen() { document.getElementById('lock-screen')?.removeAttribute('hidden'); document.getElementById('lock-screen').style.display = 'flex'; }
+  function hideLockScreen() { const el = document.getElementById('lock-screen'); if (el) { el.setAttribute('hidden',''); el.style.display='none'; } }
 
   // Start
   init();

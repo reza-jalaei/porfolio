@@ -161,26 +161,49 @@
     </ul>
   </main>
 
+  <!-- iOS 4 Lock Screen -->
+  <div id="lock-screen" role="dialog" aria-label="Lock Screen" hidden>
+    <div class="lock-bg"></div>
+    <div class="lock-time" id="lock-time">12:00</div>
+    <div class="lock-slider" id="lock-slider" aria-label="Slide to unlock">
+      <div class="slider-track"><span>slide to unlock</span></div>
+      <div class="slider-thumb" role="button" tabindex="0" aria-label="Unlock"></div>
+    </div>
+  </div>
+
   <!-- iOS SpringBoard (shown in iOS mode) -->
   <div id="springboard" role="application" aria-label="iPhone Home" hidden>
-    <div class="springboard-grid">
-      <div>
-        <button class="sb-icon" data-app="ios-about" aria-label="About"></button>
-        <div class="sb-label">About</div>
+    <div class="sb-pages" id="sb-pages">
+      <div class="sb-page">
+        <div class="springboard-grid">
+          <div>
+            <button class="sb-icon" data-app="ios-about" aria-label="About"></button>
+            <div class="sb-label">About</div>
+          </div>
+          <div>
+            <button class="sb-icon" data-app="ios-projects" aria-label="Projects"></button>
+            <div class="sb-label">Projects</div>
+          </div>
+          <div>
+            <button class="sb-icon" data-app="ios-blog" aria-label="Blog"></button>
+            <div class="sb-label">Blog</div>
+          </div>
+          <div>
+            <button class="sb-icon" data-app="ios-contact" aria-label="Contact"></button>
+            <div class="sb-label">Contact</div>
+          </div>
+        </div>
       </div>
-      <div>
-        <button class="sb-icon" data-app="ios-projects" aria-label="Projects"></button>
-        <div class="sb-label">Projects</div>
-      </div>
-      <div>
-        <button class="sb-icon" data-app="ios-blog" aria-label="Blog"></button>
-        <div class="sb-label">Blog</div>
-      </div>
-      <div>
-        <button class="sb-icon" data-app="ios-contact" aria-label="Contact"></button>
-        <div class="sb-label">Contact</div>
+      <div class="sb-page">
+        <div class="springboard-grid">
+          <div>
+            <a class="sb-icon" href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener" aria-label="Resume"></a>
+            <div class="sb-label">Resume</div>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="page-dots" id="page-dots" aria-hidden="true"><span class="active" data-page="0"></span><span data-page="1"></span></div>
     <div class="ios-dock" aria-hidden="true">
       <button class="sb-icon" data-app="ios-about" aria-label="About"></button>
       <button class="sb-icon" data-app="ios-projects" aria-label="Projects"></button>
