@@ -459,7 +459,22 @@
     const overlay = document.getElementById('boot-overlay');
     if (!overlay) return;
     overlay.classList.add('active');
-    setTimeout(() => overlay.classList.remove('active'), 1400);
+    const bar = document.getElementById('boot-bar');
+    let progress = 0;
+    const step = () => {
+      progress += Math.random() * 18 + 6; // 6-24% steps
+      progress = Math.min(100, progress);
+      if (bar) {
+        bar.style.width = progress + '%';
+        bar.parentElement?.setAttribute('aria-valuenow', String(Math.floor(progress)));
+      }
+      if (progress < 100) {
+        setTimeout(step, 160);
+      } else {
+        setTimeout(() => overlay.classList.remove('active'), 260);
+      }
+    };
+    setTimeout(step, 180);
   }
 
   // iOS Mode
