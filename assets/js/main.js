@@ -17,9 +17,6 @@
     setupGlobalHandlers();
     setTimeout(() => {
       openWindow('win-about');
-      if (document.body.classList.contains('ios-mode')) {
-        showLockScreen();
-      }
       showBootOverlay();
     }, 0);
   }
@@ -117,11 +114,11 @@
       case 'arrange-windows': tileWindows(); break;
       case 'tidy-icons': tidyIcons(); break;
       case 'show-grid': alert('Grid toggled'); break;
-      case 'about-this-site': alert('Built with vanilla HTML/CSS/JS'); break;
+      // removed
       case 'sleep': alert('Zzz…'); break;
       case 'restart': alert('Restarting…'); break;
       case 'shutdown': alert('Shutting down…'); break;
-      case 'switch-to-iphone': enableIOSMode(); break;
+      // removed
     }
     closeAllMenus();
   }
@@ -347,10 +344,10 @@
   // macOS-style Dock
   const dockId = 'dock';
   const dockApps = [
-    { id: 'win-about', label: 'About', svg: `<svg viewBox="0 0 24 24" width="48" height="48" fill="#000"><circle cx="12" cy="8" r="4"/><rect x="4" y="14" width="16" height="7" rx="3"/></svg>` },
-    { id: 'win-projects', label: 'Projects', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><path d=\"M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>` },
-    { id: 'win-blog', label: 'Blog', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M8 7h8M8 11h8M8 15h6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` },
-    { id: 'win-contact', label: 'Contact', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M3 7l9 6 9-6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` }
+    { id: 'win-about', label: 'About', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c0-4 4-6 8-6s8 2 8 6\"/></svg>` },
+    { id: 'win-projects', label: 'Projects', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>` },
+    { id: 'win-blog', label: 'Blog', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"2\"/><path d=\"M8 7h8M8 11h8M8 15h6\"/></svg>` },
+    { id: 'win-contact', label: 'Contact', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M3 7l9 6 9-6\"/></svg>` }
   ];
   function ensureDock() {
     let dock = document.getElementById(dockId);
@@ -387,11 +384,10 @@
       const icons = Array.from(dock.querySelectorAll('.dock-icon'));
       icons.forEach(icon => {
         const rect = icon.getBoundingClientRect();
-        const cx = rect.left + rect.width/2;
-        const cy = rect.top + rect.height; // bottom center as origin
-        const dx = Math.abs(e.clientX - cx);
-        const dist = Math.min(160, dx);
-        const mag = 1 + (1 - dist/160) * 1.2; // up to 2.2x
+                 const cx = rect.left + rect.width/2;
+         const dx = Math.abs(e.clientX - cx);
+         const dist = Math.min(160, dx);
+         const mag = 1 + (1 - dist/160) * 0.9; // up to 1.9x
         icon.style.setProperty('--mag', mag.toFixed(3));
         icon.style.transform = `scale(${mag.toFixed(3)})`;
       });
@@ -481,12 +477,10 @@
   function setupIOS() {
     cloneContentToIOS();
     setupSpringboard();
-    setupLockScreen();
   }
   function enableIOSMode() {
     document.body.classList.add('ios-mode');
     updateModeVisibility();
-    showLockScreen();
     window.scrollTo(0,0);
   }
   function disableIOSMode() {
@@ -510,8 +504,7 @@
   }
   function setupSpringboard() {
     const springboard = document.getElementById('springboard');
-    const homeButton = document.getElementById('home-button');
-    if (!springboard || !homeButton) return;
+    if (!springboard) return;
 
     // paging
     const pages = Array.from(document.querySelectorAll('.sb-page'));
@@ -555,10 +548,10 @@
           app.style.opacity = '1';
           setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
         });
-        document.getElementById('home-button')?.removeAttribute('hidden');
+        // home button removed
       });
     });
-    homeButton.addEventListener('click', () => showSpringboard());
+    // home button removed
 
     // Jiggle on long press
     let pressTimer = null;
@@ -578,12 +571,11 @@
     app.classList.remove('opening');
     void app.offsetWidth;
     app.classList.add('opening');
-    document.getElementById('home-button')?.removeAttribute('hidden');
+    // home button removed
   }
   function showSpringboard() {
     document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
     document.getElementById('springboard')?.removeAttribute('hidden');
-    document.getElementById('home-button')?.setAttribute('hidden', '');
   }
   function hideSpringboard() {
     document.getElementById('springboard')?.setAttribute('hidden', '');
@@ -676,7 +668,7 @@
   }
 
   // iOS: Lock Screen, SpringBoard paging, and animations
-  function setupLockScreen() {
+  /* lock screen removed */ function setupLockScreen_removed() {
     const lock = document.getElementById('lock-screen');
     const thumb = document.querySelector('#lock-slider .slider-thumb');
     const time = document.getElementById('lock-time');
@@ -709,8 +701,7 @@
     }
     function resetThumb() { thumb.style.left = '4px'; }
   }
-  function showLockScreen() { document.getElementById('lock-screen')?.removeAttribute('hidden'); document.getElementById('lock-screen').style.display = 'flex'; }
-  function hideLockScreen() { const el = document.getElementById('lock-screen'); if (el) { el.setAttribute('hidden',''); el.style.display='none'; } }
+  /* lock screen removed */
 
   // Start
   init();
