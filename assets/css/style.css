@@ -1,0 +1,148 @@
+/* Basic Reset */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: Charcoal, Chicago, Geneva, Tahoma, Arial, sans-serif; color: #000; background: #c7c7c7; }
+
+/* Desktop Background: subtle grid reminiscent of classic patterns */
+#desktop {
+  position: relative;
+  height: calc(100vh - 22px);
+  background:
+    linear-gradient(#cfcfcf, #cfcfcf) 0 0/100% 100% no-repeat,
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 8px);
+  padding: 12px;
+  overflow: hidden;
+}
+
+/* Menu Bar */
+.menu-bar {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  background: linear-gradient(#dfdfdf, #c9c9c9);
+  border-bottom: 1px solid #000;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  user-select: none;
+}
+.menu-left { display: flex; align-items: center; gap: 8px; }
+.menu-right { font-size: 12px; }
+.apple-menu {
+  font-size: 16px;
+  line-height: 18px;
+  background: transparent;
+  border: none;
+  padding: 0 6px;
+  cursor: default;
+}
+.menus { display: flex; align-items: stretch; gap: 2px; }
+.menu { position: relative; }
+.menu-trigger {
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: default;
+}
+.menu-trigger:focus { outline: 1px dotted #000; }
+.menu.open .menu-trigger { border-color: #000; background: #bfbfbf; }
+.menu-dropdown {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  min-width: 160px;
+  background: #dfdfdf;
+  border: 1px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  padding: 4px 0;
+  list-style: none;
+  margin: 0;
+  display: none;
+  z-index: 1001;
+}
+.menu.open .menu-dropdown { display: block; }
+.menu-dropdown li {
+  font-size: 12px;
+  padding: 3px 12px;
+  white-space: nowrap;
+}
+.menu-dropdown li:hover { background: #bfbfbf; }
+.menu-dropdown .separator { height: 1px; margin: 4px 0; background: #9a9a9a; padding: 0; }
+
+/* Desktop Icons */
+.desktop-icons { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 16px; align-content: start; }
+@media (min-width: 700px) {
+  .desktop-icons { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 18px; }
+}
+.desktop-icon { width: 84px; text-align: center; color: #000; cursor: default; }
+.desktop-icon .icon-svg { width: 48px; height: 48px; margin: 0 auto 4px; filter: drop-shadow(1px 1px 0 #fff) drop-shadow(-1px -1px 0 #777); }
+.desktop-icon .icon-label { display: inline-block; font-size: 12px; background: rgba(255,255,255,0.6); padding: 1px 4px; border: 1px solid #9a9a9a; }
+.desktop-icon:focus .icon-label, .desktop-icon.selected .icon-label { outline: 1px dotted #000; background: #bfbfbf; }
+.desktop-icon a.icon-link { color: inherit; text-decoration: none; display: inline-block; }
+
+/* Mac Window */
+.mac-window {
+  position: absolute;
+  top: 80px; left: 80px;
+  width: 520px; height: 360px;
+  background: #fff;
+  border: 1px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  display: grid;
+  grid-template-rows: 22px 1fr;
+}
+.mac-window[hidden] { display: none !important; }
+.mac-window.active .title-bar { background: linear-gradient(#2d63f0, #1745d8); color: #fff; }
+.mac-window.inactive .title-bar { background: linear-gradient(#e1e1e1, #c9c9c9); color: #000; }
+.title-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 70px; /* room for controls on the left (mirroring classic) */
+  border-bottom: 1px solid #000;
+  user-select: none;
+  cursor: move;
+}
+.title-bar .title { font-size: 12px; font-weight: 600; margin: 0; }
+.controls {
+  position: absolute; left: 6px; top: 2px; display: flex; gap: 6px;
+}
+.control {
+  width: 14px; height: 14px;
+  border: 1px solid #000;
+  background: #e5e5e5;
+  box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #fff;
+  padding: 0; cursor: default;
+}
+.control.close { background: repeating-linear-gradient(45deg, #e5e5e5, #e5e5e5 2px, #c5c5c5 2px, #c5c5c5 4px); }
+.control.minimize { background: linear-gradient(#f3f3f3, #cfcfcf); }
+.control.zoom { background: linear-gradient(#f3f3f3, #cfcfcf); }
+.window-content { padding: 10px; overflow: auto; font-size: 14px; }
+.resize-handle { position: absolute; right: 0; bottom: 0; width: 12px; height: 12px; background: linear-gradient(135deg, transparent 50%, #000 50%); cursor: nwse-resize; }
+
+.list { list-style: none; padding: 0; margin: 0; }
+.list li { padding: 6px 0; border-bottom: 1px solid #eaeaea; }
+.list li:last-child { border-bottom: none; }
+
+.contact { list-style: none; padding: 0; margin: 0; }
+.contact li { margin-bottom: 6px; }
+.contact a { color: #0645ad; text-decoration: underline; }
+
+/* Minimized windows dock (simple) */
+.dock {
+  position: fixed; bottom: 6px; left: 50%; transform: translateX(-50%);
+  background: #dfdfdf; border: 1px solid #000; box-shadow: 2px 2px 0 #000; padding: 4px 6px; display: flex; gap: 6px;
+}
+.dock button { font-size: 12px; border: 1px solid #000; background: #cfcfcf; padding: 2px 6px; cursor: default; }
+
+/* Responsive: small screens open windows "maximized" */
+@media (max-width: 640px) {
+  .mac-window { left: 6px !important; top: 28px !important; width: calc(100vw - 12px) !important; height: calc(100vh - 40px) !important; }
+  #desktop { padding: 6px; }
+}
