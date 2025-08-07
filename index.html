@@ -41,6 +41,8 @@
         <li role="menuitem" data-action="about-this-mac">About This Mac</li>
         <li class="separator" role="separator"></li>
         <li role="menuitem" data-action="about-this-site">About This Site</li>
+        <li class="separator" role="separator"></li>
+        <li role="menuitem" data-action="switch-to-iphone">Switch to iPhone</li>
       </ul>
       <div class="app-name" aria-hidden="true">Finder</div>
       <nav class="menus">
@@ -158,6 +160,35 @@
       </li>
     </ul>
   </main>
+
+  <!-- iOS SpringBoard (shown in iOS mode) -->
+  <div id="springboard" role="application" aria-label="iPhone Home" hidden>
+    <div class="springboard-grid">
+      <div>
+        <button class="sb-icon" data-app="ios-about" aria-label="About"></button>
+        <div class="sb-label">About</div>
+      </div>
+      <div>
+        <button class="sb-icon" data-app="ios-projects" aria-label="Projects"></button>
+        <div class="sb-label">Projects</div>
+      </div>
+      <div>
+        <button class="sb-icon" data-app="ios-blog" aria-label="Blog"></button>
+        <div class="sb-label">Blog</div>
+      </div>
+      <div>
+        <button class="sb-icon" data-app="ios-contact" aria-label="Contact"></button>
+        <div class="sb-label">Contact</div>
+      </div>
+    </div>
+    <div class="ios-dock" aria-hidden="true">
+      <button class="sb-icon" data-app="ios-about" aria-label="About"></button>
+      <button class="sb-icon" data-app="ios-projects" aria-label="Projects"></button>
+      <button class="sb-icon" data-app="ios-blog" aria-label="Blog"></button>
+      <button class="sb-icon" data-app="ios-contact" aria-label="Contact"></button>
+    </div>
+  </div>
+  <button id="home-button" class="home-button" aria-label="Home" hidden></button>
 
   <!-- Windows -->
   <section id="win-about" class="mac-window platinum" role="dialog" aria-labelledby="title-about" aria-modal="false" hidden>
@@ -281,6 +312,24 @@
       </div>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+
+  <!-- iOS App Containers -->
+  <section id="ios-about" class="ios-app" role="dialog" aria-label="About" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button><div class="ios-title">About</div></div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-projects" class="ios-app" role="dialog" aria-label="Projects" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button><div class="ios-title">Projects</div></div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-blog" class="ios-app" role="dialog" aria-label="Blog" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button><div class="ios-title">Blog</div></div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-contact" class="ios-app" role="dialog" aria-label="Contact" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button><div class="ios-title">Contact</div></div>
+    <div class="app-body"></div>
   </section>
 
   <script src="assets/js/main.js"></script>

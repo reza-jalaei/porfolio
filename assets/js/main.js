@@ -12,14 +12,16 @@
     setupMenus();
     setupDesktopIcons();
     setupWindows();
+    setupDock();
+    setupIOS();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
     // Open About by default; if on mobile, zoom it for full-screen feel
     setTimeout(() => {
       openWindow('win-about');
       if (document.body.classList.contains('ios-mode')) {
-        // Ensure about window is maximized
-        try { toggleZoom('win-about'); } catch (_) {}
+        // Show iOS SpringBoard by default
+        showSpringboard();
       }
       showBootOverlay();
     }, 0);
@@ -114,6 +116,7 @@
       case 'sleep': alert('Zzz…'); break;
       case 'restart': alert('Restarting…'); break;
       case 'shutdown': alert('Shutting down…'); break;
+      case 'switch-to-iphone': enableIOSMode(); break;
     }
     closeAllMenus();
   }
@@ -184,6 +187,7 @@
     windows.forEach(w => w.classList.remove('active'));
     win.classList.add('active');
     win.style.zIndex = String(++zIndexCounter);
+    setDockIndicator(win.id, true);
   }
 
   function openWindow(id) {
@@ -200,19 +204,21 @@
       win.dataset.initialized = 'true';
     }
     focusWindow(win);
+    bounceDockIcon(id);
   }
 
   function closeWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
     win.setAttribute('hidden', '');
+    setDockIndicator(id, false);
   }
 
   function minimizeWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
     win.setAttribute('hidden', '');
-    addToDock(id, win.querySelector('.title')?.textContent || id);
+    setDockIndicator(id, false);
   }
 
   function minimizeAll() {
@@ -318,8 +324,14 @@
     });
   }
 
-  // Simple dock for minimized windows
+  // macOS-style Dock
   const dockId = 'dock';
+  const dockApps = [
+    { id: 'win-about', label: 'About', svg: `<svg viewBox="0 0 24 24" width="48" height="48" fill="#000"><circle cx="12" cy="8" r="4"/><rect x="4" y="14" width="16" height="7" rx="3"/></svg>` },
+    { id: 'win-projects', label: 'Projects', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><path d=\"M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>` },
+    { id: 'win-blog', label: 'Blog', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M8 7h8M8 11h8M8 15h6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` },
+    { id: 'win-contact', label: 'Contact', svg: `<svg viewBox=\"0 0 24 24\" width=\"48\" height=\"48\" fill=\"#000\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/><path d=\"M3 7l9 6 9-6\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/></svg>` }
+  ];
   function ensureDock() {
     let dock = document.getElementById(dockId);
     if (!dock) {
@@ -331,19 +343,48 @@
     }
     return dock;
   }
-  function addToDock(id, label) {
+  function setupDock() {
     const dock = ensureDock();
-    let btn = dock.querySelector(`[data-win="${id}"]`);
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.textContent = label;
-      btn.setAttribute('data-win', id);
-      btn.addEventListener('click', () => {
-        openWindow(id);
-        btn.remove();
-      });
+    dock.innerHTML = '';
+    for (const app of dockApps) {
+      const btn = document.createElement('button');
+      btn.className = 'dock-icon';
+      btn.setAttribute('data-win', app.id);
+      btn.setAttribute('aria-label', app.label);
+      btn.innerHTML = `${app.svg}<span class="indicator"></span><span class="label">${app.label}</span>`;
+      btn.addEventListener('click', () => openWindow(app.id));
       dock.appendChild(btn);
     }
+    // magnification
+    dock.addEventListener('mousemove', (e) => {
+      const icons = Array.from(dock.querySelectorAll('.dock-icon'));
+      icons.forEach(icon => {
+        const rect = icon.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height; // bottom center as origin
+        const dx = Math.abs(e.clientX - cx);
+        const dist = Math.min(160, dx);
+        const mag = 1 + (1 - dist/160) * 1.2; // up to 2.2x
+        icon.style.setProperty('--mag', mag.toFixed(3));
+        icon.style.transform = `scale(${mag.toFixed(3)})`;
+      });
+    });
+    dock.addEventListener('mouseleave', () => {
+      dock.querySelectorAll('.dock-icon').forEach(i => { i.style.transform = 'scale(1)'; i.style.removeProperty('--mag'); });
+    });
+  }
+  function bounceDockIcon(id) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return;
+    icon.classList.remove('bounce');
+    void icon.offsetWidth; // restart animation
+    icon.classList.add('bounce');
+    setDockIndicator(id, true);
+  }
+  function setDockIndicator(id, on) {
+    const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
+    if (!icon) return;
+    icon.classList.toggle('active', !!on);
   }
 
   // Window management helpers
@@ -394,6 +435,84 @@
     setTimeout(() => overlay.classList.remove('active'), 1400);
   }
 
+  // iOS Mode
+  function setupIOS() {
+    cloneContentToIOS();
+    setupSpringboard();
+  }
+  function enableIOSMode() {
+    document.body.classList.add('ios-mode');
+    updateModeVisibility();
+    showSpringboard();
+    window.scrollTo(0,0);
+  }
+  function disableIOSMode() {
+    document.body.classList.remove('ios-mode');
+    updateModeVisibility();
+  }
+  function cloneContentToIOS() {
+    const mapping = [
+      ['win-about', 'ios-about'],
+      ['win-projects', 'ios-projects'],
+      ['win-blog', 'ios-blog'],
+      ['win-contact', 'ios-contact']
+    ];
+    for (const [winId, iosId] of mapping) {
+      const src = document.querySelector(`#${winId} .window-content`);
+      const dest = document.querySelector(`#${iosId} .app-body`);
+      if (src && dest && dest.childElementCount === 0) {
+        dest.appendChild(src.cloneNode(true));
+      }
+    }
+  }
+  function setupSpringboard() {
+    const springboard = document.getElementById('springboard');
+    const homeButton = document.getElementById('home-button');
+    if (!springboard || !homeButton) return;
+    springboard.querySelectorAll('[data-app]').forEach(btn => {
+      btn.addEventListener('click', () => openIOSApp(btn.getAttribute('data-app')));
+    });
+    homeButton.addEventListener('click', () => showSpringboard());
+    // Jiggle on long press
+    let pressTimer = null;
+    springboard.addEventListener('touchstart', () => {
+      pressTimer = setTimeout(() => springboard.classList.add('jiggle'), 600);
+    }, { passive: true });
+    springboard.addEventListener('touchend', () => {
+      clearTimeout(pressTimer); pressTimer = null;
+    });
+    // Back buttons in apps
+    document.querySelectorAll('.ios-app .ios-back').forEach(btn => {
+      btn.addEventListener('click', () => showSpringboard());
+    });
+  }
+  function openIOSApp(id) {
+    const app = document.getElementById(id);
+    if (!app) return;
+    hideSpringboard();
+    app.removeAttribute('hidden');
+    document.getElementById('home-button')?.removeAttribute('hidden');
+  }
+  function showSpringboard() {
+    document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
+    document.getElementById('springboard')?.removeAttribute('hidden');
+    document.getElementById('home-button')?.setAttribute('hidden', '');
+  }
+  function hideSpringboard() {
+    document.getElementById('springboard')?.setAttribute('hidden', '');
+  }
+  function updateModeVisibility() {
+    const isIOS = document.body.classList.contains('ios-mode');
+    const sb = document.getElementById('springboard');
+    if (isIOS) {
+      windows.forEach(w => w.setAttribute('hidden', ''));
+      sb?.removeAttribute('hidden');
+    } else {
+      sb?.setAttribute('hidden', '');
+      document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
+    }
+  }
+
   // Toggle iOS-like mode on small screens or mobile user agents
   function detectMobileAndToggleMode() {
     const isSmall = window.matchMedia('(max-width: 640px)').matches;
@@ -404,10 +523,12 @@
     } else {
       document.body.classList.remove('ios-mode');
     }
+    updateModeVisibility();
     window.addEventListener('resize', () => {
       const small = window.matchMedia('(max-width: 640px)').matches;
       if (small) document.body.classList.add('ios-mode');
       else document.body.classList.remove('ios-mode');
+      updateModeVisibility();
     });
   }
 
