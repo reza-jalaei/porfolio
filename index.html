@@ -28,6 +28,7 @@
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">File</button>
           <ul class="menu-dropdown" role="menu" aria-label="File">
             <li role="menuitem" data-action="open-about">About Me</li>
+            <li role="menuitem" data-action="open-blog">Blog</li>
             <li role="menuitem" data-action="open-projects">Projects</li>
             <li role="menuitem" data-action="open-contact">Contact</li>
             <li class="separator" role="separator"></li>
@@ -56,6 +57,7 @@
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Go</button>
           <ul class="menu-dropdown" role="menu" aria-label="Go">
             <li role="menuitem" data-action="open-about">About Me</li>
+            <li role="menuitem" data-action="open-blog">Blog</li>
             <li role="menuitem" data-action="open-projects">Projects</li>
             <li role="menuitem" data-action="open-contact">Contact</li>
           </ul>
@@ -102,6 +104,16 @@
         </div>
         <span class="icon-label">Projects</span>
       </li>
+      <li class="desktop-icon" tabindex="0" data-target="win-blog">
+        <div class="icon-svg" aria-hidden="true">
+          <!-- Note icon -->
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="#000">
+            <rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="#000" stroke-width="2"/>
+            <path d="M8 7h8M8 11h8M8 15h6" fill="none" stroke="#000" stroke-width="2"/>
+          </svg>
+        </div>
+        <span class="icon-label">Blog</span>
+      </li>
       <li class="desktop-icon" tabindex="0" data-target="win-contact">
         <div class="icon-svg" aria-hidden="true">
           <!-- Mail icon -->
@@ -144,6 +156,10 @@
           <p>Hello! I'm Reza. I build performant, delightful web experiences.</p>
           <p>Senior CRO Consultant and Product Owner at <a href="https://figpii.com" target="_blank" rel="noopener">FigPii</a>.</p>
           <p>Specialties: UX Focused Design, JavaScript, Node.js, Shopify, A/B Testing, Analytics.</p>
+          <div class="podcast-embed" aria-label="30 Minutes of Marketing Podcast">
+            <iframe allow="autoplay *; encrypted-media *; clipboard-write" frameborder="0" height="175" style="width:100%;max-width:700px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation" src="https://embed.podcasts.apple.com/us/podcast/30-minutes-of-marketing/id1587332914"></iframe>
+            <p class="podcast-link"><a href="https://podcasts.apple.com/us/podcast/30-minutes-of-marketing/id1587332914" target="_blank" rel="noopener">Listen on Apple Podcasts</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -164,6 +180,47 @@
         <li>
           <strong>Linkedin</strong>
           <div><a href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener">https://www.linkedin.com/in/reza-jalaei/</a></div>
+        </li>
+      </ul>
+      <div class="media">
+        <h3>Videos</h3>
+        <div class="video-item">
+          <strong>Who is Reza?</strong>
+          <video controls preload="metadata" width="100%">
+            <source src="videos/who-is-reza.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-item">
+          <strong>Why Product Owner?</strong>
+          <video controls preload="metadata" width="100%">
+            <source src="videos/why-product-owner.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+    <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+
+  <section id="win-blog" class="mac-window platinum" role="dialog" aria-labelledby="title-blog" aria-modal="false" hidden>
+    <div class="title-bar" data-window-drag-handle>
+      <div class="controls">
+        <button class="control close" aria-label="Close window" data-action="close"></button>
+        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
+        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
+      </div>
+      <h2 id="title-blog" class="title">Blog</h2>
+    </div>
+    <div class="window-content">
+      <ul class="list">
+        <li>
+          <strong>The Best Books to Read as a Product Owner</strong>
+          <div><a href="https://web.archive.org/web/20220927194805/https://www.rezziza.com/post/top-10-books-to-read-as-a-productowner" target="_blank" rel="noopener">Read on rezziza.com (archived)</a></div>
+        </li>
+        <li>
+          <strong>How to add custom JavaScript to WooCommerce Thank You Page?</strong>
+          <div><a href="https://web.archive.org/web/20220804210535/https://www.rezziza.com/post/how-to-add-custom-javascript-to-woocommerce-thank-you-page" target="_blank" rel="noopener">Read on rezziza.com (archived)</a></div>
         </li>
       </ul>
     </div>

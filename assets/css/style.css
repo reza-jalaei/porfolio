@@ -151,6 +151,13 @@ body.ios-mode .resize-handle { display: none; }
 .contact li { margin-bottom: 6px; }
 .contact a { color: #0645ad; text-decoration: underline; }
 
+/* Media section */
+.media { margin-top: 10px; }
+.media h3 { margin: 10px 0 6px; font-size: 14px; }
+.video-item { margin-bottom: 12px; }
+.podcast-embed { margin-top: 8px; }
+.podcast-embed .podcast-link { margin: 6px 0 0; font-size: 12px; }
+
 /* Minimized windows dock (simple) */
 .dock {
   position: fixed; bottom: 6px; left: 50%; transform: translateX(-50%);

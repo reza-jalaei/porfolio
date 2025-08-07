@@ -88,6 +88,7 @@
     if (!action) return;
     switch(action) {
       case 'open-about': openWindow('win-about'); break;
+      case 'open-blog': openWindow('win-blog'); break;
       case 'open-projects': openWindow('win-projects'); break;
       case 'open-contact': openWindow('win-contact'); break;
       case 'minimize-all': minimizeAll(); break;
