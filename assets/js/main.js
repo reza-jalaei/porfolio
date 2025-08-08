@@ -162,7 +162,7 @@
       if (dict[key]) el.textContent = dict[key];
     });
     const btn = document.getElementById('lang-btn');
-    if (btn) btn.textContent = (lang.toUpperCase()) + ' ▾';
+    if (btn) btn.innerHTML = (lang.toUpperCase()) + ' <i class="fa-solid fa-chevron-down"></i>';
   }
 
   function setupLanguageAndWeather() {
@@ -430,7 +430,8 @@
     { id: 'win-about', label: 'About', iconHtml: `<i class="fa-regular fa-address-card"></i>` },
     { id: 'win-projects', label: 'Projects', iconHtml: `<i class="fa-regular fa-folder-open"></i>` },
     { id: 'win-blog', label: 'Blog', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
-    { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` }
+    { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` },
+    { id: 'win-resume', label: 'Resume', iconHtml: `<i class="fa-regular fa-file-lines"></i>` }
   ];
   function ensureDock() {
     let dock = document.getElementById(dockId);
@@ -562,7 +563,8 @@
       ['win-about', 'ios-about'],
       ['win-projects', 'ios-projects'],
       ['win-blog', 'ios-blog'],
-      ['win-contact', 'ios-contact']
+      ['win-contact', 'ios-contact'],
+      ['win-resume', 'ios-resume']
     ];
     for (const [winId, iosId] of mapping) {
       const src = document.querySelector(`#${winId} .window-content`);

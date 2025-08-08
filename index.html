@@ -66,9 +66,9 @@
           <ul class="menu-dropdown" role="menu" aria-label="View">
             <li role="menuitem" data-action="tidy-icons">Tidy Up</li>
             <li role="menuitem" data-action="show-grid">Show Grid</li>
-            <li class="separator" role="separator"></li>
+            <!-- <li class="separator" role="separator"></li>
             <li role="menuitem" data-action="toggle-crt">Toggle CRT Effect</li>
-            <li role="menuitem" data-action="cycle-wallpaper">Cycle Wallpaper</li>
+            <li role="menuitem" data-action="cycle-wallpaper">Cycle Wallpaper</li> -->
           </ul>
         </div>
         <div class="menu" data-menu="go">
@@ -91,13 +91,13 @@
     </div>
     <div class="menu-right">
       <div class="lang-switcher">
-        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false">EN</button>
+        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false">EN <i class="fa-solid fa-chevron-down"></i></button>
         <ul id="lang-menu" class="menu-dropdown lang-dropdown" role="menu" aria-label="Language">
           <li role="menuitem" data-lang="en">EN — English</li>
           <li role="menuitem" data-lang="tr">TR — Türkçe</li>
         </ul>
       </div>
-      <span id="menu-weather" class="menu-weather" aria-live="polite">--°</span>
+      <span id="menu-weather" class="menu-weather" aria-live="polite" onclick="window.open('https://weather.com/weather/today/', '_blank')">--°</span>
       <span id="menu-clock" aria-live="polite" aria-atomic="true">--:--</span>
     </div>
   </header>
@@ -121,11 +121,9 @@
         <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-envelope"></i></div>
         <span class="icon-label" data-i18n="icon.contact">Contact</span>
       </li>
-      <li class="desktop-icon" tabindex="0">
-        <a class="icon-link" href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener">
-          <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-file-lines"></i></div>
-          <span class="icon-label">Resume</span>
-        </a>
+      <li class="desktop-icon" tabindex="0" data-target="win-resume">
+        <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-file-lines"></i></div>
+        <span class="icon-label">Resume</span>
       </li>
     </ul>
   </main>
@@ -160,7 +158,7 @@
             <div class="sb-label">Contact</div>
           </div>
           <div>
-            <a class="sb-icon" href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener" aria-label="Resume"><i class="fa-solid fa-file-lines"></i></a>
+            <button class="sb-icon" data-app="ios-resume" aria-label="Resume"><i class="fa-solid fa-file-lines"></i></button>
             <div class="sb-label">Resume</div>
           </div>
         </div>
@@ -192,14 +190,14 @@
     <div class="window-content">
       <div class="group-box">
         <div class="about">
-          <img class="avatar" src="https://avatars.githubusercontent.com/u/61949629?v=4" alt="Reza Jalaei" width="96"
-            height="96" />
+          <img class="avatar" src="assets/reza-img.png" alt="Reza Jalaei" width="128"
+            height="128" />
           <div class="about-text">
             <p class="lede" data-i18n="about.intro">Hello! I'm Reza. I build performant, delightful web experiences.</p>
             <p>Senior CRO Consultant and Product Owner at <a href="https://www.figpii.com" target="_blank"
                 rel="noopener">FigPii</a>.</p>
             <ul class="chips">
-              <li>UX</li>
+              <li>UX Design</li>
               <li>JavaScript</li>
               <li>Node.js</li>
               <li>Shopify</li>
@@ -215,9 +213,61 @@
             style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.podcasts.apple.com/us/podcast/episode-5-interviewing-reza-special-guest-episode/id1587332914?i=1000539771591"></iframe>
-          <p class="podcast-link"><a href="https://podcasts.apple.com/us/podcast/30-minutes-of-marketing/id1587332914"
-              target="_blank" rel="noopener">Listen on Apple Podcasts</a></p>
         </div>
+      </div>
+      <div class="group-box mobile-only">
+        <div class="mobile-credit" aria-hidden="true">
+          <img src="assets/reza.svg" alt="Apple logo" width="auto" height="30" />
+          <p>Made with ❤️ and Vanilla JS</p>
+        </div>
+      </div>
+    </div>
+    <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+  
+  <section id="win-resume" class="mac-window platinum" role="dialog" aria-labelledby="title-resume" aria-modal="false" hidden>
+    <div class="title-bar" data-window-drag-handle>
+      <div class="controls">
+        <button class="control close" aria-label="Close window" data-action="close"></button>
+        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
+        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
+      </div>
+      <h2 id="title-resume" class="title">Resume</h2>
+    </div>
+    <div class="window-content">
+      <div class="group-box">
+        <div class="experience-list">
+          <div class="experience-item">
+            <img class="experience-logo" src="assets/figpii-logo.svg" alt="FigPii logo" width="48" height="48" />
+            <div class="experience-meta">
+              <div class="experience-title">Head of Customer Success</div>
+              <div class="experience-company">FigPii · Full-time</div>
+              <div class="experience-dates">Nov 2019 – Present · 5 yrs 10 mos</div>
+              <div class="experience-location">Greater Chicago Area (remote)</div>
+            </div>
+          </div>
+          <div class="experience-item">
+            <img class="experience-logo" src="assets/invesp-logo-dark.webp" alt="Invesp logo" width="48" height="48" />
+            <div class="experience-meta">
+              <div class="experience-title">Quality Assurance Specialist</div>
+              <div class="experience-company">Invesp · Full-time</div>
+              <div class="experience-dates">Nov 2018 – Jun 2019 · 8 mos</div>
+              <div class="experience-location">Greater Chicago Area (remote)</div>
+            </div>
+          </div>
+          <div class="experience-item">
+            <img class="experience-logo" src="assets/isun-logo.png" alt="Isunco logo" width="48" height="48" />
+            <div class="experience-meta">
+              <div class="experience-title">Financial Trustee</div>
+              <div class="experience-company">Isunco · Full-time</div>
+              <div class="experience-dates">Jun 2016 – Feb 2018 · 1 yr 9 mos</div>
+              <div class="experience-location">London Area, United Kingdom</div>
+            </div>
+          </div>
+        </div>
+        <p>
+          Full resume on <a href="https://www.linkedin.com/in/reza-j/" target="_blank" rel="noopener">LinkedIn</a>.
+        </p>
       </div>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
@@ -235,7 +285,7 @@
     </div>
     <div class="window-content">
       <div class="folder-grid">
-        <a class="folder-tile" href="https://www.linkedin.com/in/reza-jalaei/" target="_blank" rel="noopener"
+        <a class="folder-tile" href="https://www.linkedin.com/in/reza-j/" target="_blank" rel="noopener"
           aria-label="LinkedIn">
           <div class="folder-icon"></div>
           <div class="folder-label">LinkedIn</div>
@@ -345,7 +395,7 @@
     <div class="window-content">
       <div class="about-mac">
         <div class="about-mac-logo">
-          <img src="../../assets/Apple_logo_black.svg" alt="Apple logo" width="60" height="80" />
+          <img src="assets/Apple_logo_black.svg" alt="Apple logo" width="65" height="80" />
         </div>
         <div class="about-mac-text">
           <div class="os-name">Mac OS X</div>
@@ -379,6 +429,12 @@
   <section id="ios-contact" class="ios-app" role="dialog" aria-label="Contact" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
       <div class="ios-title">Contact</div>
+    </div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-resume" class="ios-app" role="dialog" aria-label="Resume" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
+      <div class="ios-title">Resume</div>
     </div>
     <div class="app-body"></div>
   </section>

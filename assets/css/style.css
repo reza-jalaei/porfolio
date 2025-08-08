@@ -236,6 +236,7 @@ body.ios-mode .status-bar {
 
 .menu-weather {
   font-variant-numeric: tabular-nums;
+  cursor: pointer;
 }
 
 .lang-switcher {
@@ -563,6 +564,36 @@ body.ios-mode .title-bar {
   margin-bottom: 10px;
   background: #f9f9f9;
 }
+
+/* Experience list (Resume) */
+.experience-list {
+  display: grid;
+  gap: 10px;
+}
+.experience-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 6px;
+  background: #f2f2f2;
+  border: 1px solid #000;
+}
+.experience-logo {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #bcbcbc;
+}
+.experience-meta {
+  display: grid;
+  gap: 2px;
+}
+.experience-title { font-weight: 700; }
+.experience-company { color: #333; }
+.experience-dates, .experience-location { color: #555; font-size: 12px; }
 
 .group-title {
   display: inline-block;
@@ -1052,4 +1083,19 @@ body.ios-mode .about {
   gap: 8px;
   align-items: flex-start;
   justify-content: flex-start;
+}
+
+body:not(.ios-mode) .mobile-only {
+  display: none;
+}
+
+.mobile-credit {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.about-mac-logo {
+  margin-bottom: 10px;
 }
