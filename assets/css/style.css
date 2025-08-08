@@ -76,8 +76,8 @@ body.ios-mode #springboard {
 /* Desktop lower-right credit */
 .desktop-credit {
   position: fixed;
-  right: 10px;
-  bottom: 8px;
+  left: 12px;
+  bottom: 12px;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.7);
   background: rgba(255, 255, 255, 0.6);
@@ -87,6 +87,10 @@ body.ios-mode #springboard {
   border-radius: 6px;
   z-index: 900;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 body.ios-mode .desktop-credit {
