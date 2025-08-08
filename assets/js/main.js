@@ -313,7 +313,11 @@
     if (!win) return openWindow(id);
     const icon = document.querySelector(`.dock .dock-icon[data-win="${id}"]`);
     if (!icon) return openWindow(id);
-    // prepare
+    // If visible, just focus/bring to front; else animate from icon
+    if (!win.hasAttribute('hidden')) {
+      focusWindow(win);
+      return;
+    }
     win.removeAttribute('hidden');
     focusWindow(win);
     animateFromIconToWindow(icon, win);
@@ -642,7 +646,16 @@
     const app = document.getElementById(id);
     if (!app) return;
     hideSpringboard();
+    // Ensure this app comes to front: hide all others, then show target
+    document.querySelectorAll('.ios-app').forEach(a => {
+      if (a.id !== id) a.setAttribute('hidden', '');
+    });
     app.removeAttribute('hidden');
+    // Re-append to end of body to ensure top stacking (safest across browsers)
+    if (app.parentElement) {
+      app.parentElement.appendChild(app);
+    }
+    // Play small opening animation each time
     app.classList.remove('opening');
     void app.offsetWidth;
     app.classList.add('opening');
@@ -659,9 +672,15 @@
     const isIOS = document.body.classList.contains('ios-mode');
     const sb = document.getElementById('springboard');
     if (isIOS) {
+      // Hide desktop UI
       windows.forEach(w => w.setAttribute('hidden', ''));
+      document.getElementById('desktop')?.setAttribute('hidden', '');
+      // Show SpringBoard and iOS dock
       sb?.removeAttribute('hidden');
     } else {
+      // Show desktop UI
+      document.getElementById('desktop')?.removeAttribute('hidden');
+      // Hide iOS UI
       sb?.setAttribute('hidden', '');
       document.querySelectorAll('.ios-app').forEach(a => a.setAttribute('hidden', ''));
     }
