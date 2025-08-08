@@ -118,11 +118,9 @@
       case 'arrange-windows': tileWindows(); break;
       case 'tidy-icons': tidyIcons(); break;
       case 'show-grid': alert('Grid toggled'); break;
-      // removed
       case 'sleep': alert('Zzz…'); break;
-      case 'restart': alert('Restarting…'); break;
+      case 'restart': window.location.reload(); break;
       case 'shutdown': alert('Shutting down…'); break;
-      // removed
     }
     closeAllMenus();
   }
