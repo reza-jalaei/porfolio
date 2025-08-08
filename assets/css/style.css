@@ -11,6 +11,11 @@ body.ios-mode { background: #cfd6df; font-family: "Helvetica Neue", Helvetica, A
   --ios-dock-height: 88px; /* visual height incl. padding/shadow */
 }
 
+@media (min-width: 768px) {
+  .ios-dock {
+    display: none !important;
+  }
+
 /* Desktop Background: Mac OS X 10.0 Aqua Blue */
 #desktop {
   position: relative;
