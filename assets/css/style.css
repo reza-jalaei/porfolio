@@ -4,10 +4,17 @@ html, body { height: 100%; }
 body { margin: 0; font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif; color: #000; background: #c7c7c7; }
 body.ios-mode { background: #cfd6df; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
+/* Global layout vars */
+:root {
+  --menu-bar-height: 28px;
+  --status-bar-height: 26px;
+  --ios-dock-height: 88px; /* visual height incl. padding/shadow */
+}
+
 /* Desktop Background: Mac OS X 10.0 Aqua Blue */
 #desktop {
   position: relative;
-  height: calc(100vh - 22px);
+  height: calc(100vh - var(--menu-bar-height));
   background:
     radial-gradient(1200px 600px at 20% -10%, #9ad3ff 0%, rgba(154,211,255,0) 70%),
     radial-gradient(900px 500px at 80% 110%, #2e74ff 0%, rgba(46,116,255,0) 70%),
@@ -19,7 +26,7 @@ body.ios-mode #desktop { display: none !important; }
 
 /* Menu Bar */
 .menu-bar {
-  height: 22px;
+  height: var(--menu-bar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,14 +47,15 @@ body.ios-mode #desktop { display: none !important; }
 body.ios-mode .menu-bar { display: none; }
 
 /* iOS-like Status Bar */
-.status-bar { display: none; height: 20px; padding: 2px 8px; font-size: 12px; background: #000; color: #fff; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; }
+.status-bar { display: none; height: var(--status-bar-height); padding: 3px 10px; font-size: 13px; background: #000; color: #fff; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; padding-top: calc(3px + env(safe-area-inset-top, 0px)); }
 body.ios-mode .status-bar { display: flex; }
 .status-left { display: flex; align-items: center; gap: 6px; }
 .status-carrier { font-weight: 600; }
 .status-wifi svg { display: block; }
+.status-bar .status-wifi svg { width: 18px; height: 18px; stroke-width: 2.4; }
 .status-battery { font-variant-numeric: tabular-nums; }
 .menu-left { display: flex; align-items: center; gap: 8px; }
-.menu-right { font-size: 12px; }
+.menu-right { font-size: 13px; }
 .apple-menu {
   background: transparent;
   border: none;
@@ -58,7 +66,7 @@ body.ios-mode .status-bar { display: flex; }
 .menus { display: flex; align-items: stretch; gap: 2px; }
 .menu { position: relative; }
 .menu-trigger {
-  height: 20px;
+  height: calc(var(--menu-bar-height) - 4px);
   padding: 0 6px;
   font-size: 13px;
   border: 1px solid transparent;
@@ -69,7 +77,7 @@ body.ios-mode .status-bar { display: flex; }
 .menu.open .menu-trigger { border-color: #000; background: #bfbfbf; box-shadow: inset 1px 1px 0 #fff; }
 .menu-dropdown {
   position: absolute;
-  top: 20px;
+  top: var(--menu-bar-height);
   left: 0;
   min-width: 160px;
   background: #dfdfdf;
@@ -97,6 +105,7 @@ body.ios-mode .status-bar { display: flex; }
 }
 .desktop-icon { width: 84px; text-align: center; color: #000; cursor: default; }
 .desktop-icon .icon-svg { width: 48px; height: 48px; margin: 0 auto 4px; filter: drop-shadow(1px 1px 0 #fff) drop-shadow(-1px -1px 0 #777); }
+.desktop-icon .icon-svg i { font-size: 44px; color: #000; line-height: 48px; }
 .desktop-icon .icon-label { display: inline-block; font-size: 12px; background: rgba(255,255,255,0.6); padding: 1px 4px; border: 1px solid #9a9a9a; }
 body.ios-mode .desktop-icon .icon-label { background: rgba(255,255,255,0.8); border-radius: 6px; border-color: rgba(0,0,0,0.2); }
 .desktop-icon:focus .icon-label, .desktop-icon.selected .icon-label { outline: 1px dotted #000; background: #bfbfbf; }
@@ -186,7 +195,7 @@ body.ios-mode .dock { display: none !important; }
   z-index: 1000;
 }
 .dock .dock-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; position: relative; transform-origin: bottom center; transition: transform 0.08s linear; cursor: default; }
-.dock .dock-icon img, .dock .dock-icon svg { width: 36px; height: 36px; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.6)); }
+.dock .dock-icon img, .dock .dock-icon svg, .dock .dock-icon i { width: 36px; height: 36px; font-size: 32px; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.6)); }
 .dock .label { position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; font-size: 11px; padding: 3px 6px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.12s ease; }
 .dock .dock-icon:hover .label { opacity: 1; }
 .dock .indicator { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgba(0,0,0,0.8); opacity: 0; transition: opacity 0.2s; }
@@ -196,9 +205,9 @@ body.ios-mode .dock { display: none !important; }
 body.ios-mode .dock { background: rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 10px; }
 
 /* SpringBoard paging */
-.sb-pages { height: calc(100% - 90px); overflow: hidden; position: relative; }
+.sb-pages { height: calc(100% - var(--ios-dock-height) - 18px); overflow: hidden; position: relative; }
 .sb-pages .sb-page { position: absolute; inset: 0; }
-.page-dots { position: absolute; bottom: 84px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.page-dots { position: absolute; bottom: calc(var(--ios-dock-height) - 6px); left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
 .page-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.55); box-shadow: 0 1px 0 rgba(0,0,0,0.6); }
 .page-dots span.active { background: #fff; }
 
@@ -220,3 +229,84 @@ body.ios-mode .dock { background: rgba(255,255,255,0.9); border-color: rgba(0,0,
 .boot-apple { filter: drop-shadow(0 0 14px rgba(255,255,255,0.25)); }
 .boot-progress { width: 240px; height: 6px; border-radius: 4px; background: rgba(255,255,255,0.18); overflow: hidden; border: 1px solid rgba(255,255,255,0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 2px 10px rgba(0,0,0,0.6); }
 .boot-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #b7d0ff, #6da0ff); box-shadow: 0 0 10px rgba(109,160,255,0.6); transition: width 180ms ease; }
+
+/* iOS mode layout and visuals (iOS 4-inspired) */
+body.ios-mode {
+  background:
+    radial-gradient(1200px 800px at 50% -20%, rgba(255,255,255,0.25), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, #2a3d59, #0e1623 60%, #0a0f18);
+}
+
+body.ios-mode #springboard {
+  position: fixed;
+  top: var(--status-bar-height);
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 12px calc(env(safe-area-inset-bottom, 0px) + var(--ios-dock-height) + 10px) 12px;
+}
+
+.springboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 10px;
+  justify-items: center;
+  align-content: start;
+}
+
+.sb-icon {
+  width: 64px; height: 64px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0) 40%),
+              radial-gradient(120px 80px at 50% -20%, rgba(255,255,255,0.45), rgba(255,255,255,0) 45%),
+              linear-gradient(180deg, #5b7bb6, #2b4a84 50%, #1a2f56);
+  border: 1px solid rgba(0,0,0,0.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 6px 18px rgba(0,0,0,0.35);
+  display: grid; place-items: center;
+}
+.sb-icon i { color: #fff; font-size: 28px; text-shadow: 0 1px 0 rgba(0,0,0,0.8); }
+.sb-icon:active { transform: scale(0.96); }
+
+.sb-label { margin-top: 6px; font-size: 12px; color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,0.8); text-align: center; }
+
+/* iOS Dock (shelf) */
+.ios-dock {
+  display: none; /* hidden by default (desktop) */
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  width: auto;
+  padding: 10px 12px;
+  display: flex; gap: 16px; justify-content: center; align-items: center;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08) 40%, rgba(0,0,0,0.15)),
+    linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 16%),
+    rgba(50,60,80,0.45);
+  border: 1px solid rgba(0,0,0,0.35);
+  border-radius: 18px;
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+  box-shadow:
+    0 16px 28px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  min-height: calc(var(--ios-dock-height) - 26px);
+  z-index: 1500;
+}
+.ios-dock .sb-icon { width: 58px; height: 58px; border-radius: 12px; }
+body.ios-mode .ios-dock { display: flex; }
+
+/* Ensure mac dock stays hidden in iOS mode, use iOS dock instead */
+body.ios-mode .dock { display: none !important; }
+
+/* iOS apps container fills screen below status bar */
+body.ios-mode .ios-app {
+  position: fixed; left: 0; right: 0; top: var(--status-bar-height);
+  bottom: calc(var(--ios-dock-height) + env(safe-area-inset-bottom, 0px) + 8px);
+  background: #f6f7f9;
+  overflow: auto;
+}
+/* iOS app header (iOS 4 style) */
+.ios-app .ios-nav { position: sticky; top: 0; display: flex; align-items: center; justify-content: center; gap: 8px; height: 38px; background: linear-gradient(#dfe7f3, #b9c9e1); border-bottom: 1px solid rgba(0,0,0,0.25); z-index: 2; }
+.ios-app .ios-back { position: absolute; left: 8px; top: 6px; height: 26px; padding: 0 10px; font-size: 13px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.35); background: linear-gradient(#fff, #dbe7f7); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 0 rgba(255,255,255,0.7); }
+.ios-app .ios-title { font-weight: 700; font-size: 14px; color: #123; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
+
+/* Mobile window content spacing */
+body.ios-mode .ios-app .app-body { padding: 12px; }

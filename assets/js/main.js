@@ -4,6 +4,7 @@
   const menus = Array.from(document.querySelectorAll('.menu'));
   const windows = Array.from(document.querySelectorAll('.mac-window'));
   let zIndexCounter = 10;
+  let iosModeInitialized = false;
 
   function init() {
     setupClock();
@@ -344,10 +345,10 @@
   // macOS-style Dock
   const dockId = 'dock';
   const dockApps = [
-    { id: 'win-about', label: 'About', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c0-4 4-6 8-6s8 2 8 6\"/></svg>` },
-    { id: 'win-projects', label: 'Projects', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>` },
-    { id: 'win-blog', label: 'Blog', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"2\"/><path d=\"M8 7h8M8 11h8M8 15h6\"/></svg>` },
-    { id: 'win-contact', label: 'Contact', svg: `<svg viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M3 7l9 6 9-6\"/></svg>` }
+    { id: 'win-about', label: 'About', iconHtml: `<i class="fa-regular fa-address-card"></i>` },
+    { id: 'win-projects', label: 'Projects', iconHtml: `<i class="fa-regular fa-folder-open"></i>` },
+    { id: 'win-blog', label: 'Blog', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
+    { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` }
   ];
   function ensureDock() {
     let dock = document.getElementById(dockId);
@@ -368,7 +369,7 @@
       btn.className = 'dock-icon';
       btn.setAttribute('data-win', app.id);
       btn.setAttribute('aria-label', app.label);
-      btn.innerHTML = `${app.svg}<span class="indicator"></span><span class="label">${app.label}</span>`;
+      btn.innerHTML = `${app.iconHtml}<span class="indicator"></span><span class="label">${app.label}</span>`;
       btn.addEventListener('click', () => {
         const win = document.getElementById(app.id);
         if (win && !win.hasAttribute('hidden')) {
@@ -482,6 +483,14 @@
     document.body.classList.add('ios-mode');
     updateModeVisibility();
     window.scrollTo(0,0);
+    // Open About on first entry to iOS mode (after DOM updates)
+    if (!iosModeInitialized) {
+      iosModeInitialized = true;
+      setTimeout(() => {
+        showSpringboard();
+        openIOSApp('ios-about');
+      }, 0);
+    }
   }
   function disableIOSMode() {
     document.body.classList.remove('ios-mode');
@@ -548,7 +557,14 @@
           app.style.opacity = '1';
           setTimeout(() => { app.style.transition = ''; app.style.transform = ''; app.style.opacity = ''; }, 300);
         });
-        // home button removed
+        // no home button; dock remains visible as it's outside springboard
+      });
+    });
+    // Also wire global dock buttons (outside springboard)
+    document.querySelectorAll('.ios-dock [data-app]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-app');
+        openIOSApp(id);
       });
     });
     // home button removed
@@ -594,21 +610,12 @@
 
   // Toggle iOS-like mode on small screens or mobile user agents
   function detectMobileAndToggleMode() {
-    const isSmall = window.matchMedia('(max-width: 640px)').matches;
-    const ua = navigator.userAgent || '';
-    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-    if (isSmall || isMobileUA) {
-      document.body.classList.add('ios-mode');
-    } else {
-      document.body.classList.remove('ios-mode');
-    }
-    updateModeVisibility();
-    window.addEventListener('resize', () => {
+    const apply = () => {
       const small = window.matchMedia('(max-width: 640px)').matches;
-      if (small) document.body.classList.add('ios-mode');
-      else document.body.classList.remove('ios-mode');
-      updateModeVisibility();
-    });
+      if (small) enableIOSMode(); else disableIOSMode();
+    };
+    apply();
+    window.addEventListener('resize', apply);
   }
 
   // Genie animation (approximate)
