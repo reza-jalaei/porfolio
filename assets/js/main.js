@@ -14,11 +14,11 @@
     setupWindows();
     setupDock();
     setupIOS();
+    setupLanguageAndWeather();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
     setTimeout(() => {
       openWindow('win-about');
-      showBootOverlay();
     }, 0);
   }
 
@@ -33,11 +33,14 @@
   // Clock
   function setupClock() {
     function format(dt) {
+      const day = dt.toLocaleDateString(undefined, { weekday: 'short' });
+      const month = dt.toLocaleDateString(undefined, { month: 'short' });
+      const dayNum = dt.getDate();
       const hh = dt.getHours();
       const mm = dt.getMinutes().toString().padStart(2, '0');
       const ampm = hh >= 12 ? 'PM' : 'AM';
       const h12 = ((hh + 11) % 12 + 1);
-      return `${h12}:${mm} ${ampm}`;
+      return `${day} ${month} ${dayNum} ${h12}:${mm} ${ampm}`;
     }
     function tick() {
       clock.textContent = format(new Date());
@@ -122,6 +125,83 @@
       // removed
     }
     closeAllMenus();
+  }
+
+  // Language switching and weather
+  const translations = {
+    en: {
+      'icon.about': 'About Me',
+      'icon.projects': 'Projects',
+      'icon.blog': 'Blog',
+      'icon.contact': 'Contact',
+      'win.about': 'About Me',
+      'win.projects': 'Projects',
+      'win.blog': 'Blog',
+      'win.contact': 'Contact',
+      'about.intro': "Hello! I'm Reza. I build performant, delightful web experiences.",
+      'about.specialties': 'Specialties: UX Focused Design, JavaScript, Node.js, Shopify, A/B Testing, Analytics.',
+      'contact.sayHello': 'Say hello:'
+    },
+    tr: {
+      'icon.about': 'Hakkımda',
+      'icon.projects': 'Projeler',
+      'icon.blog': 'Blog',
+      'icon.contact': 'İletişim',
+      'win.about': 'Hakkımda',
+      'win.projects': 'Projeler',
+      'win.blog': 'Blog',
+      'win.contact': 'İletişim',
+      'about.intro': 'Merhaba! Ben Reza. Keyifli web deneyimleri geliştiriyorum.',
+      'about.specialties': 'UX Tasarım, JavaScript, Node.js, Shopify, A/B Test.',
+      'contact.sayHello': 'Merhaba deyin:'
+    },
+  };
+
+  function applyLanguage(lang) {
+    const dict = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) el.textContent = dict[key];
+    });
+    const btn = document.getElementById('lang-btn');
+    if (btn) btn.textContent = (lang.toUpperCase()) + ' ▾';
+  }
+
+  function setupLanguageAndWeather() {
+    // Language
+    const btn = document.getElementById('lang-btn');
+    const menu = document.getElementById('lang-menu');
+    if (btn && menu) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = menu.style.display === 'block';
+        menu.style.display = open ? 'none' : 'block';
+        btn.setAttribute('aria-expanded', String(!open));
+      });
+      document.addEventListener('click', () => { menu.style.display = 'none'; btn.setAttribute('aria-expanded', 'false'); });
+      menu.querySelectorAll('[data-lang]').forEach(item => {
+        item.addEventListener('click', () => {
+          const lang = item.getAttribute('data-lang');
+          applyLanguage(lang);
+          menu.style.display = 'none';
+        });
+      });
+    }
+    applyLanguage('en');
+
+    // Weather (Istanbul via Open-Meteo)
+    const weatherEl = document.getElementById('menu-weather');
+    if (weatherEl && navigator.onLine) {
+      // Istanbul approx: 41.0082, 28.9784
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true';
+      fetch(url)
+        .then(r => r.ok ? r.json() : Promise.reject(r.status))
+        .then(data => {
+          const t = Math.round(data?.current_weather?.temperature);
+          if (Number.isFinite(t)) weatherEl.textContent = `${t}°`;
+        })
+        .catch(() => { /* ignore */ });
+    }
   }
 
   // Desktop Icons
@@ -451,28 +531,7 @@
     });
   }
 
-  // Boot overlay logic
-  function showBootOverlay() {
-    const overlay = document.getElementById('boot-overlay');
-    if (!overlay) return;
-    overlay.classList.add('active');
-    const bar = document.getElementById('boot-bar');
-    let progress = 0;
-    const step = () => {
-      progress += Math.random() * 18 + 6; // 6-24% steps
-      progress = Math.min(100, progress);
-      if (bar) {
-        bar.style.width = progress + '%';
-        bar.parentElement?.setAttribute('aria-valuenow', String(Math.floor(progress)));
-      }
-      if (progress < 100) {
-        setTimeout(step, 160);
-      } else {
-        setTimeout(() => overlay.classList.remove('active'), 260);
-      }
-    };
-    setTimeout(step, 180);
-  }
+  // Boot overlay removed
 
   // iOS Mode
   function setupIOS() {
@@ -608,14 +667,15 @@
     }
   }
 
-  // Toggle iOS-like mode on small screens or mobile user agents
+  // Toggle iOS-like mode based on screen size only (<= 768px)
   function detectMobileAndToggleMode() {
     const apply = () => {
-      const small = window.matchMedia('(max-width: 640px)').matches;
-      if (small) enableIOSMode(); else disableIOSMode();
+      const isSmall = window.matchMedia('(max-width: 768px)').matches;
+      if (isSmall) enableIOSMode(); else disableIOSMode();
     };
     apply();
     window.addEventListener('resize', apply);
+    window.addEventListener('orientationchange', apply);
   }
 
   // Genie animation (approximate)

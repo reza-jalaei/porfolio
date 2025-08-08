@@ -15,14 +15,42 @@ body.ios-mode { background: #cfd6df; font-family: "Helvetica Neue", Helvetica, A
 #desktop {
   position: relative;
   height: calc(100vh - var(--menu-bar-height));
-  background:
-    radial-gradient(1200px 600px at 20% -10%, #9ad3ff 0%, rgba(154,211,255,0) 70%),
-    radial-gradient(900px 500px at 80% 110%, #2e74ff 0%, rgba(46,116,255,0) 70%),
-    linear-gradient(180deg, #8cc6ff 0%, #4ca1ff 45%, #1b6eff 100%);
+  background: url('../../assets/desktop-wallpaper.png') center center / cover no-repeat fixed;
   padding: 12px;
   overflow: hidden;
 }
+
+/* CRT monitor effect overlay */
+.crt::before, .crt::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+}
+.crt::before { background: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px); mix-blend-mode: multiply; }
+.crt::after { background: radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 60%); }
+.crt {
+  filter: saturate(1.05) contrast(1.02);
+}
 body.ios-mode #desktop { display: none !important; }
+body.ios-mode #springboard { background: url('../../assets/mobile-wallpaper.jpg') center center / cover no-repeat fixed; }
+
+/* Desktop lower-right credit */
+.desktop-credit {
+  position: fixed;
+  right: 10px;
+  bottom: 8px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.7);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,0,0,0.25);
+  box-shadow: 1px 1px 0 #fff;
+  padding: 3px 6px;
+  border-radius: 6px;
+  z-index: 900;
+  user-select: none;
+}
+body.ios-mode .desktop-credit { display: none; }
+
+/* Busy overlay removed */
 
 /* Menu Bar */
 .menu-bar {
@@ -52,10 +80,16 @@ body.ios-mode .status-bar { display: flex; }
 .status-left { display: flex; align-items: center; gap: 6px; }
 .status-carrier { font-weight: 600; }
 .status-wifi svg { display: block; }
-.status-bar .status-wifi svg { width: 18px; height: 18px; stroke-width: 2.4; }
+.battery-icon { display: inline-block; width: 16px; height: 9px; border: 1px solid #fff; position: relative; top: 1px; margin-right: 2px; }
+.battery-icon::after { content: ""; position: absolute; right: -3px; top: 2px; width: 2px; height: 5px; background: #fff; }
 .status-battery { font-variant-numeric: tabular-nums; }
 .menu-left { display: flex; align-items: center; gap: 8px; }
 .menu-right { font-size: 13px; }
+.menu-right { display: flex; align-items: center; gap: 10px; }
+.menu-weather { font-variant-numeric: tabular-nums; }
+.lang-switcher { position: relative; }
+.lang-btn { height: calc(var(--menu-bar-height) - 6px); padding: 0 8px; font-size: 12px; border: 1px solid #000; background: #e9e9e9; }
+.lang-dropdown { top: var(--menu-bar-height); right: 0; left: auto; }
 .apple-menu {
   background: transparent;
   border: none;
@@ -110,6 +144,8 @@ body.ios-mode .status-bar { display: flex; }
 body.ios-mode .desktop-icon .icon-label { background: rgba(255,255,255,0.8); border-radius: 6px; border-color: rgba(0,0,0,0.2); }
 .desktop-icon:focus .icon-label, .desktop-icon.selected .icon-label { outline: 1px dotted #000; background: #bfbfbf; }
 .desktop-icon a.icon-link { color: inherit; text-decoration: none; display: inline-block; }
+
+/* Beachball hover cursor removed */
 
 /* Mac Window */
 .mac-window {
@@ -171,6 +207,25 @@ body.ios-mode .title-bar { border-bottom-color: rgba(0,0,0,0.2); border-top-left
 .controls:hover .control.minimize::after { content: "–"; }
 .controls:hover .control.zoom::after { content: "+"; }
 .window-content { padding: 10px; overflow: auto; font-size: 14px; }
+/* Retro group boxes and lists */
+.group-box { border: 1px solid #000; box-shadow: inset 1px 1px 0 #fff; padding: 8px; margin-bottom: 10px; background: #f9f9f9; }
+.group-title { display: inline-block; margin-top: -18px; margin-left: 8px; background: #f9f9f9; padding: 0 6px; font-size: 12px; }
+.lede { font-weight: 600; margin-top: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 8px 0 0; }
+.chips li { font-size: 11px; border: 1px solid #000; box-shadow: inset 1px 1px 0 #fff; padding: 2px 6px; background: #eaeaea; }
+.folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin: 8px 0 12px; }
+.folder-tile { display: grid; place-items: center; gap: 6px; padding: 10px; border: 1px solid #000; box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000; text-decoration: none; color: #000; background: #f3f3f3; }
+.folder-tile:hover { background: #e3e3e3; }
+.folder-icon { width: 48px; height: 34px; background: linear-gradient(#fff, #dfe3ff); border: 1px solid #000; box-shadow: inset 1px 1px 0 #fff; border-radius: 6px 6px 2px 2px; }
+.folder-label { font-size: 12px; }
+.link-list { display: grid; gap: 6px; }
+.link-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border: 1px solid #000; box-shadow: 1px 1px 0 #fff; background: #fff; color: #0645ad; text-decoration: none; }
+.link-row:hover { background: #f3f6ff; }
+.link-title { font-size: 13px; }
+.link-meta { font-size: 11px; color: #333; }
+.button-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.retro-button { display: inline-block; border: 1px solid #000; background: linear-gradient(#fff, #e9e9e9); box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000; padding: 4px 10px; font-size: 12px; color: #000; text-decoration: none; }
+.retro-button:hover { background: linear-gradient(#fff, #dcdcdc); }
 body.ios-mode .window-content { padding: 12px; font-size: 15px; }
 .resize-handle { position: absolute; right: 0; bottom: 0; width: 12px; height: 12px; background: linear-gradient(135deg, transparent 50%, #000 50%); cursor: nwse-resize; }
 body.ios-mode .resize-handle { display: none; }
@@ -182,18 +237,8 @@ body.ios-mode #springboard { display: grid; }
 body.ios-mode .home-button { display: block; }
 body.ios-mode .dock { display: none !important; }
 
-/* Improved Dock */
-.dock {
-  position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 20px; align-items: flex-end; padding: 12px 18px;
-  background: rgba(255,255,255,0.35);
-  border: 1px solid rgba(0,0,0,0.2);
-  border-radius: 16px;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
-  z-index: 1000;
-}
+/* Improved Dock - ensure hidden on desktop */
+.dock { display: none !important; visibility: hidden !important; pointer-events: none !important; }
 .dock .dock-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; position: relative; transform-origin: bottom center; transition: transform 0.08s linear; cursor: default; }
 .dock .dock-icon img, .dock .dock-icon svg, .dock .dock-icon i { width: 36px; height: 36px; font-size: 32px; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.6)); }
 .dock .label { position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; font-size: 11px; padding: 3px 6px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.12s ease; }
@@ -221,14 +266,7 @@ body.ios-mode .dock { background: rgba(255,255,255,0.9); border-color: rgba(0,0,
 .app-name { transition: background-color 120ms ease, color 120ms ease; }
 .app-name.active { background: #3466ff; color: #fff; border-color: #123aa8; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.7); }
 
-/* Boot overlay */
-#boot-overlay { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 2000; }
-#boot-overlay.active { display: flex; }
-.boot-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; color: #fff; position: relative; }
-.boot-inner::before { content: ""; position: absolute; inset: -20vh -20vw; pointer-events: none; background: radial-gradient(60vh 40vh at 50% 40%, rgba(255,255,255,0.08), rgba(0,0,0,0) 70%); }
-.boot-apple { filter: drop-shadow(0 0 14px rgba(255,255,255,0.25)); }
-.boot-progress { width: 240px; height: 6px; border-radius: 4px; background: rgba(255,255,255,0.18); overflow: hidden; border: 1px solid rgba(255,255,255,0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 2px 10px rgba(0,0,0,0.6); }
-.boot-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #b7d0ff, #6da0ff); box-shadow: 0 0 10px rgba(109,160,255,0.6); transition: width 180ms ease; }
+/* Boot overlay removed */
 
 /* iOS mode layout and visuals (iOS 4-inspired) */
 body.ios-mode {
@@ -291,7 +329,7 @@ body.ios-mode #springboard {
   z-index: 1500;
 }
 .ios-dock .sb-icon { width: 58px; height: 58px; border-radius: 12px; }
-body.ios-mode .ios-dock { display: flex; }
+@media (max-width: 768px) { body.ios-mode .ios-dock { display: flex; } }
 
 /* Ensure mac dock stays hidden in iOS mode, use iOS dock instead */
 body.ios-mode .dock { display: none !important; }
