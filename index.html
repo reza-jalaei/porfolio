@@ -5,7 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Reza Jalaei • Portfolio</title>
-  <meta name="description" content="Hello! I'm Reza. I build performant, delightful web experiences. Senior CRO Consultant and Product Owner at FigPii." />
+  <meta name="description"
+    content="Hello! I'm Reza. I build performant, delightful web experiences. Senior CRO Consultant and Product Owner at FigPii." />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -17,11 +18,12 @@
     <div class="status-left">
       <span class="status-carrier">Reza</span>
       <span class="status-wifi" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4.5 9.5c5.1-4 9.9-4 15 0"/>
-          <path d="M7.2 12.3c3.4-2.6 6.2-2.6 9.6 0"/>
-          <path d="M10.2 15.1c1.8-1.4 2.8-1.4 4.6 0"/>
-          <circle cx="12" cy="18" r="1.2" fill="currentColor" stroke="none"/>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4.5 9.5c5.1-4 9.9-4 15 0" />
+          <path d="M7.2 12.3c3.4-2.6 6.2-2.6 9.6 0" />
+          <path d="M10.2 15.1c1.8-1.4 2.8-1.4 4.6 0" />
+          <circle cx="12" cy="18" r="1.2" fill="currentColor" stroke="none" />
         </svg>
       </span>
     </div>
@@ -92,13 +94,15 @@
     </div>
     <div class="menu-right">
       <div class="lang-switcher">
-        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false">EN <i class="fa-solid fa-chevron-down"></i></button>
+        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false">EN <i
+            class="fa-solid fa-chevron-down"></i></button>
         <ul id="lang-menu" class="menu-dropdown lang-dropdown" role="menu" aria-label="Language">
           <li role="menuitem" data-lang="en">EN — English</li>
           <li role="menuitem" data-lang="tr">TR — Türkçe</li>
         </ul>
       </div>
-      <span id="menu-weather" class="menu-weather" aria-live="polite" onclick="window.open('https://weather.com/weather/today/', '_blank')">--°</span>
+      <span id="menu-weather" class="menu-weather" aria-live="polite"
+        onclick="window.open('https://weather.com/weather/today/', '_blank')">--°</span>
       <span id="menu-clock" aria-live="polite" aria-atomic="true">--:--</span>
     </div>
   </header>
@@ -148,19 +152,23 @@
             <div class="sb-label">About</div>
           </div>
           <div>
-            <button class="sb-icon" data-app="ios-projects" aria-label="Projects"><i class="fa-solid fa-folder"></i></button>
+            <button class="sb-icon" data-app="ios-projects" aria-label="Projects"><i
+                class="fa-solid fa-folder"></i></button>
             <div class="sb-label">Projects</div>
           </div>
           <div>
-            <button class="sb-icon" data-app="ios-blog" aria-label="Blog"><i class="fa-solid fa-note-sticky"></i></button>
+            <button class="sb-icon" data-app="ios-blog" aria-label="Blog"><i
+                class="fa-solid fa-note-sticky"></i></button>
             <div class="sb-label">Blog</div>
           </div>
           <div>
-            <button class="sb-icon" data-app="ios-contact" aria-label="Contact"><i class="fa-solid fa-envelope"></i></button>
+            <button class="sb-icon" data-app="ios-contact" aria-label="Contact"><i
+                class="fa-solid fa-envelope"></i></button>
             <div class="sb-label">Contact</div>
           </div>
           <div>
-            <button class="sb-icon" data-app="ios-resume" aria-label="Resume"><i class="fa-solid fa-file-lines"></i></button>
+            <button class="sb-icon" data-app="ios-resume" aria-label="Resume"><i
+                class="fa-solid fa-file-lines"></i></button>
             <div class="sb-label">Resume</div>
           </div>
           <!-- Snake icon hidden on SpringBoard -->
@@ -193,12 +201,17 @@
     <div class="window-content">
       <div class="group-box">
         <div class="about">
-          <img class="avatar" src="assets/reza-img.png" alt="Reza Jalaei" width="128"
+          <img class="avatar desktop-only" src="assets/reza-img.png" alt="Reza Jalaei" width="128"
             height="128" />
           <div class="about-text">
-            <p class="lede" data-i18n="about.intro">Hello! I'm Reza. I build performant, delightful web experiences.</p>
+            <div class="about-text-inner">
+              <img class="avatar mobile-only" src="assets/reza-img.png" alt="Reza Jalaei" width="64"
+                height="64" />
+                <p class="lede" data-i18n="about.intro">Hello! I'm Reza. I build performant, delightful web experiences.
+                </p>
+            </div>
             <p>Senior CRO Consultant and Product Owner at <a href="https://www.figpii.com" target="_blank"
-                rel="noopener">FigPii</a>.</p>
+              rel="noopener">FigPii</a>.</p>
             <ul class="chips">
               <li>UX Design</li>
               <li>JavaScript</li>
@@ -227,8 +240,9 @@
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
   </section>
-  
-  <section id="win-resume" class="mac-window platinum" role="dialog" aria-labelledby="title-resume" aria-modal="false" hidden>
+
+  <section id="win-resume" class="mac-window platinum" role="dialog" aria-labelledby="title-resume" aria-modal="false"
+    hidden>
     <div class="title-bar" data-window-drag-handle>
       <div class="controls">
         <button class="control close" aria-label="Close window" data-action="close"></button>
@@ -291,15 +305,13 @@
         <div class="video-item">
           <strong class="video-title">Who is Reza?</strong>
           <div class="folder-grid">
-            <a class="folder-tile" href="https://www.figpii.com" target="_blank" rel="noopener"
-              aria-label="FigPii">
+            <a class="folder-tile" href="https://www.figpii.com" target="_blank" rel="noopener" aria-label="FigPii">
               <div class="folder-icon">
                 <img src="assets/figpii-logo.svg" alt="FigPii logo" width="46" height="18" />
               </div>
               <div class="folder-label">FigPii</div>
             </a>
-            <a class="folder-tile" href="https://www.invespcro.com" target="_blank" rel="noopener"
-              aria-label="Invesp">
+            <a class="folder-tile" href="https://www.invespcro.com" target="_blank" rel="noopener" aria-label="Invesp">
               <div class="folder-icon">
                 <img src="assets/invesp-logo-dark.webp" alt="Invesp logo" width="53" height="18" />
               </div>
@@ -335,42 +347,50 @@
     </div>
     <div class="window-content">
       <div class="link-list">
-        <a class="link-row" href="https://web.archive.org/web/20220927194805/https://www.rezziza.com/post/top-10-books-to-read-as-a-productowner"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927194805/https://www.rezziza.com/post/top-10-books-to-read-as-a-productowner"
           target="_blank" rel="noopener">
           <span class="link-title">The Best Books to Read as a Product Owner</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220804210535/https://www.rezziza.com/post/how-to-add-custom-javascript-to-woocommerce-thank-you-page"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220804210535/https://www.rezziza.com/post/how-to-add-custom-javascript-to-woocommerce-thank-you-page"
           target="_blank" rel="noopener">
           <span class="link-title">How to add custom JavaScript to WooCommerce Thank You Page?</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220927204643/https://www.rezziza.com/post/price-a-b-testing-on-shopify-do-s-and-don-ts"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927204643/https://www.rezziza.com/post/price-a-b-testing-on-shopify-do-s-and-don-ts"
           target="_blank" rel="noopener">
           <span class="link-title">Price A/B Testing on Shopify: Do’s and Don’ts</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220927194805/https://www.rezziza.com/post/top-10-books-to-read-as-a-productowner"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927194805/https://www.rezziza.com/post/top-10-books-to-read-as-a-productowner"
           target="_blank" rel="noopener">
           <span class="link-title">The Best Books to Read as a Product Owner</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220927201032/https://www.rezziza.com/post/what-are-the-4-steps-of-conversion-optimization"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927201032/https://www.rezziza.com/post/what-are-the-4-steps-of-conversion-optimization"
           target="_blank" rel="noopener">
           <span class="link-title">What Are the 4 Steps of Conversion Optimization?</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220927200144/https://www.rezziza.com/post/10-successful-ecommerce-a-b-test-examples"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927200144/https://www.rezziza.com/post/10-successful-ecommerce-a-b-test-examples"
           target="_blank" rel="noopener">
           <span class="link-title">10 Successful eCommerce A/B test examples</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20220927205135/https://www.rezziza.com/post/quality-assurance-for-ab-testing-best-practices"
+        <a class="link-row"
+          href="https://web.archive.org/web/20220927205135/https://www.rezziza.com/post/quality-assurance-for-ab-testing-best-practices"
           target="_blank" rel="noopener">
           <span class="link-title">Quality Assurance for AB Testing, Best Practices.</span>
           <span class="link-meta">rezziza.com (archived)</span>
         </a>
-        <a class="link-row" href="https://web.archive.org/web/20221213222613/https://reza.guru/post/moving-your-domain-away-from-wix-3-simple-steps/"
+        <a class="link-row"
+          href="https://web.archive.org/web/20221213222613/https://reza.guru/post/moving-your-domain-away-from-wix-3-simple-steps/"
           target="_blank" rel="noopener">
           <span class="link-title">Moving Your Domain Away From Wix</span>
           <span class="link-meta">reza.guru (archived)</span>
@@ -401,7 +421,8 @@
     <div class="resize-handle" aria-hidden="true"></div>
   </section>
 
-  <section id="win-snake" class="mac-window platinum" role="dialog" aria-labelledby="title-snake" aria-modal="false" hidden>
+  <section id="win-snake" class="mac-window platinum" role="dialog" aria-labelledby="title-snake" aria-modal="false"
+    hidden>
     <div class="title-bar" data-window-drag-handle>
       <div class="controls">
         <button class="control close" aria-label="Close window" data-action="close"></button>
