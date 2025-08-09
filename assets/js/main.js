@@ -14,12 +14,146 @@
     setupWindows();
     setupDock();
     setupIOS();
+    setupSnake();
     setupLanguageAndWeather();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
     setTimeout(() => {
       openWindow('win-about');
     }, 0);
+  }
+  // Snake Game
+  function setupSnake() {
+    const gameContainers = Array.from(document.querySelectorAll('.snake-game'));
+    if (gameContainers.length === 0) return;
+    for (const container of gameContainers) initSnakeInstance(container);
+  }
+
+  function initSnakeInstance(container) {
+    const canvas = container.querySelector('.snake-canvas');
+    const scoreEl = container.querySelector('[data-score]');
+    const statusEl = container.querySelector('[data-status]');
+    const btnToggle = container.querySelector('[data-action="toggle"]');
+    const btnRestart = container.querySelector('[data-action="restart"]');
+    const btns = container.querySelectorAll('[data-dir]');
+    if (!canvas || !scoreEl || !statusEl) return;
+
+    const ctx = canvas.getContext('2d');
+    const gridSize = 16; // pixels per cell
+    const cols = Math.floor(canvas.width / gridSize);
+    const rows = Math.floor(canvas.height / gridSize);
+    const initialSpeedMs = 140;
+
+    let snake = [ {x: 5, y: 8}, {x:4, y:8}, {x:3, y:8} ];
+    let dir = {x: 1, y: 0};
+    let pendingDir = dir;
+    let food = spawnFood();
+    let score = 0;
+    let running = false;
+    let rafId = null;
+    let lastTick = 0;
+    let speedMs = initialSpeedMs;
+
+    function spawnFood() {
+      let fx, fy;
+      do {
+        fx = Math.floor(Math.random() * cols);
+        fy = Math.floor(Math.random() * rows);
+      } while (snake.some(s => s.x === fx && s.y === fy));
+      return { x: fx, y: fy };
+    }
+
+    function drawCell(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x*gridSize, y*gridSize, gridSize, gridSize);
+    }
+
+    function drawGrid() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // food
+      drawCell(food.x, food.y, '#e74c3c');
+      // snake
+      snake.forEach((seg, idx) => {
+        drawCell(seg.x, seg.y, idx === 0 ? '#2ecc71' : '#27ae60');
+      });
+    }
+
+    function step(now) {
+      if (!running) return;
+      if (now - lastTick < speedMs) { rafId = requestAnimationFrame(step); return; }
+      lastTick = now;
+
+      // apply pending direction (prevent reversing)
+      if ((pendingDir.x !== -dir.x || pendingDir.y !== -dir.y)) {
+        dir = pendingDir;
+      }
+
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      // wall collision
+      if (head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows) {
+        return gameOver();
+      }
+      // self collision
+      if (snake.some((s, i) => i>0 && s.x === head.x && s.y === head.y)) {
+        return gameOver();
+      }
+      snake.unshift(head);
+      // eat
+      if (head.x === food.x && head.y === food.y) {
+        score += 10; speedMs = Math.max(70, speedMs - 2);
+        updateHUD();
+        food = spawnFood();
+      } else {
+        snake.pop();
+      }
+      drawGrid();
+      rafId = requestAnimationFrame(step);
+    }
+
+    function updateHUD() {
+      scoreEl.textContent = String(score);
+      statusEl.textContent = running ? 'Running' : 'Paused';
+    }
+
+    function start() {
+      if (running) return;
+      running = true; updateHUD(); lastTick = 0; rafId = requestAnimationFrame(step);
+    }
+    function pause() { running = false; updateHUD(); if (rafId) cancelAnimationFrame(rafId); }
+    function restart() {
+      snake = [ {x: 5, y: 8}, {x:4, y:8}, {x:3, y:8} ];
+      dir = {x:1, y:0}; pendingDir = dir; food = spawnFood(); score = 0; speedMs = initialSpeedMs;
+      drawGrid(); updateHUD();
+    }
+    function gameOver() {
+      pause(); statusEl.textContent = 'Game Over';
+    }
+
+    // Keyboard controls (desktop)
+    function onKey(e) {
+      const k = e.key;
+      if (k === 'ArrowUp') pendingDir = {x:0,y:-1};
+      else if (k === 'ArrowDown') pendingDir = {x:0,y:1};
+      else if (k === 'ArrowLeft') pendingDir = {x:-1,y:0};
+      else if (k === 'ArrowRight') pendingDir = {x:1,y:0};
+      else if (k === ' ' || k === 'Enter') { running ? pause() : start(); }
+    }
+    container.addEventListener('mouseenter', () => { window.addEventListener('keydown', onKey); });
+    container.addEventListener('mouseleave', () => { window.removeEventListener('keydown', onKey); });
+
+    // Touch controls (mobile)
+    btns.forEach(b => b.addEventListener('click', () => {
+      const d = b.getAttribute('data-dir');
+      if (d === 'up') pendingDir = {x:0,y:-1};
+      if (d === 'down') pendingDir = {x:0,y:1};
+      if (d === 'left') pendingDir = {x:-1,y:0};
+      if (d === 'right') pendingDir = {x:1,y:0};
+    }));
+    btnToggle?.addEventListener('click', () => { running ? pause() : start(); });
+    btnRestart?.addEventListener('click', () => { restart(); start(); });
+
+    // Initial draw
+    drawGrid(); updateHUD();
   }
 
   function updateAppName(activeTitle) {
@@ -452,7 +586,8 @@
     { id: 'win-projects', label: 'Projects', iconHtml: `<i class="fa-regular fa-folder-open"></i>` },
     { id: 'win-blog', label: 'Blog', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
     { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` },
-    { id: 'win-resume', label: 'Resume', iconHtml: `<i class="fa-regular fa-file-lines"></i>` }
+    { id: 'win-resume', label: 'Resume', iconHtml: `<i class="fa-regular fa-file-lines"></i>` },
+    // Snake hidden from dock
   ];
   function ensureDock() {
     let dock = document.getElementById(dockId);

@@ -598,6 +598,29 @@ body.ios-mode .title-bar {
 .experience-company { color: #333; }
 .experience-dates, .experience-location { color: #555; font-size: 12px; }
 
+/* Snake game */
+.snake-game {
+  display: grid;
+  gap: 10px;
+  place-items: center;
+}
+.snake-hud {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.snake-actions { display: flex; gap: 8px; }
+.snake-canvas {
+  image-rendering: pixelated;
+  border: 1px solid #000;
+  background: #111;
+}
+.snake-controls { display: none; }
+body.ios-mode .snake-controls { display: grid; gap: 6px; }
+.snake-controls .ctrl-row { display: flex; gap: 6px; justify-content: center; }
+
 .group-title {
   display: inline-block;
   margin-top: -18px;

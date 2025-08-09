@@ -7,6 +7,7 @@
   <title>Reza Jalaei • Portfolio</title>
   <meta name="description" content="Hello! I'm Reza. I build performant, delightful web experiences. Senior CRO Consultant and Product Owner at FigPii." />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 
@@ -113,6 +114,7 @@
         <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-folder-open"></i></div>
         <span class="icon-label" data-i18n="icon.projects">Projects</span>
       </li>
+      <!-- Snake icon hidden on desktop -->
       <li class="desktop-icon" tabindex="0" data-target="win-blog">
         <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-note-sticky"></i></div>
         <span class="icon-label" data-i18n="icon.blog">Blog</span>
@@ -161,6 +163,7 @@
             <button class="sb-icon" data-app="ios-resume" aria-label="Resume"><i class="fa-solid fa-file-lines"></i></button>
             <div class="sb-label">Resume</div>
           </div>
+          <!-- Snake icon hidden on SpringBoard -->
         </div>
       </div>
     </div>
@@ -398,6 +401,43 @@
     <div class="resize-handle" aria-hidden="true"></div>
   </section>
 
+  <section id="win-snake" class="mac-window platinum" role="dialog" aria-labelledby="title-snake" aria-modal="false" hidden>
+    <div class="title-bar" data-window-drag-handle>
+      <div class="controls">
+        <button class="control close" aria-label="Close window" data-action="close"></button>
+        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
+        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
+      </div>
+      <h2 id="title-snake" class="title">Snake</h2>
+    </div>
+    <div class="window-content">
+      <div class="group-box">
+        <div class="snake-game" data-game="snake">
+          <div class="snake-hud">
+            <div class="snake-score">Score: <span data-score>0</span></div>
+            <div class="snake-status" data-status>Paused</div>
+            <div class="snake-actions">
+              <button class="retro-button" data-action="toggle">Start / Pause</button>
+              <button class="retro-button" data-action="restart">Restart</button>
+            </div>
+          </div>
+          <canvas class="snake-canvas" width="320" height="320" aria-label="Snake game area"></canvas>
+          <div class="snake-controls" aria-label="Touch controls">
+            <div class="ctrl-row">
+              <button class="retro-button" data-dir="up">▲</button>
+            </div>
+            <div class="ctrl-row">
+              <button class="retro-button" data-dir="left">◀</button>
+              <button class="retro-button" data-dir="down">▼</button>
+              <button class="retro-button" data-dir="right">▶</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+
   <section id="win-about-mac" class="mac-window platinum" role="dialog" aria-labelledby="title-about-mac"
     aria-modal="false" hidden>
     <div class="title-bar" data-window-drag-handle>
@@ -445,6 +485,12 @@
   <section id="ios-contact" class="ios-app" role="dialog" aria-label="Contact" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
       <div class="ios-title">Contact</div>
+    </div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-snake" class="ios-app" role="dialog" aria-label="Snake" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
+      <div class="ios-title">Snake</div>
     </div>
     <div class="app-body"></div>
   </section>
