@@ -279,11 +279,32 @@
     const wasHidden = win.hasAttribute('hidden');
     win.removeAttribute('hidden');
     if (wasHidden && win.dataset.initialized !== 'true') {
-      // Stagger placement
+      // Compute intended placement first (used for fit check)
       const offset = (zIndexCounter - 10) * 16;
-      const x = 80 + (offset % 160);
-      const y = 80 + (offset % 120);
-      setWindowPosition(win, x, y);
+      const intendedX = 80 + (offset % 160);
+      const intendedY = 80 + (offset % 120);
+
+      // On desktop, try to fit height to content if it will fully fit on screen
+      if (!document.body.classList.contains('ios-mode')) {
+        const titleBarEl = win.querySelector('.title-bar');
+        const contentEl = win.querySelector('.window-content');
+        if (titleBarEl && contentEl) {
+          // Ensure layout is up-to-date
+          void contentEl.offsetHeight;
+          const desktopBounds = desktop.getBoundingClientRect();
+          const titleHeight = titleBarEl.offsetHeight || 22;
+          const contentHeight = contentEl.scrollHeight;
+          const desiredHeight = titleHeight + contentHeight;
+          const bottomMargin = 10; // small breathing room at bottom
+          const availableHeight = Math.max(200, desktopBounds.height - intendedY - bottomMargin);
+          if (desiredHeight <= availableHeight) {
+            win.style.height = `${desiredHeight}px`;
+          }
+        }
+      }
+
+      // Place window at intended position (will clamp inside desktop)
+      setWindowPosition(win, intendedX, intendedY);
       win.dataset.initialized = 'true';
     }
     focusWindow(win);
