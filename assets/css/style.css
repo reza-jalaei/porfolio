@@ -1123,8 +1123,20 @@ body:not(.ios-mode) .about {
   justify-content: flex-start;
 }
 
+@media screen and (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
 body.ios-mode .desktop-only {
-  display: none;
+  display: none !important;
 }
 
 body.ios-mode .about {
