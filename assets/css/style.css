@@ -707,7 +707,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
 
 .link-row {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 40%;
   padding: 6px 8px;
   border: 1px solid #000;
   box-shadow: 1px 1px 0 #fff;
