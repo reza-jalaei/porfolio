@@ -729,6 +729,7 @@
         dest.appendChild(src.cloneNode(true));
       }
     }
+    // Contact forms are plain HTML POST now; no JS wiring required
   }
   function setupSpringboard() {
     const springboard = document.getElementById('springboard');

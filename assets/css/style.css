@@ -1181,3 +1181,7 @@ body:not(.ios-mode) .mobile-only {
   align-items: flex-start;
   justify-content: flex-start;
 }
+
+.form-label {
+  margin-bottom: 8px;
+}
