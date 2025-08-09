@@ -200,6 +200,7 @@ body.ios-mode .status-bar {
   width: 16px;
   height: 9px;
   border: 1px solid #fff;
+  background: #fff;
   position: relative;
   top: 1px;
   margin-right: 2px;
