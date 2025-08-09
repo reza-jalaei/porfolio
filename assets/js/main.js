@@ -720,7 +720,8 @@
       ['win-projects', 'ios-projects'],
       ['win-blog', 'ios-blog'],
       ['win-contact', 'ios-contact'],
-      ['win-resume', 'ios-resume']
+      ['win-resume', 'ios-resume'],
+      ['win-privacy', 'ios-privacy']
     ];
     for (const [winId, iosId] of mapping) {
       const src = document.querySelector(`#${winId} .window-content`);

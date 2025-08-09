@@ -32,7 +32,7 @@
   </div>
 
   <!-- Menu Bar -->
-  <header class="menu-bar" role="navigation" aria-label="Menu bar">
+  <header class="menu-bar">
     <div class="menu-left">
       <button class="apple-menu" aria-haspopup="true" aria-expanded="false" title="Apple Menu" aria-label="Apple Menu">
         <img src="assets/Apple_logo_black.svg" class="apple-logo" alt="Apple Logo" width="12" height="auto">
@@ -41,7 +41,7 @@
         <li role="menuitem" data-action="about-this-mac">About This Mac</li>
       </ul>
       <div class="app-name" aria-hidden="true">Finder</div>
-      <nav class="menus">
+      <nav class="menus" aria-label="Main menu">
         <div class="menu" data-menu="file">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">File</button>
           <ul class="menu-dropdown" role="menu" aria-label="File">
@@ -108,7 +108,7 @@
   </header>
 
   <!-- Desktop -->
-  <main id="desktop" tabindex="-1" aria-label="Desktop" role="application">
+  <main id="desktop" tabindex="-1">
     <ul class="desktop-icons" aria-label="Desktop icons">
       <li class="desktop-icon" tabindex="0" data-target="win-about">
         <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-address-card"></i></div>
@@ -130,6 +130,10 @@
       <li class="desktop-icon" tabindex="0" data-target="win-resume">
         <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-file-lines"></i></div>
         <span class="icon-label">Resume</span>
+      </li>
+      <li class="desktop-icon" tabindex="0" data-target="win-privacy">
+        <div class="icon-svg" aria-hidden="true"><i class="fa-regular fa-file"></i></div>
+        <span class="icon-label">Privacy</span>
       </li>
     </ul>
   </main>
@@ -170,6 +174,10 @@
             <button class="sb-icon" data-app="ios-resume" aria-label="Resume"><i
                 class="fa-solid fa-file-lines"></i></button>
             <div class="sb-label">Resume</div>
+          </div>
+          <div>
+            <button class="sb-icon" data-app="ios-privacy" aria-label="Privacy"><i class="fa-solid fa-shield"></i></button>
+            <div class="sb-label">Privacy</div>
           </div>
           <!-- Snake icon hidden on SpringBoard -->
         </div>
@@ -234,6 +242,121 @@
           <img src="assets/reza.svg" alt="Apple logo" width="auto" height="30" />
           <p>Made with ❤️ and Vanilla JS</p>
         </div>
+      </div>
+    </div>
+    <div class="resize-handle" aria-hidden="true"></div>
+  </section>
+
+  <section id="win-privacy" class="mac-window platinum" role="dialog" aria-labelledby="title-privacy" aria-modal="false" hidden>
+    <div class="title-bar" data-window-drag-handle>
+      <div class="controls">
+        <button class="control close" aria-label="Close window" data-action="close"></button>
+        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
+        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
+      </div>
+      <h2 id="title-privacy" class="title">Privacy Policy</h2>
+    </div>
+    <div class="window-content">
+      <div class="group-box">
+        <div class="group-title">Last updated: 2025-08-09</div>
+        <p>
+          This Privacy Policy explains what information is collected when you use this site, how it is used, and your choices.
+          This site loads several third‑party scripts in the “Tracking Snippets” section solely to improve performance, usability,
+          and content quality. We do not sell visitor personal information.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Data we process</div>
+        <ul>
+          <li><strong>Usage and device data</strong> (e.g., page URLs, referrers, timestamps, screen size, browser/OS, performance metrics).</li>
+          <li><strong>Interaction data</strong> (e.g., clicks, scrolls, navigation flows). Some tools may provide session replays to help diagnose UX issues.</li>
+          <li><strong>Network and approximate location</strong> as derived from IP address (generally aggregated or truncated, depending on the provider).</li>
+          <li><strong>Form content</strong> you submit (e.g., name, email, message) via the contact form is sent to our form processor for delivery.</li>
+        </ul>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Tracking Snippets used on this site</div>
+        <ul>
+          <li><strong>Cloudflare Beacon</strong> — site reliability and performance telemetry to keep the site fast and available. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare Privacy</a>.</li>
+          <li><strong>Microsoft Clarity</strong> — behavior analytics (clicks, scroll depth, heatmaps; may include session recordings) to improve UX. Learn more at <a href="https://privacy.microsoft.com/" target="_blank" rel="noopener">Microsoft Privacy</a>.</li>
+          <li><strong>Rybbit</strong> — Core Web Vitals and quality analytics to monitor page health. See <a href="https://rybbit.io" target="_blank" rel="noopener">Rybbit</a>.</li>
+          <li><strong>Umami</strong> — privacy‑friendly analytics used to count visits and pages without ad tracking cookies. See <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Privacy</a>.</li>
+          <li><strong>FullStory</strong> — experience analytics/session replays to diagnose issues and improve usability. See <a href="https://www.fullstory.com/legal/privacy-policy/" target="_blank" rel="noopener">FullStory Privacy</a>.</li>
+          <li><strong>RB2B</strong> — When you visit or log in to our website, cookies  and similar technologies may be used by our online data partners or vendors to associate these activities with other personal information they or others have about you, including by association with your email. We (or service providers on our behalf) may then send communications and marketing to these email. You may opt out of receiving this advertising by visiting <a href="https://app.retention.com/optout" target="_blank" rel="noopener">https://app.retention.com/optout</a>.</li>
+        </ul>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Cookies, storage, and consent</div>
+        <p>
+          Some providers use cookies or local storage for sampling, session continuity, or feature toggles. Where applicable, these
+          scripts honor your consent preferences managed by your browser or cookie tools. You can block or clear cookies at any time in your browser settings.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Legal bases and data sharing</div>
+        <p>
+          We process analytics data under <strong>legitimate interests</strong> (to maintain and improve the site) and/or
+          <strong>consent</strong> where required by law. Service providers may act as processors on our behalf. We do not sell personal information.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Retention</div>
+        <p>
+          We retain analytics data for the minimum period needed to measure trends and troubleshoot issues. Aggregated metrics may be kept longer for longitudinal analysis.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Your choices and opt‑out controls</div>
+        <ul>
+          <li>Use browser features such as private windows, tracker‑blocking, and “Do Not Track.”</li>
+          <li>Manage cookies/storage in your browser or via your consent/cookie banner if present.</li>
+          <li>Provider pages: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare</a>,
+            <a href="https://privacy.microsoft.com/" target="_blank" rel="noopener">Microsoft Clarity</a>,
+            <a href="https://www.fullstory.com/legal/privacy-policy/" target="_blank" rel="noopener">FullStory</a>,
+            <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami</a>,
+            <a href="https://rybbit.io" target="_blank" rel="noopener">Rybbit</a>,
+            <a href="https://rb2b.com" target="_blank" rel="noopener">RB2B</a>.</li>
+          <li>RB2B specific opt‑outs
+            <a href="https://app.retention.com/optout" target="_blank" rel="noopener">https://app.retention.com/optout</a>
+            and, if applicable, GDPR opt‑out at
+            <a href="https://www.rb2b.com/rb2b-gdpr-opt-out" target="_blank" rel="noopener">https://www.rb2b.com/rb2b-gdpr-opt-out</a>.
+          </li>
+        </ul>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Your rights</div>
+        <p>
+          Depending on your region, you may have rights to access, correct, delete, or restrict processing of your personal data,
+          and to object or withdraw consent. To exercise these rights, contact us below.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">International transfers</div>
+        <p>
+          Service providers may process data in countries different from yours. Where required, safeguards such as standard contractual clauses are used.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Changes to this policy</div>
+        <p>
+          We may update this policy to reflect changes in our practices or legal requirements. Material changes will be noted here.
+        </p>
+      </div>
+
+      <div class="group-box">
+        <div class="group-title">Contact</div>
+        <p>
+          For privacy questions or requests, email <a href="mailto:reza@jalaei.com">reza@jalaei.com</a>.
+        </p>
       </div>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
@@ -561,6 +684,12 @@
   <section id="ios-resume" class="ios-app" role="dialog" aria-label="Resume" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
       <div class="ios-title">Resume</div>
+    </div>
+    <div class="app-body"></div>
+  </section>
+  <section id="ios-privacy" class="ios-app" role="dialog" aria-label="Privacy" hidden>
+    <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
+      <div class="ios-title">Privacy</div>
     </div>
     <div class="app-body"></div>
   </section>
