@@ -84,7 +84,7 @@ body.ios-mode #springboard {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(0, 0, 0, 0.25);
   box-shadow: 1px 1px 0 #fff;
-  padding: 3px 6px;
+  padding: 6px 12px;
   border-radius: 6px;
   z-index: 900;
   user-select: none;
@@ -203,13 +203,14 @@ body.ios-mode .status-bar {
   position: relative;
   top: 1px;
   margin-right: 2px;
+  border-radius: 1px;
 }
 
 .battery-icon::after {
   content: "";
   position: absolute;
   right: -3px;
-  top: 2px;
+  top: 1px;
   width: 2px;
   height: 5px;
   background: #fff;
@@ -589,6 +590,7 @@ body.ios-mode .title-bar {
   object-fit: contain;
   background: #fff;
   border: 1px solid #bcbcbc;
+  padding: 4px;
 }
 .experience-meta {
   display: grid;
@@ -688,8 +690,8 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
   justify-content: center;
 }
 .folder-icon img {
-  height: 18px;
-  width: fit-content;
+  /* height: 18px;
+  width: fit-content; */
   align-self: center;
 }
 
