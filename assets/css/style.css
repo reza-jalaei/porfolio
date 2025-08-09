@@ -15,6 +15,26 @@ body {
   background: #c7c7c7;
 }
 
+.skip-link {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+  width: auto;
+  height: auto;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #000;
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000;
+  z-index: 2000;
+}
+
 body.ios-mode {
   background: #cfd6df;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

@@ -13,6 +13,7 @@
 </head>
 
 <body>
+  <a href="#desktop" class="skip-link">Skip to desktop content</a>
   <!-- iOS-style Status Bar (shown on mobile only) -->
   <div class="status-bar" aria-hidden="true">
     <div class="status-left">
@@ -38,37 +39,37 @@
         <img src="assets/Apple_logo_black.svg" class="apple-logo" alt="Apple Logo" width="12" height="auto">
       </button>
       <ul id="apple-dropdown" class="apple-dropdown" role="menu" aria-label="Apple">
-        <li role="menuitem" data-action="about-this-mac">About This Mac</li>
+        <li role="menuitem" tabindex="0" data-action="about-this-mac">About This Mac</li>
       </ul>
       <div class="app-name" aria-hidden="true">Finder</div>
       <nav class="menus" aria-label="Main menu">
         <div class="menu" data-menu="file">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">File</button>
           <ul class="menu-dropdown" role="menu" aria-label="File">
-            <li role="menuitem" data-action="open-about">About Me</li>
-            <li role="menuitem" data-action="open-blog">Blog</li>
-            <li role="menuitem" data-action="open-projects">Projects</li>
-            <li role="menuitem" data-action="open-contact">Contact</li>
+            <li role="menuitem" tabindex="0" data-action="open-about">About Me</li>
+            <li role="menuitem" tabindex="0" data-action="open-blog">Blog</li>
+            <li role="menuitem" tabindex="0" data-action="open-projects">Projects</li>
+            <li role="menuitem" tabindex="0" data-action="open-contact">Contact</li>
             <li class="separator" role="separator"></li>
-            <li role="menuitem" data-action="sleep">Sleep</li>
-            <li role="menuitem" data-action="restart">Restart…</li>
-            <li role="menuitem" data-action="shutdown">Shut Down…</li>
+            <li role="menuitem" tabindex="0" data-action="sleep">Sleep</li>
+            <li role="menuitem" tabindex="0" data-action="restart">Restart…</li>
+            <li role="menuitem" tabindex="0" data-action="shutdown">Shut Down…</li>
           </ul>
         </div>
         <div class="menu" data-menu="edit">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Edit</button>
           <ul class="menu-dropdown" role="menu" aria-label="Edit">
-            <li role="menuitem">Cut</li>
-            <li role="menuitem">Copy</li>
-            <li role="menuitem">Paste</li>
-            <li role="menuitem">Select All</li>
+            <li role="menuitem" tabindex="0">Cut</li>
+            <li role="menuitem" tabindex="0">Copy</li>
+            <li role="menuitem" tabindex="0">Paste</li>
+            <li role="menuitem" tabindex="0">Select All</li>
           </ul>
         </div>
         <div class="menu" data-menu="view">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">View</button>
           <ul class="menu-dropdown" role="menu" aria-label="View">
-            <li role="menuitem" data-action="tidy-icons">Tidy Up</li>
-            <li role="menuitem" data-action="show-grid">Show Grid</li>
+            <li role="menuitem" tabindex="0" data-action="tidy-icons">Tidy Up</li>
+            <li role="menuitem" tabindex="0" data-action="show-grid">Show Grid</li>
             <!-- <li class="separator" role="separator"></li>
             <li role="menuitem" data-action="toggle-crt">Toggle CRT Effect</li>
             <li role="menuitem" data-action="cycle-wallpaper">Cycle Wallpaper</li> -->
@@ -77,32 +78,32 @@
         <div class="menu" data-menu="go">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Go</button>
           <ul class="menu-dropdown" role="menu" aria-label="Go">
-            <li role="menuitem" data-action="open-about">About Me</li>
-            <li role="menuitem" data-action="open-blog">Blog</li>
-            <li role="menuitem" data-action="open-projects">Projects</li>
-            <li role="menuitem" data-action="open-contact">Contact</li>
+            <li role="menuitem" tabindex="0" data-action="open-about">About Me</li>
+            <li role="menuitem" tabindex="0" data-action="open-blog">Blog</li>
+            <li role="menuitem" tabindex="0" data-action="open-projects">Projects</li>
+            <li role="menuitem" tabindex="0" data-action="open-contact">Contact</li>
           </ul>
         </div>
         <div class="menu" data-menu="window">
           <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Window</button>
           <ul class="menu-dropdown" role="menu" aria-label="Window">
-            <li role="menuitem" data-action="arrange-windows">Arrange</li>
-            <li role="menuitem" data-action="minimize-all">Minimize All</li>
+            <li role="menuitem" tabindex="0" data-action="arrange-windows">Arrange</li>
+            <li role="menuitem" tabindex="0" data-action="minimize-all">Minimize All</li>
           </ul>
         </div>
       </nav>
     </div>
     <div class="menu-right">
       <div class="lang-switcher">
-        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false">EN <i
+        <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu">EN <i
             class="fa-solid fa-chevron-down"></i></button>
         <ul id="lang-menu" class="menu-dropdown lang-dropdown" role="menu" aria-label="Language">
           <li role="menuitem" data-lang="en">EN — English</li>
           <li role="menuitem" data-lang="tr">TR — Türkçe</li>
         </ul>
       </div>
-      <span id="menu-weather" class="menu-weather" aria-live="polite"
-        onclick="window.open('https://weather.com/weather/today/', '_blank')">--°</span>
+      <a id="menu-weather" class="menu-weather" aria-live="polite"
+        href="https://weather.com/weather/today/" target="_blank" rel="noopener">--°</a>
       <span id="menu-clock" aria-live="polite" aria-atomic="true">--:--</span>
     </div>
   </header>
@@ -653,43 +654,43 @@
   <!-- iOS App Containers -->
   <section id="ios-about" class="ios-app" role="dialog" aria-label="About" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">About</div>
+      <div class="ios-title" role="heading" aria-level="1">About</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-projects" class="ios-app" role="dialog" aria-label="Projects" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Projects</div>
+      <div class="ios-title" role="heading" aria-level="1">Projects</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-blog" class="ios-app" role="dialog" aria-label="Blog" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Blog</div>
+      <div class="ios-title" role="heading" aria-level="1">Blog</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-contact" class="ios-app" role="dialog" aria-label="Contact" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Contact</div>
+      <div class="ios-title" role="heading" aria-level="1">Contact</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-snake" class="ios-app" role="dialog" aria-label="Snake" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Snake</div>
+      <div class="ios-title" role="heading" aria-level="1">Snake</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-resume" class="ios-app" role="dialog" aria-label="Resume" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Resume</div>
+      <div class="ios-title" role="heading" aria-level="1">Resume</div>
     </div>
     <div class="app-body"></div>
   </section>
   <section id="ios-privacy" class="ios-app" role="dialog" aria-label="Privacy" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home">Home</button>
-      <div class="ios-title">Privacy</div>
+      <div class="ios-title" role="heading" aria-level="1">Privacy</div>
     </div>
     <div class="app-body"></div>
   </section>
