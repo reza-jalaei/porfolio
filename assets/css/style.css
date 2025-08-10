@@ -260,6 +260,8 @@ body.ios-mode .status-bar {
 .menu-weather {
   font-variant-numeric: tabular-nums;
   cursor: pointer;
+  text-decoration: none;
+  color: #000;
 }
 
 .lang-switcher {
