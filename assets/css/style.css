@@ -629,6 +629,23 @@ body.ios-mode .title-bar {
   gap: 10px;
 }
 
+/* Carousel slide image styles */
+.project-carousel-item img:not(.project-carousel-logo) {
+  display: block;
+  height: auto;
+  width: 180px;
+  background: #fff;
+  box-shadow: 1px 1px 0 #fff;
+}
+
+.project-carousel-logo {
+  display: none;
+}
+
+.project-carousel-item[data-target] {
+  cursor: pointer;
+}
+
 .project-item {
   display: flex;
   flex-direction: column;
@@ -638,6 +655,29 @@ body.ios-mode .title-bar {
   border: 1px solid #000;
   box-shadow: 1px 1px 0 #fff;
   align-items: start;
+  transition: box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.project-item.highlight {
+  /* Animated, blurred, colored (hue) box-shadow */
+  box-shadow:
+    0 0 0 0 #fff,
+    0 0 12px 8px #4f8cff88;
+  /* fallback for browsers that don't support transition on box-shadow */
+  animation: highlight-glow 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes highlight-glow {
+  from {
+    box-shadow:
+      1px 1px 0 #fff,
+      0 0 0 0 #4f8cff00;
+  }
+  to {
+    box-shadow:
+      1px 1px 0 #fff,
+      0 0 12px 8px #4f8cff88;
+  }
 }
 
 /* Row containing logo (left) and description (right) */
