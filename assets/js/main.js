@@ -586,7 +586,7 @@
     { id: 'win-projects', label: 'Projects', iconHtml: `<i class="fa-regular fa-folder-open"></i>` },
     { id: 'win-blog', label: 'Blog', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
     { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` },
-    { id: 'win-resume', label: 'Resume', iconHtml: `<i class="fa-regular fa-file-lines"></i>` },
+    
     // Snake hidden from dock
   ];
   function ensureDock() {
@@ -720,7 +720,6 @@
       ['win-projects', 'ios-projects'],
       ['win-blog', 'ios-blog'],
       ['win-contact', 'ios-contact'],
-      ['win-resume', 'ios-resume'],
       ['win-privacy', 'ios-privacy']
     ];
     for (const [winId, iosId] of mapping) {
