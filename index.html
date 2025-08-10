@@ -510,7 +510,7 @@
                 <img src="assets/projects/project-5.png" width="128" height="auto" alt="Project 5" />
                 <img class="project-carousel-logo" src="assets/figpii-logo.svg" width="24" height="auto" alt="Project 5" />
               </li>
-              <li class="project-carousel-item splide__slide">
+              <li class="project-carousel-item splide__slide" data-target="olivias-heritage">
                 <img src="assets/projects/project-6.png" width="128" height="auto" alt="Project 6" />
               </li>
               <li class="project-carousel-item splide__slide">
@@ -519,7 +519,7 @@
               <li class="project-carousel-item splide__slide">
                 <img src="assets/projects/project-8.png" width="128" height="auto" alt="Project 7" />
               </li>
-              <li class="project-carousel-item splide__slide" data-target="olivias-heritage">
+              <li class="project-carousel-item splide__slide" data-target="thma">
                 <img src="assets/projects/project-9.png" width="128" height="auto" alt="Project 7" />
                 <img class="project-carousel-logo" src="assets/oliviasheritage-logo.png" width="24" height="auto" alt="Project 7" />
               </li>
@@ -1098,7 +1098,7 @@
       });
       splide.mount(window.splide.Extensions);
 
-      const slidesWithTargets = document.querySelectorAll(`[data-target]`);
+      const slidesWithTargets = document.querySelectorAll(`.project-carousel-item[data-target]`);
       slidesWithTargets.forEach(slide => {
         const target = slide.getAttribute('data-target');
         const slideTarget = document.querySelector(`[data-project="${target}"]`);
