@@ -1080,36 +1080,56 @@
   <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.2/dist/js/splide-extension-auto-scroll.min.js"></script>
   <script>
     (function(){
-      const root = document.querySelector('.project-carousel-wrapper.splide');
-      if (!root) return;
-      const splide = new Splide(root, {
-        type: 'loop',
-        drag: 'free',
-        autoWidth: true,
-        pagination: false,
-        arrows: false,
-        gap: '12px',
-        focus: 'left',
-        autoScroll: {
-          speed: 0.75,
-          pauseOnHover: true,
-          pauseOnFocus: false,
-        },
-      });
-      splide.mount(window.splide.Extensions);
+      const roots = Array.from(document.querySelectorAll('.project-carousel-wrapper.splide'));
 
-      const slidesWithTargets = document.querySelectorAll(`.project-carousel-item[data-target]`);
-      slidesWithTargets.forEach(slide => {
-        const target = slide.getAttribute('data-target');
-        const slideTarget = document.querySelector(`[data-project="${target}"]`);
-        if (slide && slideTarget) {
-          slide.addEventListener('click', () => {
-            slideTarget.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-            slideTarget.classList.add('highlight');
-            setTimeout(() => {
-              slideTarget.classList.remove('highlight');
-            }, 800);
-          });
+      function mountIfVisible(root){
+        if (root.dataset.splideMounted === 'true') return;
+        const visible = root.offsetWidth > 0 && root.offsetHeight > 0;
+        if (!visible) return;
+        const splide = new Splide(root, {
+          type: 'loop',
+          drag: 'free',
+          autoWidth: true,
+          pagination: false,
+          arrows: false,
+          gap: '12px',
+          focus: 'left',
+          autoScroll: {
+            speed: 0.75,
+            pauseOnHover: true,
+            pauseOnFocus: false,
+          },
+        });
+        splide.mount(window.splide.Extensions);
+        root.dataset.splideMounted = 'true';
+
+        const slidesWithTargets = root.querySelectorAll('.project-carousel-item[data-target]');
+        slidesWithTargets.forEach(slide => {
+          const target = slide.getAttribute('data-target');
+          const slideTarget = document.querySelector(`[data-project="${target}"]`);
+          if (slide && slideTarget) {
+            slide.addEventListener('click', () => {
+              slideTarget.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+              slideTarget.classList.add('highlight');
+              setTimeout(() => slideTarget.classList.remove('highlight'), 800);
+            });
+          }
+        });
+      }
+
+      roots.forEach(root => {
+        // Try immediately
+        mountIfVisible(root);
+        // Observe for when its window/app becomes visible (desktop or iOS mode)
+        if ('ResizeObserver' in window) {
+          const ro = new ResizeObserver(() => mountIfVisible(root));
+          ro.observe(root);
+        } else if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver(() => mountIfVisible(root), { root: null, threshold: 0 });
+          io.observe(root);
+        } else {
+          // Fallback: attempt after a short delay
+          setTimeout(() => mountIfVisible(root), 400);
         }
       });
     })();
