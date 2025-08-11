@@ -18,8 +18,11 @@
     setupLanguageAndWeather();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
+    // Open default window on desktop only
     setTimeout(() => {
-      openWindow('win-about');
+      if (!document.body.classList.contains('ios-mode')) {
+        openWindow('win-about');
+      }
     }, 0);
   }
   // Snake Game

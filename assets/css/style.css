@@ -23,6 +23,7 @@ body {
   height: 1px;
   overflow: hidden;
 }
+
 .skip-link:focus {
   left: 8px;
   top: 8px;
@@ -58,7 +59,7 @@ body.ios-mode {
 #desktop {
   position: relative;
   height: calc(100vh - var(--menu-bar-height));
-  background-image: url('../../assets/OS8_Default.png');
+  background-image: url('../images/wallpapers/OS8_Default.png');
   background-repeat: repeat;
   padding: 12px;
   overflow: hidden;
@@ -91,7 +92,7 @@ body.ios-mode #desktop {
 }
 
 body.ios-mode #springboard {
-  background: url('../../assets/mobile-wallpaper.png') top center / cover no-repeat fixed;
+  background: url('../images/wallpapers/mobile-wallpaper.png') top center / cover no-repeat fixed;
 }
 
 /* Desktop lower-right credit */
@@ -187,7 +188,7 @@ body.ios-mode .menu-bar {
   height: var(--status-bar-height);
   padding: 3px 10px;
   font-size: 13px;
-  background: #000;
+  background: transparent;
   color: #fff;
   align-items: center;
   justify-content: space-between;
@@ -373,11 +374,16 @@ body.ios-mode .status-bar {
 @media (min-width: 700px) {
   .desktop-icons {
     display: flex;
-    flex-direction: column; /* stack vertically */
-    flex-wrap: wrap;        /* wrap into columns */
-    height: 100%;           /* fill desktop height to enable column wrap */
-    align-content: flex-end;/* keep columns aligned to the right */
-    justify-content: flex-start; /* start at top */
+    flex-direction: column;
+    /* stack vertically */
+    flex-wrap: wrap;
+    /* wrap into columns */
+    height: 100%;
+    /* fill desktop height to enable column wrap */
+    align-content: flex-end;
+    /* keep columns aligned to the right */
+    justify-content: flex-start;
+    /* start at top */
     gap: 18px;
   }
 }
@@ -400,6 +406,14 @@ body.ios-mode .status-bar {
   font-size: 44px;
   color: #000;
   line-height: 48px;
+}
+
+/* Ensure desktop image icons fit properly */
+.desktop-icon .icon-svg img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
 }
 
 .desktop-icon .icon-label {
@@ -597,6 +611,7 @@ body.ios-mode .title-bar {
   display: grid;
   gap: 10px;
 }
+
 .experience-item {
   display: grid;
   grid-template-columns: 48px 1fr;
@@ -606,6 +621,7 @@ body.ios-mode .title-bar {
   background: #f2f2f2;
   border: 1px solid #000;
 }
+
 .experience-logo {
   display: block;
   width: 48px;
@@ -615,18 +631,31 @@ body.ios-mode .title-bar {
   border: 1px solid #bcbcbc;
   padding: 4px;
 }
+
 .experience-meta {
   display: grid;
   gap: 2px;
 }
-.experience-title { font-weight: 700; }
-.experience-company { color: #333; }
-.experience-dates, .experience-location { color: #555; font-size: 12px; }
+
+.experience-title {
+  font-weight: 700;
+}
+
+.experience-company {
+  color: #333;
+}
+
+.experience-dates,
+.experience-location {
+  color: #555;
+  font-size: 12px;
+}
 
 /* Projects list */
 .project-list {
   display: grid;
   gap: 10px;
+  padding-bottom: 12px;
 }
 
 /* Carousel slide image styles */
@@ -655,7 +684,7 @@ body.ios-mode .title-bar {
   border: 1px solid #000;
   box-shadow: 1px 1px 0 #fff;
   align-items: start;
-  transition: box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+  transition: box-shadow 0.4s cubic-bezier(.4, 0, .2, 1);
 }
 
 .project-item.highlight {
@@ -664,7 +693,7 @@ body.ios-mode .title-bar {
     0 0 0 0 #fff,
     0 0 12px 8px #4f8cff88;
   /* fallback for browsers that don't support transition on box-shadow */
-  animation: highlight-glow 0.4s cubic-bezier(.4,0,.2,1);
+  animation: highlight-glow 0.4s cubic-bezier(.4, 0, .2, 1);
 }
 
 @keyframes highlight-glow {
@@ -673,6 +702,7 @@ body.ios-mode .title-bar {
       1px 1px 0 #fff,
       0 0 0 0 #4f8cff00;
   }
+
   to {
     box-shadow:
       1px 1px 0 #fff,
@@ -783,9 +813,30 @@ body.ios-mode .title-bar {
   text-decoration: none;
 }
 
+/* iOS 7 styling for project links */
+body.ios-mode .project-link-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #111;
+  background: #f2f2f7;
+  border: 1px solid rgba(60, 60, 67, 0.16);
+  box-shadow: none;
+  border-radius: 12px;
+  padding: 2px 8px;
+}
+body.ios-mode .project-link-text:hover { background: #eaeaef; }
+
 @media (max-width: 560px) {
-  .project-row .project-title { flex-basis: 76px; }
-  .project-title { justify-content: flex-start; }
+  .project-row .project-title {
+    flex-basis: 76px;
+  }
+
+  .project-title {
+    justify-content: flex-start;
+  }
+
   /* no grid specific overrides needed */
 }
 
@@ -795,6 +846,7 @@ body.ios-mode .title-bar {
   gap: 10px;
   place-items: center;
 }
+
 .snake-hud {
   display: flex;
   gap: 10px;
@@ -802,15 +854,32 @@ body.ios-mode .title-bar {
   justify-content: space-between;
   width: 100%;
 }
-.snake-actions { display: flex; gap: 8px; }
+
+.snake-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .snake-canvas {
   image-rendering: pixelated;
   border: 1px solid #000;
   background: #111;
 }
-.snake-controls { display: none; }
-body.ios-mode .snake-controls { display: grid; gap: 6px; }
-.snake-controls .ctrl-row { display: flex; gap: 6px; justify-content: center; }
+
+.snake-controls {
+  display: none;
+}
+
+body.ios-mode .snake-controls {
+  display: grid;
+  gap: 6px;
+}
+
+.snake-controls .ctrl-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
 
 .group-title {
   display: inline-block;
@@ -840,7 +909,6 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
 .chips li {
   font-size: 11px;
   border: 1px solid #000;
-  box-shadow: inset 1px 1px 0 #fff;
   padding: 2px 6px;
   background: #eaeaea;
 }
@@ -880,6 +948,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
   align-content: center;
   justify-content: center;
 }
+
 .folder-icon img {
   /* height: 18px;
   width: fit-content; */
@@ -893,6 +962,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
 .link-list {
   display: grid;
   gap: 6px;
+  padding-bottom: 12px;
 }
 
 .link-row {
@@ -906,6 +976,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
   text-decoration: none;
   gap: 8px;
 }
+
 @media (min-width: 768px) {
   .link-row {
     display: flex;
@@ -931,6 +1002,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 16px;
 }
 
 .retro-button {
@@ -950,7 +1022,7 @@ body.ios-mode .snake-controls { display: grid; gap: 6px; }
 
 body.ios-mode .window-content {
   padding: 12px;
-  padding-bottom: 78px;
+  padding-bottom: 112px;
   font-size: 15px;
 }
 
@@ -1189,12 +1261,21 @@ body.ios-mode #springboard {
   border: none;
   display: grid;
   place-items: center;
+  padding: 0;
 }
 
 .sb-icon i {
   color: #fff;
   font-size: 28px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Ensure image-based icons fit inside iOS icons */
+.sb-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .sb-icon:active {
@@ -1211,45 +1292,54 @@ body.ios-mode #springboard {
 
 /* iOS Dock (shelf) */
 .ios-dock {
-  display: none;
-  /* hidden by default (desktop) */
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
-  width: auto;
-  padding: 10px 12px;
   display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: fit-content;
+  padding: 18px 0 10px 0;
   gap: 16px;
   justify-content: center;
   align-items: center;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08) 40%, rgba(0, 0, 0, 0.15)),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 16%),
-    rgba(50, 60, 80, 0.45);
-  border: none;
-  border-radius: 18px;
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  backdrop-filter: blur(12px) saturate(120%);
-  box-shadow:
-    0 16px 28px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-  min-height: calc(var(--ios-dock-height) - 26px);
+  background: rgba(0, 0, 0, 0.28);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 -0.5px 0 rgba(60, 60, 67, 0.1) inset, 0 8px 20px rgba(0, 0, 0, 0.18);
+  border-radius: 0;
   z-index: 1500;
 }
 
 .ios-dock .sb-icon {
-  width: 58px;
-  height: 58px;
+  width: 64px;
+  height: 64px;
   border-radius: 12px;
+  background: unset;
+  /* reverted to original minimal styling */
 }
 
-@media (max-width: 768px) {
-  body.ios-mode .ios-dock {
-    display: flex;
-  }
+/* Dock items stack icon above label (iOS 4 style) */
+.ios-dock-item {
+  display: grid;
+  grid-template-rows: 58px auto;
+  justify-items: center;
+  align-items: end;
 }
+
+.ios-dock-item .sb-label {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #fff;
+  text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.8);
+}
+
+.ios-dock .sb-icon img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Dock visible on both desktop and mobile */
 
 /* Ensure mac dock stays hidden in iOS mode, use iOS dock instead */
 body.ios-mode .dock {
@@ -1267,7 +1357,7 @@ body.ios-mode .ios-app {
   overflow: auto;
 }
 
-/* iOS app header (iOS 4 style) */
+/* iOS 7-style app header */
 .ios-app .ios-nav {
   position: sticky;
   top: 0;
@@ -1275,35 +1365,115 @@ body.ios-mode .ios-app {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  background: linear-gradient(#dfe7f3, #b9c9e1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  height: 48px;
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 2;
 }
 
 .ios-app .ios-back {
   position: absolute;
   left: 8px;
-  top: 6px;
-  height: 26px;
-  padding: 0 10px;
-  font-size: 13px;
+  top: 7px;
+  height: 30px;
+  padding: 0 8px 0 6px;
+  font-size: 14px;
   border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  background: linear-gradient(#fff, #dbe7f7);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 0 rgba(255, 255, 255, 0.7);
+  border: none;
+  background: transparent;
+  color: #007aff;
+}
+
+.ios-app .ios-back::before {
+  content: '‹';
+  font-size: 22px;
+  line-height: 0;
+  position: relative;
+  top: 1px;
+  margin-right: 4px;
+}
+
+.ios-app .ios-back:active {
+  opacity: 0.6;
 }
 
 .ios-app .ios-title {
-  font-weight: 700;
-  font-size: 14px;
-  color: #123;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 16px;
+  color: #111;
 }
 
 /* Mobile window content spacing */
+body.ios-mode .ios-app {
+  background: rgba(249, 249, 249, 1);
+}
+
 body.ios-mode .ios-app .app-body {
-  padding: 12px;
+  padding: 0;
+}
+
+/* iOS 7 visual language: softer borders and shadows on mobile */
+body.ios-mode .group-box,
+body.ios-mode .project-item {
+  border: 1px solid rgba(60, 60, 67, 0.16);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.98);
+}
+/* Modernize experience items only on mobile/iOS */
+body.ios-mode .experience-item {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid rgba(60, 60, 67, 0.16);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+body.ios-mode .experience-logo {
+  border: 1px solid rgba(60, 60, 67, 0.18);
+  border-radius: 10px;
+}
+
+body.ios-mode .project-logo-box {
+  border-color: rgba(60, 60, 67, 0.18);
+  background: #fff;
+  border-radius: 10px;
+}
+
+body.ios-mode .project-tag,
+body.ios-mode .chips li {
+  border: 1px solid rgba(60, 60, 67, 0.16);
+  background: #f2f2f7;
+  border-radius: 12px;
+}
+
+/* Links and list rows */
+body.ios-mode .link-row {
+  border: 1px solid rgba(60, 60, 67, 0.16);
+  box-shadow: none;
+  background: #fff;
+}
+body.ios-mode .link-row:hover { background: #f7f7fb; }
+
+/* Buttons (within iOS apps) */
+.ios-app .retro-button {
+  border: 1px solid rgba(0, 122, 255, 0.28);
+  background: rgba(0, 122, 255, 0.08);
+  color: #007aff;
+  border-radius: 10px;
+}
+.ios-app .retro-button:hover { background: rgba(0, 122, 255, 0.14); }
+
+/* Inputs inside iOS apps */
+.ios-app input[type="text"],
+.ios-app input[type="email"],
+.ios-app input[type="tel"],
+.ios-app input[type="number"],
+.ios-app textarea {
+  border: 1px solid rgba(60, 60, 67, 0.2) !important;
+  box-shadow: none !important;
+  background: #fff !important;
 }
 
 body:not(.ios-mode) .about {
@@ -1399,4 +1569,19 @@ body:not(.ios-mode) .mobile-only {
 
 .form-label {
   margin-bottom: 8px;
+}
+
+.avatar.mobile-only {
+  border-radius: 12px;
+}
+
+.project-carousel-wrapper {
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .project-carousel-wrapper {
+    border-radius: 12px;
+  }
 }
