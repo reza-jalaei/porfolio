@@ -3,4 +3,4 @@ Allow: /
 
 Sitemap: https://jalaei.com/sitemap.xml
 
-
+Host: https://jalaei.com

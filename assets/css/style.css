@@ -146,7 +146,7 @@ body.ios-mode .desktop-credit {
 .menu-left {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   position: relative;
 }
 
@@ -242,17 +242,8 @@ body.ios-mode .status-bar {
   font-variant-numeric: tabular-nums;
 }
 
-.menu-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .menu-right {
   font-size: 13px;
-}
-
-.menu-right {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1584,4 +1575,15 @@ body:not(.ios-mode) .mobile-only {
   .project-carousel-wrapper {
     border-radius: 12px;
   }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
