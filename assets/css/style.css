@@ -119,8 +119,6 @@ body.ios-mode .desktop-credit {
   display: none;
 }
 
-/* Busy overlay removed */
-
 /* Menu Bar */
 .menu-bar {
   height: var(--menu-bar-height);
@@ -1041,10 +1039,6 @@ body.ios-mode #springboard {
   display: grid;
 }
 
-body.ios-mode .home-button {
-  display: block;
-}
-
 body.ios-mode .dock {
   display: none !important;
 }
@@ -1215,8 +1209,6 @@ body.ios-mode .dock {
   border-color: #123aa8;
   box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.7);
 }
-
-/* Boot overlay removed */
 
 /* iOS mode layout and visuals (iOS 4-inspired) */
 body.ios-mode {

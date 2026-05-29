@@ -18,10 +18,12 @@
     setupLanguageAndWeather();
     detectMobileAndToggleMode();
     setupGlobalHandlers();
-    // Open default window on desktop only
+    setupHashNav();
+    // Open default window on desktop only (respect deep-link hash if present)
     setTimeout(() => {
       if (!document.body.classList.contains('ios-mode')) {
-        openWindow('win-about');
+        const route = currentHashRoute();
+        openWindow(route ? route[0] : 'win-about');
       }
     }, 0);
   }
@@ -265,41 +267,203 @@
   // Language switching and weather
   const translations = {
     en: {
+      // Menu bar
+      'menu.file': 'File',
+      'menu.edit': 'Edit',
+      'menu.view': 'View',
+      'menu.go': 'Go',
+      'menu.window': 'Window',
+      'menu.sleep': 'Sleep',
+      'menu.restart': 'Restart…',
+      'menu.shutDown': 'Shut Down…',
+      'menu.cut': 'Cut',
+      'menu.copy': 'Copy',
+      'menu.paste': 'Paste',
+      'menu.selectAll': 'Select All',
+      'menu.tidyUp': 'Tidy Up',
+      'menu.showGrid': 'Show Grid',
+      'menu.arrange': 'Arrange',
+      'menu.minimizeAll': 'Minimize All',
+      'menu.aboutThisMac': 'About This Mac',
+      // Desktop icon labels
       'icon.about': 'About Me',
       'icon.projects': 'Projects',
       'icon.blog': 'Blog',
       'icon.contact': 'Contact',
+      'icon.privacy': 'Privacy',
+      // SpringBoard / iOS app titles
+      'nav.about': 'About',
+      'nav.projects': 'Projects',
+      'nav.blog': 'Blog',
+      'nav.contact': 'Contact',
+      'nav.privacy': 'Privacy',
+      // Window titles
       'win.about': 'About Me',
       'win.projects': 'Projects',
       'win.blog': 'Blog',
       'win.contact': 'Contact',
+      'win.privacy': 'Privacy Policy',
+      // About
       'about.intro': "Hello! I'm Reza. I build performant, delightful web experiences.",
-      'about.specialties': 'Specialties: UX Focused Design, JavaScript, Node.js, Shopify, A/B Testing, Analytics.',
-      'contact.sayHello': 'Say hello:'
+      'about.role': 'Senior CRO Consultant and Product Owner at',
+      'about.workExperience': 'Work Experience',
+      'about.whoAmI': 'Who am I?',
+      'about.bio1': "I'm an artist and software engineer with a passion for building products and online experiences that revolutionize the way people interact with the world.",
+      'about.bio2': "I'm a big believer in optimization through experimentation and data-driven decision making.",
+      'about.bio3': "I've been fortunate to have worked with some of the most innovative companies in the world, from startups and small online stores to Fortune 500 companies.",
+      // Skill chips
+      'chip.uxDesign': 'UX Design',
+      'chip.abTesting': 'A/B Testing',
+      'chip.analytics': 'Analytics',
+      // Projects
+      'projects.heading': 'Clients & Projects',
+      // Contact
+      'contact.sayHello': 'Say hello:',
+      'form.name': 'Name',
+      'form.email': 'Email',
+      'form.message': 'Message',
+      'form.namePlaceholder': 'Your Name',
+      'form.emailPlaceholder': 'Your Email',
+      'form.messagePlaceholder': 'Your Message',
+      'form.send': 'Send',
+      // iOS chrome
+      'ios.home': 'Home',
     },
     tr: {
+      'menu.file': 'Dosya',
+      'menu.edit': 'Düzen',
+      'menu.view': 'Görünüm',
+      'menu.go': 'Git',
+      'menu.window': 'Pencere',
+      'menu.sleep': 'Uyku',
+      'menu.restart': 'Yeniden Başlat…',
+      'menu.shutDown': 'Kapat…',
+      'menu.cut': 'Kes',
+      'menu.copy': 'Kopyala',
+      'menu.paste': 'Yapıştır',
+      'menu.selectAll': 'Tümünü Seç',
+      'menu.tidyUp': 'Topla',
+      'menu.showGrid': 'Izgarayı Göster',
+      'menu.arrange': 'Yerleştir',
+      'menu.minimizeAll': 'Tümünü Küçült',
+      'menu.aboutThisMac': 'Bu Mac Hakkında',
       'icon.about': 'Hakkımda',
       'icon.projects': 'Projeler',
       'icon.blog': 'Blog',
       'icon.contact': 'İletişim',
+      'icon.privacy': 'Gizlilik',
+      'nav.about': 'Hakkımda',
+      'nav.projects': 'Projeler',
+      'nav.blog': 'Blog',
+      'nav.contact': 'İletişim',
+      'nav.privacy': 'Gizlilik',
       'win.about': 'Hakkımda',
       'win.projects': 'Projeler',
       'win.blog': 'Blog',
       'win.contact': 'İletişim',
+      'win.privacy': 'Gizlilik Politikası',
       'about.intro': 'Merhaba! Ben Reza. Keyifli web deneyimleri geliştiriyorum.',
-      'about.specialties': 'UX Tasarım, JavaScript, Node.js, Shopify, A/B Test.',
-      'contact.sayHello': 'Merhaba deyin:'
+      'about.role': 'Kıdemli CRO Danışmanı ve Ürün Sahibi —',
+      'about.workExperience': 'İş Deneyimi',
+      'about.whoAmI': 'Ben kimim?',
+      'about.bio1': 'Ürünler ve çevrimiçi deneyimler oluşturmaya tutkuyla bağlı bir sanatçı ve yazılım mühendisiyim; insanların dünyayla etkileşim biçimini dönüştürmeyi amaçlıyorum.',
+      'about.bio2': 'Deneylere ve veriye dayalı karar almaya dayanan optimizasyona güçlü bir şekilde inanıyorum.',
+      'about.bio3': 'Yeni girişimlerden küçük çevrimiçi mağazalara ve Fortune 500 şirketlerine kadar dünyanın en yenilikçi şirketlerinden bazılarıyla çalışma şansına eriştim.',
+      'chip.uxDesign': 'UX Tasarımı',
+      'chip.abTesting': 'A/B Testi',
+      'chip.analytics': 'Analitik',
+      'projects.heading': 'Müşteriler ve Projeler',
+      'contact.sayHello': 'Merhaba deyin:',
+      'form.name': 'Ad',
+      'form.email': 'E-posta',
+      'form.message': 'Mesaj',
+      'form.namePlaceholder': 'Adınız',
+      'form.emailPlaceholder': 'E-postanız',
+      'form.messagePlaceholder': 'Mesajınız',
+      'form.send': 'Gönder',
+      'ios.home': 'Ana Ekran',
+    },
+    sv: {
+      'menu.file': 'Arkiv',
+      'menu.edit': 'Redigera',
+      'menu.view': 'Visa',
+      'menu.go': 'Gå',
+      'menu.window': 'Fönster',
+      'menu.sleep': 'Vila',
+      'menu.restart': 'Starta om…',
+      'menu.shutDown': 'Stäng av…',
+      'menu.cut': 'Klipp ut',
+      'menu.copy': 'Kopiera',
+      'menu.paste': 'Klistra in',
+      'menu.selectAll': 'Markera allt',
+      'menu.tidyUp': 'Städa upp',
+      'menu.showGrid': 'Visa rutnät',
+      'menu.arrange': 'Ordna',
+      'menu.minimizeAll': 'Minimera alla',
+      'menu.aboutThisMac': 'Om den här datorn',
+      'icon.about': 'Om mig',
+      'icon.projects': 'Projekt',
+      'icon.blog': 'Blogg',
+      'icon.contact': 'Kontakt',
+      'icon.privacy': 'Integritet',
+      'nav.about': 'Om mig',
+      'nav.projects': 'Projekt',
+      'nav.blog': 'Blogg',
+      'nav.contact': 'Kontakt',
+      'nav.privacy': 'Integritet',
+      'win.about': 'Om mig',
+      'win.projects': 'Projekt',
+      'win.blog': 'Blogg',
+      'win.contact': 'Kontakt',
+      'win.privacy': 'Integritetspolicy',
+      'about.intro': 'Hej! Jag heter Reza. Jag bygger snabba och förtjusande webbupplevelser.',
+      'about.role': 'Senior CRO-konsult och produktägare på',
+      'about.workExperience': 'Arbetslivserfarenhet',
+      'about.whoAmI': 'Vem är jag?',
+      'about.bio1': 'Jag är en konstnär och mjukvaruingenjör med en passion för att bygga produkter och digitala upplevelser som förändrar hur människor interagerar med världen.',
+      'about.bio2': 'Jag tror starkt på optimering genom experiment och datadrivet beslutsfattande.',
+      'about.bio3': 'Jag har haft förmånen att arbeta med några av världens mest innovativa företag, från nystartade bolag och små webbutiker till Fortune 500-företag.',
+      'chip.uxDesign': 'UX-design',
+      'chip.abTesting': 'A/B-testning',
+      'chip.analytics': 'Analys',
+      'projects.heading': 'Kunder & projekt',
+      'contact.sayHello': 'Säg hej:',
+      'form.name': 'Namn',
+      'form.email': 'E-post',
+      'form.message': 'Meddelande',
+      'form.namePlaceholder': 'Ditt namn',
+      'form.emailPlaceholder': 'Din e-post',
+      'form.messagePlaceholder': 'Ditt meddelande',
+      'form.send': 'Skicka',
+      'ios.home': 'Hem',
     },
   };
 
+  function getInitialLang() {
+    let lang = '';
+    try {
+      const params = new URLSearchParams(location.search);
+      lang = params.get('lang') || localStorage.getItem('lang') || '';
+    } catch (e) { /* query/storage unavailable */ }
+    lang = (lang || 'en').toLowerCase();
+    return translations[lang] ? lang : 'en';
+  }
+
   function applyLanguage(lang) {
-    const dict = translations[lang] || translations.en;
+    if (!translations[lang]) lang = 'en';
+    const dict = translations[lang];
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) el.textContent = dict[key];
     });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key]) el.setAttribute('placeholder', dict[key]);
+    });
     const btn = document.getElementById('lang-btn');
     if (btn) btn.innerHTML = (lang.toUpperCase()) + ' <i class="fa-solid fa-chevron-down"></i>';
+    document.documentElement.lang = lang;
+    try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable */ }
   }
 
   function setupLanguageAndWeather() {
@@ -322,7 +486,7 @@
         });
       });
     }
-    applyLanguage('en');
+    applyLanguage(getInitialLang());
 
     // Weather (Istanbul via Open-Meteo)
     const weatherEl = document.getElementById('menu-weather');
@@ -693,7 +857,30 @@
     });
   }
 
-  // Boot overlay removed
+  // Hash-based deep linking (keeps sitemap URLs like /#projects functional)
+  const hashRoutes = {
+    about: ['win-about', 'ios-about'],
+    projects: ['win-projects', 'ios-projects'],
+    blog: ['win-blog', 'ios-blog'],
+    contact: ['win-contact', 'ios-contact'],
+    privacy: ['win-privacy', 'ios-privacy'],
+  };
+  function currentHashRoute() {
+    const key = (location.hash || '').replace(/^#/, '').toLowerCase();
+    return hashRoutes[key] || null;
+  }
+  function navigateToHash() {
+    const route = currentHashRoute();
+    if (!route) return;
+    if (document.body.classList.contains('ios-mode')) {
+      openIOSApp(route[1]);
+    } else {
+      openWindow(route[0]);
+    }
+  }
+  function setupHashNav() {
+    window.addEventListener('hashchange', navigateToHash);
+  }
 
   // iOS Mode
   function setupIOS() {
@@ -704,12 +891,14 @@
     document.body.classList.add('ios-mode');
     updateModeVisibility();
     window.scrollTo(0,0);
-    // Open About on first entry to iOS mode (after DOM updates)
+    // Open About on first entry to iOS mode (after DOM updates),
+    // unless a deep-link hash points to a specific app.
     if (!iosModeInitialized) {
       iosModeInitialized = true;
       setTimeout(() => {
         showSpringboard();
-        openIOSApp('ios-about');
+        const route = currentHashRoute();
+        openIOSApp(route ? route[1] : 'ios-about');
       }, 0);
     }
   }
@@ -912,42 +1101,6 @@
       focusWindow(win);
     };
   }
-
-  // iOS: Lock Screen, SpringBoard paging, and animations
-  /* lock screen removed */ function setupLockScreen_removed() {
-    const lock = document.getElementById('lock-screen');
-    const thumb = document.querySelector('#lock-slider .slider-thumb');
-    const time = document.getElementById('lock-time');
-    if (!lock || !thumb || !time) return;
-    const tick = () => {
-      const d = new Date();
-      const hh = ((d.getHours()+11)%12)+1;
-      const mm = String(d.getMinutes()).padStart(2,'0');
-      time.textContent = `${hh}:${mm}`;
-    };
-    tick(); setInterval(tick, 60_000);
-
-    let dragging = false, startX = 0;
-    thumb.addEventListener('mousedown', (e) => { dragging = true; startX = e.clientX; });
-    window.addEventListener('mouseup', () => { if (!dragging) return; dragging = false; resetThumb(); });
-    window.addEventListener('mousemove', (e) => { if (!dragging) return; dragTo(e.clientX); });
-    thumb.addEventListener('touchstart', (e) => { dragging = true; startX = e.touches[0].clientX; }, { passive: true });
-    window.addEventListener('touchend', () => { if (!dragging) return; dragging = false; resetThumb(); }, { passive: true });
-    window.addEventListener('touchmove', (e) => { if (!dragging) return; dragTo(e.touches[0].clientX); }, { passive: true });
-
-    function dragTo(x) {
-      const track = document.querySelector('#lock-slider');
-      const min = 4, max = track.clientWidth - thumb.clientWidth - 4;
-      let dx = Math.max(min, Math.min(x - startX + 4, max));
-      thumb.style.left = dx + 'px';
-      if (dx >= max) {
-        hideLockScreen();
-        showSpringboard();
-      }
-    }
-    function resetThumb() { thumb.style.left = '4px'; }
-  }
-  /* lock screen removed */
 
   // Start
   init();
