@@ -1659,3 +1659,273 @@ body:not(.ios-mode) .mobile-only {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* =========================================================================
+   Cookie consent (orestbida/cookieconsent v3), themed to match the OS UI.
+   Desktop = Mac OS "Platinum" dialog; iOS mode = rounded iOS sheet.
+   ========================================================================= */
+
+/* ---- Base / desktop (Platinum) variables ---- */
+#cc-main {
+  --cc-font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif;
+  --cc-bg: #f4f4f4;
+  --cc-primary-color: #000;
+  --cc-secondary-color: #333;
+  --cc-modal-border-radius: 0;
+  --cc-btn-border-radius: 0;
+  --cc-modal-margin: 16px;
+  --cc-modal-transition-duration: .14s;
+  --cc-link-color: #1745d8;
+
+  --cc-btn-primary-bg: #e9e9e9;
+  --cc-btn-primary-color: #000;
+  --cc-btn-primary-border-color: #000;
+  --cc-btn-primary-hover-bg: #dcdcdc;
+  --cc-btn-primary-hover-color: #000;
+  --cc-btn-primary-hover-border-color: #000;
+  --cc-btn-secondary-bg: #e9e9e9;
+  --cc-btn-secondary-color: #000;
+  --cc-btn-secondary-border-color: #000;
+  --cc-btn-secondary-hover-bg: #dcdcdc;
+  --cc-btn-secondary-hover-color: #000;
+  --cc-btn-secondary-hover-border-color: #000;
+
+  --cc-separator-border-color: #bdbdbd;
+
+  --cc-toggle-on-bg: #1745d8;
+  --cc-toggle-off-bg: #9a9a9a;
+  --cc-toggle-on-knob-bg: #fff;
+  --cc-toggle-off-knob-bg: #fff;
+  --cc-toggle-readonly-bg: #c4c4c4;
+  --cc-toggle-readonly-knob-bg: #fff;
+
+  --cc-cookie-category-block-bg: #f9f9f9;
+  --cc-cookie-category-block-border: #000;
+  --cc-cookie-category-block-hover-bg: #f0f0f0;
+  --cc-cookie-category-block-hover-border: #000;
+  --cc-cookie-category-expanded-block-bg: #ececec;
+  --cc-cookie-category-expanded-block-hover-bg: #e3e3e3;
+
+  --cc-overlay-bg: rgba(0, 0, 0, .35);
+  --cc-footer-bg: #ececec;
+  --cc-footer-color: #333;
+  --cc-footer-border-color: #000;
+}
+
+/* ---- The two modals look like Platinum windows ---- */
+#cc-main .cm,
+#cc-main .pm {
+  background: #f4f4f4;
+  border: 1px solid #000;
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000, 0 12px 34px rgba(0, 0, 0, .28);
+}
+
+/* Consent banner: faux Mac title bar via ::before (label is the site, language-neutral).
+   NB: do not set position on .cm. The library positions it (inset/absolute), so an
+   absolutely-positioned .cm is already the containing block for ::before. */
+#cc-main .cm {
+  padding-top: 2.3rem;
+}
+#cc-main .cm::before {
+  content: "jalaei.com";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
+  border-bottom: 1px solid #000;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .18) 0, rgba(255, 255, 255, .18) 2px, rgba(0, 0, 0, .05) 2px, rgba(0, 0, 0, .05) 4px),
+    linear-gradient(#2d63f0, #1745d8);
+}
+#cc-main .cm__title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Preferences modal: header acts as the Platinum title bar */
+#cc-main .pm__header {
+  border-bottom: 1px solid #000;
+  color: #fff;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .18) 0, rgba(255, 255, 255, .18) 2px, rgba(0, 0, 0, .05) 2px, rgba(0, 0, 0, .05) 4px),
+    linear-gradient(#2d63f0, #1745d8);
+}
+#cc-main .pm__title {
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
+}
+/* Close control styled like the red window button */
+#cc-main .pm__close-btn {
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, .55);
+  color: #5a0a00;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .9), rgba(255, 255, 255, .15)), linear-gradient(#ff6b63, #d9332a);
+}
+#cc-main .pm__close-btn:hover {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .95), rgba(255, 255, 255, .25)), linear-gradient(#ff7d75, #e23b32);
+}
+
+/* ---- Buttons → .retro-button ---- */
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+  border-radius: 0;
+  border: 1px solid #000;
+  background: linear-gradient(#fff, #e9e9e9);
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000;
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 16px;
+  transition: background .1s ease;
+}
+#cc-main .cm__btn:hover,
+#cc-main .pm__btn:hover {
+  background: linear-gradient(#fff, #dcdcdc);
+}
+#cc-main .cm__btn:active,
+#cc-main .pm__btn:active {
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .4);
+  background: linear-gradient(#e0e0e0, #cfcfcf);
+}
+/* Only "Manage preferences" (data-role="show") is a quiet link. Accept all and
+   Reject all stay identical, equally-weighted buttons. GDPR requires rejecting to be
+   as easy as accepting, so they must not differ in prominence. */
+#cc-main .cm__btn[data-role="show"] {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  font-weight: 400;
+  text-decoration: underline;
+  color: #1745d8;
+}
+#cc-main .cm__btn[data-role="show"]:hover {
+  background: none;
+  color: #0a2ea0;
+}
+
+#cc-main .cm__desc,
+#cc-main .pm__section-desc,
+#cc-main .pm__section-title {
+  color: #1a1a1a;
+}
+#cc-main .pm__section {
+  border-radius: 0;
+}
+/* Disclosure caret → small beveled retro control instead of a flat gray blob.
+   Selector mirrors the library's own (.pm__section--expandable) to win the cascade. */
+#cc-main .pm__section--expandable .pm__section-arrow {
+  background: linear-gradient(#fff, #e0e0e0);
+  border: 1px solid rgba(0, 0, 0, .45);
+}
+/* "N Services" counter → platinum chip (matches .chips li) */
+#cc-main .pm__badge {
+  border: 1px solid #000;
+  border-radius: 0;
+  background: #eaeaea;
+  color: #000;
+  font-weight: 400;
+}
+#cc-main .cm a,
+#cc-main .pm a {
+  color: var(--cc-link-color);
+}
+
+/* ---- iOS mode → rounded sheet, iOS-blue accents ---- */
+body.ios-mode #cc-main {
+  --cc-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --cc-bg: #ffffff;
+  --cc-primary-color: #111;
+  --cc-secondary-color: #3c3c43;
+  --cc-modal-border-radius: 16px;
+  --cc-btn-border-radius: 12px;
+  --cc-link-color: #007aff;
+  --cc-toggle-on-bg: #34c759;
+  --cc-toggle-off-bg: #c7c7cc;
+  --cc-cookie-category-block-bg: #f2f2f7;
+  --cc-cookie-category-block-border: rgba(60, 60, 67, .16);
+  --cc-cookie-category-block-hover-bg: #ececf2;
+  --cc-cookie-category-block-hover-border: rgba(60, 60, 67, .16);
+  --cc-overlay-bg: rgba(0, 0, 0, .4);
+  --cc-separator-border-color: rgba(60, 60, 67, .14);
+  --cc-footer-bg: #f2f2f7;
+  --cc-footer-color: #3c3c43;
+  --cc-footer-border-color: rgba(60, 60, 67, .14);
+}
+body.ios-mode #cc-main .cm,
+body.ios-mode #cc-main .pm {
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .3);
+  padding-top: 0;
+}
+body.ios-mode #cc-main .cm::before {
+  content: none;
+  display: none;
+}
+body.ios-mode #cc-main .cm__title,
+body.ios-mode #cc-main .pm__title {
+  color: #111;
+  text-shadow: none;
+}
+body.ios-mode #cc-main .pm__header {
+  color: #111;
+  background: rgba(255, 255, 255, .85);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+body.ios-mode #cc-main .pm__close-btn {
+  border: none;
+  color: #3c3c43;
+  background: rgba(120, 120, 128, .16);
+}
+body.ios-mode #cc-main .pm__close-btn:hover {
+  background: rgba(120, 120, 128, .24);
+}
+body.ios-mode #cc-main .cm__btn,
+body.ios-mode #cc-main .pm__btn {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 122, 255, .28);
+  background: rgba(0, 122, 255, .08);
+  color: #007aff;
+  box-shadow: none;
+  font-weight: 600;
+}
+body.ios-mode #cc-main .cm__btn:hover,
+body.ios-mode #cc-main .pm__btn:hover {
+  background: rgba(0, 122, 255, .14);
+}
+body.ios-mode #cc-main .cm__btn:active,
+body.ios-mode #cc-main .pm__btn:active {
+  box-shadow: none;
+  background: rgba(0, 122, 255, .2);
+}
+body.ios-mode #cc-main .cm__btn[data-role="show"] {
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+  color: #007aff;
+  text-decoration: none;
+}
+body.ios-mode #cc-main .pm__section {
+  border-radius: 12px;
+}
+body.ios-mode #cc-main .pm__section--expandable .pm__section-arrow {
+  background: rgba(120, 120, 128, .12);
+  border: none;
+}
+body.ios-mode #cc-main .pm__badge {
+  border: 1px solid rgba(60, 60, 67, .16);
+  border-radius: 12px;
+  background: #f2f2f7;
+  color: #3c3c43;
+}

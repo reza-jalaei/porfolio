@@ -47,6 +47,7 @@
     "knowsAbout": ["Web Development", "Product Management", "CRO", "User Experience", "JavaScript", "React"]
   }
   </script>
+  <link rel="stylesheet" href="assets/vendor/cookieconsent/cookieconsent.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="apple-touch-icon" sizes="57x57" href="assets/pwa/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="assets/pwa/apple-icon-60x60.png">
@@ -96,6 +97,8 @@
       </button>
       <ul id="apple-dropdown" class="apple-dropdown" role="menu" aria-label="Apple">
         <li role="menuitem" tabindex="0" data-action="about-this-mac" data-i18n="menu.aboutThisMac">About This Mac</li>
+        <li class="separator" role="separator"></li>
+        <li role="menuitem" tabindex="0" data-cc="show-preferencesModal" data-i18n="menu.cookiePrefs">Cookie Preferences…</li>
       </ul>
       <div class="app-name" aria-hidden="true">Finder</div>
       <nav class="menus" aria-label="Main menu">
@@ -154,9 +157,9 @@
         <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu">EN
           <i class="fa-solid fa-chevron-down"></i></button>
         <ul id="lang-menu" class="menu-dropdown lang-dropdown" role="menu" aria-label="Language">
-          <li role="menuitem" data-lang="en">EN — English</li>
-          <li role="menuitem" data-lang="tr">TR — Türkçe</li>
-          <li role="menuitem" data-lang="sv">SV — Svenska</li>
+          <li role="menuitem" data-lang="en">EN · English</li>
+          <li role="menuitem" data-lang="tr">TR · Türkçe</li>
+          <li role="menuitem" data-lang="sv">SV · Svenska</li>
         </ul>
       </div>
       <a id="menu-weather" class="menu-weather" aria-live="polite" href="https://weather.com/weather/today/"
@@ -416,20 +419,13 @@
       <div class="group-box">
         <div class="group-title">Tracking Snippets used on this site</div>
         <ul>
-          <li><strong>Cloudflare Beacon</strong> — site reliability and performance telemetry to keep the site fast and
+          <li><strong>Cloudflare Beacon</strong>: site reliability and performance telemetry to keep the site fast and
             available. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare
               Privacy</a>.</li>
-          <li><strong>Microsoft Clarity</strong> — behavior analytics (clicks, scroll depth, heatmaps; may include
+          <li><strong>Microsoft Clarity</strong>: behavior analytics (clicks, scroll depth, heatmaps; may include
             session recordings) to improve UX. Learn more at <a href="https://privacy.microsoft.com/" target="_blank"
               rel="noopener">Microsoft Privacy</a>.</li>
-          <li><strong>Rybbit</strong> — Core Web Vitals and quality analytics to monitor page health. See <a
-              href="https://rybbit.io" target="_blank" rel="noopener">Rybbit</a>.</li>
-          <li><strong>Umami</strong> — privacy‑friendly analytics used to count visits and pages without ad tracking
-            cookies. See <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Privacy</a>.</li>
-          <li><strong>FullStory</strong> — experience analytics/session replays to diagnose issues and improve
-            usability. See <a href="https://www.fullstory.com/legal/privacy-policy/" target="_blank"
-              rel="noopener">FullStory Privacy</a>.</li>
-          <li><strong>RB2B</strong> — When you visit or log in to our website, cookies and similar technologies may be
+          <li><strong>RB2B</strong>: When you visit or log in to our website, cookies and similar technologies may be
             used by our online data partners or vendors to associate these activities with other personal information
             they or others have about you, including by association with your email. We (or service providers on our
             behalf) may then send communications and marketing to these email. You may opt out of receiving this
@@ -441,10 +437,13 @@
       <div class="group-box">
         <div class="group-title">Cookies, storage, and consent</div>
         <p>
-          Some providers use cookies or local storage for sampling, session continuity, or feature toggles. Where
-          applicable, these
-          scripts honor your consent preferences managed by your browser or cookie tools. You can block or clear cookies
-          at any time in your browser settings.
+          When you first visit, a consent banner lets you accept or reject each category of cookies. Analytics and
+          marketing scripts stay blocked until you opt in. Nothing non‑essential runs without your consent. Your
+          choice is stored locally on your device, and you can change it at any time with the button below (or via
+          “Cookie Preferences…” in the Apple menu). You can also block or clear cookies in your browser settings.
+        </p>
+        <p>
+          <button type="button" class="retro-button" data-cc="show-preferencesModal">Manage cookie preferences</button>
         </p>
       </div>
 
@@ -474,9 +473,6 @@
           <li>Provider pages: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank"
               rel="noopener">Cloudflare</a>,
             <a href="https://privacy.microsoft.com/" target="_blank" rel="noopener">Microsoft Clarity</a>,
-            <a href="https://www.fullstory.com/legal/privacy-policy/" target="_blank" rel="noopener">FullStory</a>,
-            <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami</a>,
-            <a href="https://rybbit.io" target="_blank" rel="noopener">Rybbit</a>,
             <a href="https://rb2b.com" target="_blank" rel="noopener">RB2B</a>.
           </li>
           <li>RB2B specific opt‑outs
@@ -1265,68 +1261,24 @@
     })();
   </script>
 
-  <!-- Tracking Snippets -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+  <!-- Tracking Snippets, consent-gated. type="text/plain" keeps each inert until the
+       matching CookieConsent category is granted; the library then activates them. -->
+  <script type="text/plain" data-category="analytics" data-service="cloudflare" defer
+    src='https://static.cloudflareinsights.com/beacon.min.js'
     data-cf-beacon='{"token": "64c638eddc9c4e57890ff697aff32c9b"}'></script>
-  <script defer type="text/javascript">
+  <script type="text/plain" data-category="analytics" data-service="clarity">
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
       t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "srxpg0e5iz");
   </script>
-  <script src="https://app.rybbit.io/api/script.js" data-site-id="2035" data-web-vitals="true" defer></script>
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="789ba819-dc60-49c9-b5a5-725168262375"></script>
-  <script>
-    window['_fs_host'] = 'fullstory.com';
-    window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
-    window['_fs_org'] = 'o-23NSB0-na1';
-    window['_fs_namespace'] = 'FS';
-    !function (m, n, e, t, l, o, g, y) {
-      var s, f, a = function (h) {
-        return !(h in m) || (m.console && m.console.log && m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'), !1)
-      }(e)
-        ; function p(b) {
-          var h, d = []; function j() {
-            h && (d.forEach((function (b) {
-              var d; try { d = b[h[0]] && b[h[0]](h[1]) } catch (h) { return void (b[3] && b[3](h)) }
-              d && d.then ? d.then(b[2], b[3]) : b[2] && b[2](d)
-            })), d.length = 0)
-          } function r(b) { return function (d) { h || (h = [b, d], j()) } } return b(r(0), r(1)), {
-            then: function (b, h) { return p((function (r, i) { d.push([b, h, r, i]), j() })) }
-          }
-        } a && (g = m[e] = function () {
-          var b = function (b, d, j, r) {
-            function i(i, c) {
-              h(b, d, j, i, c, r)
-            } r = r || 2; var c, u = /Async$/; return u.test(b) ? (b = b.replace(u, ""), "function" == typeof Promise ? new Promise(i) : p(i)) : h(b, d, j, c, c, r)
-          }
-            ; function h(h, d, j, r, i, c) { return b._api ? b._api(h, d, j, r, i, c) : (b.q && b.q.push([h, d, j, r, i, c]), null) } return b.q = [], b
-        }(), y = function (b) {
-          function h(h) {
-            "function" == typeof h[4] && h[4](new Error(b))
-          } var d = g.q; if (d) { for (var j = 0; j < d.length; j++)h(d[j]); d.length = 0, d.push = h }
-        }, function () {
-          (o = n.createElement(t)).async = !0, o.crossOrigin = "anonymous", o.src = "https://" + l, o.onerror = function () { y("Error loading " + l) }
-            ; var b = n.getElementsByTagName(t)[0]; b && b.parentNode ? b.parentNode.insertBefore(o, b) : n.head.appendChild(o)
-        }(), function () {
-          function b() { }
-          function h(b, h, d) { g(b, h, d, 1) } function d(b, d, j) { h("setProperties", { type: b, properties: d }, j) } function j(b, h) { d("user", b, h) } function r(b, h, d) {
-            j({
-              uid: b
-            }, d), h && j(h, d)
-          } g.identify = r, g.setUserVars = j, g.identifyAccount = b, g.clearUserCookie = b, g.setVars = d, g.event = function (b, d, j) {
-            h("trackEvent", {
-              name: b, properties: d
-            }, j)
-          }, g.anonymize = function () { r(!1) }, g.shutdown = function () { h("shutdown") }, g.restart = function () { h("restart") },
-            g.log = function (b, d) { h("log", { level: b, msg: d }) }, g.consent = function (b) { h("setIdentity", { consent: !arguments.length || b }) }
-        }(), s = "fetch",
-          f = "XMLHttpRequest", g._w = {}, g._w[f] = m[f], g._w[s] = m[s], m[s] && (m[s] = function () { return g._w[s].apply(this, arguments) }), g._v = "2.0.0")
-    }(window, document, window._fs_namespace, "script", window._fs_script);
-  </script>
-  <script>!function (key) { if (window.reb2b) return; window.reb2b = { loaded: true }; var s = document.createElement("script"); s.async = true; s.src = "https://ddwl4m2hdecbv.cloudfront.net/b/" + key + "/" + key + ".js.gz"; document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]); }("5NRP9HQ15XO1");</script>
+  <script type="text/plain" data-category="marketing" data-service="rb2b">!function (key) { if (window.reb2b) return; window.reb2b = { loaded: true }; var s = document.createElement("script"); s.async = true; s.src = "https://ddwl4m2hdecbv.cloudfront.net/b/" + key + "/" + key + ".js.gz"; document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]); }("5NRP9HQ15XO1");</script>
   <!-- End Tracking Snippets -->
+
+  <!-- GDPR cookie consent (orestbida/cookieconsent v3.1.0, self-hosted, opt-in) -->
+  <script src="assets/vendor/cookieconsent/cookieconsent.umd.js"></script>
+  <script src="assets/js/cookie-consent.js"></script>
 </body>
 
 </html>
