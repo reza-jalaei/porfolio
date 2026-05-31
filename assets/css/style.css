@@ -1009,6 +1009,86 @@ body.ios-mode .snake-controls {
   background: linear-gradient(#fff, #dcdcdc);
 }
 
+/* ===== Projects password gate ===== */
+.projects-protected {
+  display: none;
+}
+
+body.projects-unlocked .projects-protected {
+  display: block;
+}
+
+body.projects-unlocked .project-gate {
+  display: none;
+}
+
+.project-gate {
+  max-width: 360px;
+  margin: 8px auto;
+  text-align: center;
+}
+
+.project-gate-icon {
+  font-size: 26px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.project-gate-text {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  color: #222;
+}
+
+.project-gate-form {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.project-gate-input {
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 #b9b9b9;
+  padding: 5px 8px;
+  font-size: 13px;
+  min-width: 160px;
+  background: #fff;
+}
+
+.project-gate-btn {
+  cursor: pointer;
+}
+
+.project-gate-error {
+  color: #b00020;
+  font-size: 12px;
+  margin: 10px 0 0;
+}
+
+.project-gate-help {
+  font-size: 12px;
+  margin: 12px 0 0;
+  color: #222;
+}
+
+.project-gate-help a {
+  color: #0050a0;
+}
+
+.project-gate-form.shake {
+  animation: gateShake 0.32s ease;
+}
+
+@keyframes gateShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
 body.ios-mode .window-content {
   padding: 12px;
   padding-bottom: 112px;

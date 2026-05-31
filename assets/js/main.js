@@ -19,6 +19,7 @@
     detectMobileAndToggleMode();
     setupGlobalHandlers();
     setupHashNav();
+    setupProjectGate();
     // Open default window on desktop only (respect deep-link hash if present)
     setTimeout(() => {
       if (!document.body.classList.contains('ios-mode')) {
@@ -922,6 +923,61 @@
       }
     }
     // Contact forms are plain HTML POST now; no JS wiring required
+  }
+  function setupProjectGate() {
+    // SHA-256 of the access password, stored as a hash (never the plaintext).
+    const PASSWORD_HASH = '8bd8b63d5cc9b9605c91427bd508db1b0e0d3d7c9c205054e57c6561334af295';
+    const STORE_KEY = 'projectsUnlocked';
+
+    function reveal() {
+      document.body.classList.add('projects-unlocked');
+      // On desktop the window auto-fit to the small gate; let it return to its
+      // normal size now that the full content is visible.
+      if (!document.body.classList.contains('ios-mode')) {
+        const win = document.getElementById('win-projects');
+        if (win) win.style.height = '';
+      }
+    }
+
+    // Restore the unlocked state for the rest of this browser session.
+    try { if (sessionStorage.getItem(STORE_KEY) === '1') reveal(); } catch (e) { /* storage unavailable */ }
+
+    async function sha256Hex(text) {
+      const bytes = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Delegated so it covers both the desktop window and the cloned iOS app.
+    document.addEventListener('submit', async (event) => {
+      const form = event.target.closest('[data-project-gate-form]');
+      if (!form) return;
+      event.preventDefault();
+      const input = form.querySelector('[data-project-gate-input]');
+      const errorEl = form.parentElement.querySelector('[data-project-gate-error]');
+      let hashed = '';
+      try { hashed = await sha256Hex(input ? input.value : ''); } catch (e) { /* crypto needs https */ }
+      if (hashed === PASSWORD_HASH) {
+        try { sessionStorage.setItem(STORE_KEY, '1'); } catch (e) { /* storage unavailable */ }
+        if (errorEl) errorEl.setAttribute('hidden', '');
+        reveal();
+      } else {
+        if (errorEl) errorEl.removeAttribute('hidden');
+        form.classList.remove('shake');
+        void form.offsetWidth;
+        form.classList.add('shake');
+        if (input) { input.value = ''; input.focus(); }
+      }
+    });
+
+    // "Reach out to request access" opens the Contact window/app in the active mode.
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('[data-open-contact]');
+      if (!link) return;
+      event.preventDefault();
+      if (document.body.classList.contains('ios-mode')) openIOSApp('ios-contact');
+      else openWindow('win-contact');
+    });
   }
   function setupSpringboard() {
     const springboard = document.getElementById('springboard');

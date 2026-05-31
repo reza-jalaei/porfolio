@@ -536,6 +536,19 @@
       <h2 id="title-projects" class="title" data-i18n="win.projects">Projects</h2>
     </div>
     <div class="window-content">
+      <div class="project-gate group-box" data-project-gate>
+        <div class="project-gate-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></div>
+        <div class="group-title">Protected Projects</div>
+        <p class="project-gate-text">These case studies are password-protected. Enter the password to view them.</p>
+        <form class="project-gate-form" data-project-gate-form autocomplete="off" novalidate>
+          <input type="password" class="project-gate-input" data-project-gate-input placeholder="Password"
+            aria-label="Password" autocomplete="off" spellcheck="false" />
+          <button type="submit" class="retro-button project-gate-btn">Unlock</button>
+        </form>
+        <p class="project-gate-error" data-project-gate-error role="alert" hidden>Incorrect password. Please try again.</p>
+        <p class="project-gate-help">Don't have access? <a href="#" data-open-contact>Reach out to request access</a>.</p>
+      </div>
+      <div class="projects-protected" data-projects-protected>
       <div class="group-title" data-i18n="projects.heading">Clients & Projects</div>
       <div class="project-list">
         <div class="project-item" data-project="figpii">
@@ -958,6 +971,7 @@
             <span class="project-tag">DevOps</span>
           </div>
         </div>
+      </div>
       </div>
     </div>
     <div class="resize-handle" aria-hidden="true"></div>
