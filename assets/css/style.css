@@ -254,6 +254,32 @@ body.ios-mode .status-bar {
   color: #000;
 }
 
+/* Prominent Blog nav → significan.se */
+.menu-blog-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: calc(var(--menu-bar-height) - 8px);
+  padding: 0 10px;
+  border: 1px solid #14337a;
+  border-radius: 5px;
+  background: linear-gradient(#3f6af1, #1f49d6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 1px 1px 0 rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+.menu-blog-link:hover { background: linear-gradient(#4f79ff, #2a55e6); }
+.menu-blog-link:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+.menu-blog-link .ext-arrow { font-size: 11px; opacity: 0.9; }
+
+@media (max-width: 520px) {
+  .menu-blog-link .fa-note-sticky { display: none; }
+  .menu-blog-link { padding: 0 8px; }
+}
+
 .lang-switcher {
   position: relative;
 }

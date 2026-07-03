@@ -11,11 +11,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jalaei.com/#blog</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jalaei.com/#contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

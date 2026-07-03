@@ -153,6 +153,12 @@
       </nav>
     </div>
     <div class="menu-right">
+      <a class="menu-blog-link" href="https://significan.se/" target="_blank" rel="noopener"
+        title="Read my blog on significan.se (opens in a new tab)">
+        <i class="fa-regular fa-note-sticky" aria-hidden="true"></i>
+        <span data-i18n="icon.blog">Blog</span>
+        <span class="ext-arrow" aria-hidden="true">↗</span>
+      </a>
       <div class="lang-switcher">
         <button id="lang-btn" class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu">EN
           <i class="fa-solid fa-chevron-down"></i></button>
@@ -181,7 +187,8 @@
         <span class="icon-label" data-i18n="icon.projects">Projects</span>
       </li>
       <!-- Snake icon hidden on desktop -->
-      <li class="desktop-icon" tabindex="0" data-target="win-blog">
+      <li class="desktop-icon" tabindex="0" data-href="https://significan.se/"
+        aria-label="Blog — opens significan.se in a new tab">
         <div class="icon-svg" aria-hidden="true"><img src="assets/apps/blog.png" alt="" loading="lazy" /></div>
         <span class="icon-label" data-i18n="icon.blog">Blog</span>
       </li>
@@ -220,7 +227,7 @@
             <div class="sb-label" data-i18n="nav.projects">Projects</div>
           </div>
           <div>
-            <button class="sb-icon" data-app="ios-blog" aria-label="Blog"><img src="assets/icons/blog.png" alt=""
+            <button class="sb-icon" data-href="https://significan.se/" aria-label="Blog — opens significan.se in a new tab"><img src="assets/icons/blog.png" alt=""
                 loading="lazy" /></button>
             <div class="sb-label" data-i18n="nav.blog">Blog</div>
           </div>
@@ -256,7 +263,7 @@
       <div class="sb-label" data-i18n="nav.projects">Projects</div>
     </div>
     <div class="ios-dock-item">
-      <button class="sb-icon" data-app="ios-blog" aria-label="Blog"><img src="assets/icons/blog.png" alt=""
+      <button class="sb-icon" data-href="https://significan.se/" aria-label="Blog — opens significan.se in a new tab"><img src="assets/icons/blog.png" alt=""
           loading="lazy" /></button>
       <div class="sb-label" data-i18n="nav.blog">Blog</div>
     </div>
@@ -973,72 +980,6 @@
     <div class="resize-handle" aria-hidden="true"></div>
   </section>
 
-  <section id="win-blog" class="mac-window platinum" role="dialog" aria-labelledby="title-blog" aria-modal="false"
-    hidden>
-    <div class="title-bar" data-window-drag-handle>
-      <div class="controls">
-        <button class="control close" aria-label="Close window" data-action="close"></button>
-        <button class="control minimize" aria-label="Minimize window" data-action="minimize"></button>
-        <button class="control zoom" aria-label="Zoom window" data-action="zoom"></button>
-      </div>
-      <h2 id="title-blog" class="title" data-i18n="win.blog">Blog</h2>
-    </div>
-    <div class="window-content">
-      <div class="link-list">
-        <a class="link-row" href="https://www.figpii.com/blog/customer-feedback-questions-30-examples/" target="_blank"
-          rel="noopener">
-          <span class="link-title">Customer Feedback Questions: +30 Examples</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://www.figpii.com/blog/ecommerce-ab-testing/" target="_blank" rel="noopener">
-          <span class="link-title">The Ultimate Guide To Ecommerce A/B Testing</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://www.figpii.com/blog/identify-user-patterns-from-session-recordings/"
-          target="_blank" rel="noopener">
-          <span class="link-title">How To Identify User Patterns From Session Recordings?</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://www.figpii.com/blog/what-are-the-4-steps-of-conversion-optimization/"
-          target="_blank" rel="noopener">
-          <span class="link-title">What Are the 4 Steps of Conversion Optimization?</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://significan.se/blog/best-books-for-product-owners/" target="_blank"
-          rel="noopener">
-          <span class="link-title">The Best Books to Read as a Product Owner</span>
-          <span class="link-meta">significan.se</span>
-        </a>
-        <a class="link-row" href="https://significan.se/blog/custom-javascript-woocommerce-thank-you-page/"
-          target="_blank" rel="noopener">
-          <span class="link-title">How to add custom JavaScript to WooCommerce Thank You Page?</span>
-          <span class="link-meta">significan.se</span>
-        </a>
-        <a class="link-row" href="https://www.figpii.com/blog/price-a-b-testing-on-shopify-dos-and-donts/"
-          target="_blank" rel="noopener">
-          <span class="link-title">Price A/B Testing on Shopify: Do’s and Don’ts</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://significan.se/blog/ecommerce-ab-test-examples/" target="_blank"
-          rel="noopener">
-          <span class="link-title">10 Successful eCommerce A/B test examples</span>
-          <span class="link-meta">significan.se</span>
-        </a>
-        <a class="link-row" href="https://www.figpii.com/blog/quality-assurance-for-ab-testing-best-practices/"
-          target="_blank" rel="noopener">
-          <span class="link-title">Quality Assurance for AB Testing, Best Practices.</span>
-          <span class="link-meta">figpii.com</span>
-        </a>
-        <a class="link-row" href="https://significan.se/blog/moving-your-domain-away-from-wix/" target="_blank"
-          rel="noopener">
-          <span class="link-title">Moving Your Domain Away From Wix</span>
-          <span class="link-meta">significan.se</span>
-        </a>
-      </div>
-    </div>
-    <div class="resize-handle" aria-hidden="true"></div>
-  </section>
-
   <section id="win-contact" class="mac-window platinum" role="dialog" aria-labelledby="title-contact" aria-modal="false"
     hidden>
     <div class="title-bar" data-window-drag-handle>
@@ -1158,12 +1099,6 @@
   <section id="ios-projects" class="ios-app" role="dialog" aria-label="Projects" hidden>
     <div class="ios-nav"><button class="ios-back" aria-label="Home" data-i18n="ios.home">Home</button>
       <div class="ios-title" role="heading" aria-level="1" data-i18n="nav.projects">Projects</div>
-    </div>
-    <div class="app-body"></div>
-  </section>
-  <section id="ios-blog" class="ios-app" role="dialog" aria-label="Blog" hidden>
-    <div class="ios-nav"><button class="ios-back" aria-label="Home" data-i18n="ios.home">Home</button>
-      <div class="ios-title" role="heading" aria-level="1" data-i18n="nav.blog">Blog</div>
     </div>
     <div class="app-body"></div>
   </section>

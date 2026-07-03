@@ -22,6 +22,7 @@
     setupProjectGate();
     // Open default window on desktop only (respect deep-link hash if present)
     setTimeout(() => {
+      if ((location.hash || '').toLowerCase() === '#blog') { window.location.replace('https://significan.se/'); return; }
       if (!document.body.classList.contains('ios-mode')) {
         const route = currentHashRoute();
         openWindow(route ? route[0] : 'win-about');
@@ -250,7 +251,7 @@
     if (!action) return;
     switch(action) {
       case 'open-about': openWindow('win-about'); break;
-      case 'open-blog': openWindow('win-blog'); break;
+      case 'open-blog': window.open('https://significan.se/', '_blank', 'noopener'); break;
       case 'open-projects': openWindow('win-projects'); break;
       case 'open-contact': openWindow('win-contact'); break;
       case 'about-this-mac': openWindow('win-about-mac'); break;
@@ -512,15 +513,20 @@
     const icons = Array.from(document.querySelectorAll('.desktop-icon'));
     icons.forEach(icon => {
       const target = icon.getAttribute('data-target');
-      icon.addEventListener('dblclick', () => { if (target) openWindow(target); });
+      const href = icon.getAttribute('data-href');
+      const open = () => {
+        if (href) window.open(href, '_blank', 'noopener');
+        else if (target) openWindow(target);
+      };
+      icon.addEventListener('dblclick', open);
       icon.addEventListener('click', (e) => {
         icons.forEach(i => i.classList.remove('selected'));
         icon.classList.add('selected');
       });
       icon.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && target) {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openWindow(target);
+          open();
         }
       });
     });
@@ -755,7 +761,7 @@
   const dockApps = [
     { id: 'win-about', label: 'About', iconHtml: `<i class="fa-regular fa-address-card"></i>` },
     { id: 'win-projects', label: 'Projects', iconHtml: `<i class="fa-regular fa-folder-open"></i>` },
-    { id: 'win-blog', label: 'Blog', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
+    { id: 'win-blog', label: 'Blog', href: 'https://significan.se/', iconHtml: `<i class="fa-regular fa-note-sticky"></i>` },
     { id: 'win-contact', label: 'Contact', iconHtml: `<i class="fa-regular fa-envelope"></i>` },
     
     // Snake hidden from dock
@@ -781,6 +787,7 @@
       btn.setAttribute('aria-label', app.label);
       btn.innerHTML = `${app.iconHtml}<span class="indicator"></span><span class="label">${app.label}</span>`;
       btn.addEventListener('click', () => {
+        if (app.href) { window.open(app.href, '_blank', 'noopener'); return; }
         const win = document.getElementById(app.id);
         if (win && !win.hasAttribute('hidden')) {
           minimizeWindow(app.id);
@@ -865,7 +872,6 @@
   const hashRoutes = {
     about: ['win-about', 'ios-about'],
     projects: ['win-projects', 'ios-projects'],
-    blog: ['win-blog', 'ios-blog'],
     contact: ['win-contact', 'ios-contact'],
     privacy: ['win-privacy', 'ios-privacy'],
   };
@@ -874,6 +880,7 @@
     return hashRoutes[key] || null;
   }
   function navigateToHash() {
+    if ((location.hash || '').toLowerCase() === '#blog') { window.location.href = 'https://significan.se/'; return; }
     const route = currentHashRoute();
     if (!route) return;
     if (document.body.classList.contains('ios-mode')) {
@@ -914,7 +921,6 @@
     const mapping = [
       ['win-about', 'ios-about'],
       ['win-projects', 'ios-projects'],
-      ['win-blog', 'ios-blog'],
       ['win-contact', 'ios-contact'],
       ['win-privacy', 'ios-privacy']
     ];
@@ -1012,8 +1018,10 @@
     springboard.addEventListener('touchend', e=>onUp(e.changedTouches[0].clientX), { passive: true });
     dots.querySelectorAll('span').forEach(s=> s.addEventListener('click', ()=> goTo(parseInt(s.dataset.page,10))));
 
-    springboard.querySelectorAll('[data-app]').forEach(btn => {
+    springboard.querySelectorAll('[data-app], [data-href]').forEach(btn => {
       btn.addEventListener('click', (e) => {
+        const href = btn.getAttribute('data-href');
+        if (href) { window.open(href, '_blank', 'noopener'); return; }
         const targetId = btn.getAttribute('data-app');
         const app = document.getElementById(targetId);
         if (!app) return;
@@ -1032,8 +1040,10 @@
       });
     });
     // Also wire global dock buttons (outside springboard)
-    document.querySelectorAll('.ios-dock [data-app]').forEach(btn => {
+    document.querySelectorAll('.ios-dock [data-app], .ios-dock [data-href]').forEach(btn => {
       btn.addEventListener('click', () => {
+        const href = btn.getAttribute('data-href');
+        if (href) { window.open(href, '_blank', 'noopener'); return; }
         const id = btn.getAttribute('data-app');
         openIOSApp(id);
       });
